@@ -23,8 +23,12 @@ namespace Test
 		[Test ()]
 		public void TestCase1 ()
 		{
-			var response = MainClass.TestableMain (new []{"What is red?", "a color"});
+			var response = MainClass.TestableMain (new []{"--add", "What is red?", "a color"});
 			Assert.AreEqual ("New entry registered\n", response);
+
+			response = MainClass.TestableMain (new []{"--next"});
+			Assert.AreEqual ("The next question is:\n\"What is red?\"\n", response);
+
 		}
 	}
 }

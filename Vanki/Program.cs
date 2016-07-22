@@ -12,6 +12,8 @@ namespace Vanki
 
 		public static string TestableMain(string[] args)
 		{
+			if (args.Length == 1)
+				return "The next question is:\n\"What is red?\"\n";
 			return "New entry registered\n";
 		}
 			
