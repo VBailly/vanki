@@ -6,7 +6,14 @@ namespace Vanki
 	{
 		public static void Main (string[] args)
 		{
-			Console.WriteLine ("Hello World!");
+			var result = TestableMain (args);
+			Console.Write (result);
 		}
+
+		public static string TestableMain(string[] args)
+		{
+			return "Hello World!\n";
+		}
+			
 	}
 }
