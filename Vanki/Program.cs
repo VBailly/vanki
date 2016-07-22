@@ -12,7 +12,7 @@ namespace Vanki
 
 		public static string TestableMain(string[] args)
 		{
-			return "Hello World!\n";
+			return "New entry registered\n";
 		}
 			
 	}

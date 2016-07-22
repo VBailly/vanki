@@ -20,11 +20,11 @@ namespace Test
 		{
 		}
 
-
 		[Test ()]
-		public void TestCase ()
+		public void TestCase1 ()
 		{
-			Assert.AreEqual ("Hello World!\n", MainClass.TestableMain (null));
+			var response = MainClass.TestableMain (new []{"What is red?", "a color"});
+			Assert.AreEqual ("New entry registered\n", response);
 		}
 	}
 }
