@@ -14,33 +14,44 @@ namespace Vanki
 
 		public static string TestableMain(string[] args, DateTime time)
 		{
-
-			
-			bool visited = false;
-
-			if (File.Exists ("db.xml")) 
-			{
-				var xdoc = XElement.Load("db.xml");
-				visited = xdoc.Value == "yes";
-			}
-
-
 			if (args.Length == 1)
-			{
-				if ((time - DateTime.Now) > TimeSpan.FromMinutes(2))
-					return "The next question is:\n\"What is red?\"\n";
-				if (!visited) {
-					var xEl = new XElement ("visited", "yes");
-					File.WriteAllText ("db.xml", xEl.ToString ());
-					return "The next question is:\n\"What is red?\"\n";
-
-				}
-				return "There is no next question\n";
-			}
+				return PrintNextQuestion (time);
 			if (args.Length == 2)
-				return "That is a correct answer!\n";
+				return ProcessAnswer (time);
 			return "New entry registered\n";
 		}
+
+		static string ProcessAnswer (DateTime time)
+		{
+			if ((time - DateTime.Now) > TimeSpan.FromMinutes (2)) {
+				var xEl = new XElement ("visited", "no");
+				File.WriteAllText ("db.xml", xEl.ToString ());
+			}
+			return "That is a correct answer!\n";
+		}
+
+		static string PrintNextQuestion (DateTime time)
+		{
+			bool visited = HasBeenVisited ();
+
+			if ((time - DateTime.Now) > TimeSpan.FromMinutes (2))
+				return "The next question is:\n\"What is red?\"\n";
+			if (!visited) {
+				var xEl = new XElement ("visited", "yes");
+				File.WriteAllText ("db.xml", xEl.ToString ());
+				return "The next question is:\n\"What is red?\"\n";
+			}
+			return "There is no next question\n";
+		}
+
+		static bool HasBeenVisited ()
+		{
+			if (!File.Exists ("db.xml"))
+				return false;
 			
+			var xdoc = XElement.Load ("db.xml");
+			return xdoc.Value == "yes";
+
+		}
 	}
 }
