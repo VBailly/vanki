@@ -14,8 +14,7 @@ namespace Vanki
 
 		public static string TestableMain(string[] args, DateTime time)
 		{
-			if ((time - DateTime.Now) > TimeSpan.FromMinutes(2))
-				return "The next question is:\n\"What is red?\"\n";
+
 			
 			bool visited = false;
 
@@ -28,10 +27,13 @@ namespace Vanki
 
 			if (args.Length == 1)
 			{
+				if ((time - DateTime.Now) > TimeSpan.FromMinutes(2))
+					return "The next question is:\n\"What is red?\"\n";
 				if (!visited) {
 					var xEl = new XElement ("visited", "yes");
 					File.WriteAllText ("db.xml", xEl.ToString ());
 					return "The next question is:\n\"What is red?\"\n";
+
 				}
 				return "There is no next question\n";
 			}
