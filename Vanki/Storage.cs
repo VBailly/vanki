@@ -9,49 +9,53 @@ namespace Vanki
 
 		public static void SetTime (DateTime time)
 		{
-			var visited = HasBeenVisited ();
-			var xEl = new XElement ("visited", visited ? "yes" : "no" );
-
-			var xTime = new XElement ("time", time.ToString ());
-
-			var data = new XElement ("Data");
-			data.Add (xEl);
-			data.Add (xTime);
+			var data = GetData ();
+			data.Element ("time").Value = time.ToString();
 
 			File.WriteAllText ("db.xml", data.ToString ());
 		}
 
 		public static DateTime GetTime()
 		{
-			if (!File.Exists ("db.xml"))
-				return DateTime.Now;
+			var data = GetData ();
 
-			var xdoc = XElement.Load ("db.xml");
-			return DateTime.Parse(xdoc.Element ("time").Value);
+			return DateTime.Parse(data.Element ("time").Value);
 		}
 			
 
 		public static void SetVisited (bool value) 
 		{
-			var xEl = new XElement ("visited", value ? "yes" : "no" );
-
-			var time = GetTime ();
-			var xTime = new XElement ("time", time.ToString ());
-
-			var data = new XElement ("Data");
-			data.Add (xEl);
-			data.Add (xTime);
+			var data = GetData ();
+			data.Element ("visited").Value = value ? "yes" : "no";
 
 			File.WriteAllText ("db.xml", data.ToString ());
 		}
 
 		public static bool HasBeenVisited ()
 		{
-			if (!File.Exists ("db.xml"))
-				return false;
+			var data = GetData ();
+			return data.Element ("visited").Value == "yes";
+		}
 
-			var xdoc = XElement.Load ("db.xml");
-			return xdoc.Element ("visited").Value == "yes";
+		public static XElement GetData()
+		{
+			if (!File.Exists ("db.xml"))
+				return GetNewData();
+			return XElement.Load ("db.xml");
+		}
+
+		public static XElement GetNewData()
+		{
+			var xEl = new XElement ("visited", "no" );
+
+			var time = DateTime.Now;
+			var xTime = new XElement ("time", time.ToString ());
+
+			var data = new XElement ("Data");
+			data.Add (xEl);
+			data.Add (xTime);
+
+			return data;
 		}
 
 	}
