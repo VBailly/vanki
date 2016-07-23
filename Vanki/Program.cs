@@ -6,11 +6,11 @@ namespace Vanki
 	{
 		public static void Main (string[] args)
 		{
-			var result = TestableMain (args);
+			var result = TestableMain (args, DateTime.Now);
 			Console.Write (result);
 		}
 
-		public static string TestableMain(string[] args)
+		public static string TestableMain(string[] args, DateTime time)
 		{
 			if (args.Length == 1)
 				return "The next question is:\n\"What is red?\"\n";
