@@ -29,17 +29,22 @@ namespace Vanki
 
 		static string ProcessAnswer (DateTime time)
 		{
-			if ((time - DateTime.Now) > TimeSpan.FromMinutes (2)) {
+			if (LapseGreaterThan2Min (time)) {
 				SetVisited (false);
 			}
 			return "That is a correct answer!\n";
+		}
+
+		static bool LapseGreaterThan2Min (DateTime time)
+		{
+			return (time - DateTime.Now) > TimeSpan.FromMinutes (2);
 		}
 
 		static string PrintNextQuestion (DateTime time)
 		{
 			bool visited = HasBeenVisited ();
 
-			if ((time - DateTime.Now) > TimeSpan.FromMinutes (2))
+			if (LapseGreaterThan2Min (time))
 				return "The next question is:\n\"What is red?\"\n";
 			if (!visited) {
 				SetVisited (true);
