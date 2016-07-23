@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Xml.Linq;
-using System.IO;
+
 
 namespace Vanki
 {
@@ -25,17 +24,11 @@ namespace Vanki
 				return ProcessAnswer (time);
 			return newEntryRegistered;
 		}
-
-		static void SetVisited (bool value)
-		{
-			var xEl = new XElement ("visited", value ? "yes" : "no" );
-			File.WriteAllText ("db.xml", xEl.ToString ());
-		}
-
+			
 		static string ProcessAnswer (DateTime time)
 		{
 			if (LapseGreaterThan2Min (time)) {
-				SetVisited (false);
+				Storage.SetVisited (false);
 			}
 			return thatIsACorrectAnswer;
 		}
@@ -47,25 +40,17 @@ namespace Vanki
 
 		static string PrintNextQuestion (DateTime time)
 		{
-			bool visited = HasBeenVisited ();
+			bool visited = Storage.HasBeenVisited ();
 
 			if (LapseGreaterThan2Min (time))
 				return theNextQuestionIsWhatIsRed;
 			if (!visited) {
-				SetVisited (true);
+				Storage.SetVisited (true);
 				return theNextQuestionIsWhatIsRed;
 			}
 			return thereIsNoNextQuestion;
 		}
 
-		static bool HasBeenVisited ()
-		{
-			if (!File.Exists ("db.xml"))
-				return false;
-			
-			var xdoc = XElement.Load ("db.xml");
-			return xdoc.Value == "yes";
 
-		}
 	}
 }
