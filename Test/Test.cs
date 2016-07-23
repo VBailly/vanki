@@ -23,6 +23,8 @@ namespace Test
 		[Test ()]
 		public void TestCase1 ()
 		{
+			File.Delete ("db.xml");
+
 			var response = MainClass.TestableMain (new []{"--add", "What is red?", "a color"}, DateTime.Now);
 			Assert.AreEqual ("New entry registered\n", response);
 

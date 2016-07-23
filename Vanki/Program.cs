@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Xml.Linq;
+using System.IO;
 
 namespace Vanki
 {
@@ -10,14 +12,22 @@ namespace Vanki
 			Console.Write (result);
 		}
 
-		private static bool Visited;
-
 		public static string TestableMain(string[] args, DateTime time)
 		{
+			bool visited = false;
+
+			if (File.Exists ("db.xml")) 
+			{
+				var xdoc = XElement.Load("db.xml");
+				visited = xdoc.Value == "yes";
+			}
+
+
 			if (args.Length == 1)
 			{
-				if (!Visited) {
-					Visited = true;
+				if (!visited) {
+					var xEl = new XElement ("visited", "yes");
+					File.WriteAllText ("db.xml", xEl.ToString ());
 					return "The next question is:\n\"What is red?\"\n";
 				}
 				return "There is no next question\n";
