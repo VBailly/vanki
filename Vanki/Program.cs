@@ -22,6 +22,7 @@ namespace Vanki
 				return PrintNextQuestion (time);
 			if (args.Length == 2)
 				return ProcessAnswer (time);
+			Storage.SetTime (time);
 			return newEntryRegistered;
 		}
 			
@@ -35,7 +36,7 @@ namespace Vanki
 
 		static bool LapseGreaterThan2Min (DateTime time)
 		{
-			return (time - DateTime.Now) > TimeSpan.FromMinutes (2);
+			return (time - Storage.GetTime()) > TimeSpan.FromMinutes (2);
 		}
 
 		static string PrintNextQuestion (DateTime time)
