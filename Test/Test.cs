@@ -39,7 +39,7 @@ namespace Test
 		}
 
 		[Test ()]
-		public void We_cannot_awnswer_when_there_is_no_question ()
+		public void We_cannot_answer_when_there_is_no_question ()
 		{
 
 			var time = DateTime.Now;
