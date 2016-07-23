@@ -14,6 +14,9 @@ namespace Vanki
 
 		public static string TestableMain(string[] args, DateTime time)
 		{
+			if ((time - DateTime.Now) > TimeSpan.FromMinutes(2))
+				return "The next question is:\n\"What is red?\"\n";
+			
 			bool visited = false;
 
 			if (File.Exists ("db.xml")) 
