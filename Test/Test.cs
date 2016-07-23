@@ -55,6 +55,10 @@ namespace Test
 			response = MainClass.TestableMain (new []{"--next"}, time);
 			Assert.AreEqual ("There is no next question\n", response);
 
+			time += TimeSpan.FromMinutes (5); // +8
+			response = MainClass.TestableMain (new []{"--next"}, time);
+			Assert.AreEqual ("There is no next question\n", response);
+
 		}
 	}
 }

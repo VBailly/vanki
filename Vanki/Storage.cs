@@ -21,6 +21,22 @@ namespace Vanki
 
 			return DateTime.Parse(data.Element ("time").Value);
 		}
+
+		public static void SetLapse (int minutes)
+		{
+			var data = GetData ();
+			data.Element ("lapse").Value = minutes.ToString();
+
+			File.WriteAllText ("db.xml", data.ToString ());
+		}
+
+		public static int GetLapse()
+		{
+			var data = GetData ();
+
+			return int.Parse(data.Element ("lapse").Value);
+		}
+
 			
 
 		public static void SetVisited (bool value) 
@@ -50,10 +66,12 @@ namespace Vanki
 
 			var time = DateTime.Now;
 			var xTime = new XElement ("time", time.ToString ());
+			var xLapse = new XElement ("lapse", "2");
 
 			var data = new XElement ("Data");
 			data.Add (xEl);
 			data.Add (xTime);
+			data.Add (xLapse);
 
 			return data;
 		}
