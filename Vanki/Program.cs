@@ -21,11 +21,16 @@ namespace Vanki
 			return "New entry registered\n";
 		}
 
+		static void SetVisited (bool value)
+		{
+			var xEl = new XElement ("visited", value ? "yes" : "no" );
+			File.WriteAllText ("db.xml", xEl.ToString ());
+		}
+
 		static string ProcessAnswer (DateTime time)
 		{
 			if ((time - DateTime.Now) > TimeSpan.FromMinutes (2)) {
-				var xEl = new XElement ("visited", "no");
-				File.WriteAllText ("db.xml", xEl.ToString ());
+				SetVisited (false);
 			}
 			return "That is a correct answer!\n";
 		}
@@ -37,8 +42,7 @@ namespace Vanki
 			if ((time - DateTime.Now) > TimeSpan.FromMinutes (2))
 				return "The next question is:\n\"What is red?\"\n";
 			if (!visited) {
-				var xEl = new XElement ("visited", "yes");
-				File.WriteAllText ("db.xml", xEl.ToString ());
+				SetVisited (true);
 				return "The next question is:\n\"What is red?\"\n";
 			}
 			return "There is no next question\n";
