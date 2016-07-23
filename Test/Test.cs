@@ -29,6 +29,9 @@ namespace Test
 			response = MainClass.TestableMain (new []{"--next"});
 			Assert.AreEqual ("The next question is:\n\"What is red?\"\n", response);
 
+			response = MainClass.TestableMain (new []{"--answer", "a color"});
+			Assert.AreEqual ("That is a correct answer!\n", response);
+
 		}
 	}
 }

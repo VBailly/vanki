@@ -14,6 +14,8 @@ namespace Vanki
 		{
 			if (args.Length == 1)
 				return "The next question is:\n\"What is red?\"\n";
+			if (args.Length == 2)
+				return "That is a correct answer!\n";
 			return "New entry registered\n";
 		}
 			
