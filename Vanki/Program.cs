@@ -6,6 +6,11 @@ namespace Vanki
 {
 	public class MainClass
 	{
+		const string newEntryRegistered = "New entry registered\n";
+		const string thatIsACorrectAnswer = "That is a correct answer!\n";
+		const string theNextQuestionIsWhatIsRed = "The next question is:\n\"What is red?\"\n";
+		const string thereIsNoNextQuestion = "There is no next question\n";
+
 		public static void Main (string[] args)
 		{
 			var result = TestableMain (args, DateTime.Now);
@@ -18,7 +23,7 @@ namespace Vanki
 				return PrintNextQuestion (time);
 			if (args.Length == 2)
 				return ProcessAnswer (time);
-			return "New entry registered\n";
+			return newEntryRegistered;
 		}
 
 		static void SetVisited (bool value)
@@ -32,7 +37,7 @@ namespace Vanki
 			if (LapseGreaterThan2Min (time)) {
 				SetVisited (false);
 			}
-			return "That is a correct answer!\n";
+			return thatIsACorrectAnswer;
 		}
 
 		static bool LapseGreaterThan2Min (DateTime time)
@@ -45,12 +50,12 @@ namespace Vanki
 			bool visited = HasBeenVisited ();
 
 			if (LapseGreaterThan2Min (time))
-				return "The next question is:\n\"What is red?\"\n";
+				return theNextQuestionIsWhatIsRed;
 			if (!visited) {
 				SetVisited (true);
-				return "The next question is:\n\"What is red?\"\n";
+				return theNextQuestionIsWhatIsRed;
 			}
-			return "There is no next question\n";
+			return thereIsNoNextQuestion;
 		}
 
 		static bool HasBeenVisited ()
