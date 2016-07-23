@@ -29,7 +29,7 @@ namespace Vanki
 		static string ProcessAnswer (DateTime time)
 		{
 			if (LapseGreaterThan2Min (time)) {
-				Storage.SetVisited (false);
+				Storage.SetTime (time);
 			}
 			return thatIsACorrectAnswer;
 		}

@@ -13,12 +13,12 @@ namespace Test
 		[SetUp]
 		public void SetUp ()
 		{
+			File.Delete ("db.xml");
 		}
 
 		[TearDown]
 		public void TearDown ()
 		{
-			File.Delete ("db.xml");
 		}
 
 		[Test ()]
@@ -51,6 +51,9 @@ namespace Test
 
 			response = MainClass.TestableMain (new []{"--answer", "a color"}, time);
 			Assert.AreEqual ("That is a correct answer!\n", response);
+
+			response = MainClass.TestableMain (new []{"--next"}, time);
+			Assert.AreEqual ("There is no next question\n", response);
 
 		}
 	}
