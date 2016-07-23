@@ -9,6 +9,7 @@ namespace Vanki
 		const string thatIsACorrectAnswer = "That is a correct answer!\n";
 		const string theNextQuestionIsWhatIsRed = "The next question is:\n\"What is red?\"\n";
 		const string thereIsNoNextQuestion = "There is no next question\n";
+		const string cannotAnswer = "You cannot answer because there is no question pending\n";
 
 		public static void Main (string[] args)
 		{
@@ -28,6 +29,9 @@ namespace Vanki
 			
 		static string ProcessAnswer (DateTime time)
 		{
+			if (!IsLapsePassed(time))
+				return cannotAnswer;
+			
 			Storage.SetLapse (Math.Max(2, (time - Storage.GetTime()).Minutes * 2));
 			Storage.SetTime (time);
 
