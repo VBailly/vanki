@@ -28,29 +28,24 @@ namespace Vanki
 			
 		static string ProcessAnswer (DateTime time)
 		{
-			if (IsLapsePassed (time)) {
-				Storage.SetLapse ((time - Storage.GetTime()).Minutes * 2);
-				Storage.SetTime (time);
-			}
+			Storage.SetLapse (Math.Max(2, (time - Storage.GetTime()).Minutes * 2));
+			Storage.SetTime (time);
 
 			return thatIsACorrectAnswer;
 		}
 
 		static bool IsLapsePassed (DateTime time)
 		{
-			return (time - Storage.GetTime()) > TimeSpan.FromMinutes (Storage.GetLapse());
+			var lapse = Storage.GetLapse();
+			var storedTime = Storage.GetTime ();
+			return time > storedTime + TimeSpan.FromMinutes (lapse);
 		}
 
 		static string PrintNextQuestion (DateTime time)
 		{
-			bool visited = Storage.HasBeenVisited ();
 
 			if (IsLapsePassed (time))
 				return theNextQuestionIsWhatIsRed;
-			if (!visited) {
-				Storage.SetVisited (true);
-				return theNextQuestionIsWhatIsRed;
-			}
 			return thereIsNoNextQuestion;
 		}
 

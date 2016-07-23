@@ -37,22 +37,6 @@ namespace Vanki
 			return int.Parse(data.Element ("lapse").Value);
 		}
 
-			
-
-		public static void SetVisited (bool value) 
-		{
-			var data = GetData ();
-			data.Element ("visited").Value = value ? "yes" : "no";
-
-			File.WriteAllText ("db.xml", data.ToString ());
-		}
-
-		public static bool HasBeenVisited ()
-		{
-			var data = GetData ();
-			return data.Element ("visited").Value == "yes";
-		}
-
 		public static XElement GetData()
 		{
 			if (!File.Exists ("db.xml"))
@@ -62,14 +46,11 @@ namespace Vanki
 
 		public static XElement GetNewData()
 		{
-			var xEl = new XElement ("visited", "no" );
-
 			var time = DateTime.Now;
 			var xTime = new XElement ("time", time.ToString ());
-			var xLapse = new XElement ("lapse", "2");
+			var xLapse = new XElement ("lapse", "0");
 
 			var data = new XElement ("Data");
-			data.Add (xEl);
 			data.Add (xTime);
 			data.Add (xLapse);
 
