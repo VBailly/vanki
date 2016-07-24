@@ -35,7 +35,7 @@ namespace Vanki
 		{
 			Storage.LastAnswerTime = time;
 			Storage.SetAnswer(answer);
-			Storage.SetQuestion(question);
+			Storage.Question = question;
 			return newEntryRegistered;
 		}
 			
@@ -70,7 +70,7 @@ namespace Vanki
 		static string PrintNextQuestion (DateTime time)
 		{
 			if (IsLapsePassed (time) && Storage.DataExist())
-				return string.Format(theNextQuestionIs, Storage.GetQuestion());
+				return string.Format(theNextQuestionIs, Storage.Question);
 			return thereIsNoNextQuestion;
 		}
 

@@ -23,21 +23,22 @@ namespace Vanki
 			}
 		}
 
-
-		public static void SetQuestion(string question)
+		public static string Question
 		{
-			var data = GetData();
-			data.Element("question").Value = question;
+			get
+			{
+				var data = GetData();
+				return data.Element("question").Value;
+			}
+			set
+			{
+				var data = GetData();
+				data.Element("question").Value = value;
 
-			File.WriteAllText(DataBaseFileName, data.ToString());
+				File.WriteAllText(DataBaseFileName, data.ToString());
+			}
 		}
 
-		public static string GetQuestion()
-		{
-			var data = GetData();
-
-			return data.Element("question").Value;
-		}
 
 		public static void SetLapse (int minutes)
 		{
