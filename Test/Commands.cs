@@ -21,9 +21,9 @@ namespace Test
 			return MainClass.TestableMain(new[] { "--next" }, time);
 		}
 
-		public static string RegisterQuestion()
+		public static string RegisterQuestion(string question, string answer)
 		{
-			return MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
+			return MainClass.TestableMain(new[] { "-q", question, "-a", answer }, DateTime.Now);
 		}
 	}
 }

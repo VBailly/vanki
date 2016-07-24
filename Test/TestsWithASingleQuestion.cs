@@ -229,7 +229,7 @@ namespace Test
 
 		static string RegisterQuestion()
 		{
-			return Commands.RegisterQuestion();
+			return Commands.RegisterQuestion("What is red?", "a color");
 		}
 
 	}

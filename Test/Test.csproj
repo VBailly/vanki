@@ -38,6 +38,7 @@
     <Compile Include="TestWithoutAnQuestionRegistered.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="ConsoleOutputs.cs" />
+    <Compile Include="TestWithADifferentSingleQuestion.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
