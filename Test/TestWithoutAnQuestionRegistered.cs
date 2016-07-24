@@ -18,7 +18,7 @@ namespace Test
 		{
 			var response = Commands.AskForNextQuestion(DateTime.Now);
 
-			Assert.AreEqual(ConsoleOutputs.NoNextQuestionMessage, response);
+			Assert.AreEqual(ConsoleOutputs.EmptyDeckMessage, response);
 		}
 
 		[Test]

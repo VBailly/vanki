@@ -35,6 +35,7 @@ namespace Vanki.Model.Impl
 			var xAnswer = new XElement("answer", answer);
 
 			var xCard = new XElement("Card");
+			xCard.Add(new XAttribute("version", "1"));
 			xCard.Add(xTime);
 			xCard.Add(xLapse);
 			xCard.Add(xQuestion);
@@ -99,7 +100,9 @@ namespace Vanki.Model.Impl
 		{
 			if (!File.Exists(DataBaseFileName))
 			{
-				return new XElement("Deck");
+				var deck = new XElement("Deck");
+				deck.Add(new XAttribute("version", "1"));
+				return deck;
 			}
 			return XElement.Load(DataBaseFileName);
 		}

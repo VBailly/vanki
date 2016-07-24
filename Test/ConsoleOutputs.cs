@@ -9,6 +9,7 @@ namespace Test
 		public const string WrongAnswerMessage = "WRONG! The correct answer is \"{0}\".\n";
 		public const string CannotAnswerMessage = "You cannot answer because there is no question pending\n";
 		public const string NewEntryMessage = "New entry registered\n";
+		public const string EmptyDeckMessage = "There is no questions, the deck is empty\n";
 	}
 }
 

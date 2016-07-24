@@ -13,6 +13,7 @@ namespace Vanki
 		static readonly string theNextQuestionIs = "The next question is:\n\"{0}\"\n";
 		const string thereIsNoNextQuestion = "There is no next question\n";
 		const string cannotAnswer = "You cannot answer because there is no question pending\n";
+		const string emptyDeckMessage = "There is no questions, the deck is empty\n";
 		static readonly Deck deck = new DeckImpl();
 
 		public static void Main (string[] args)
@@ -68,10 +69,13 @@ namespace Vanki
 
 		static string PrintNextQuestion (DateTime time)
 		{
+			if (!deck.Cards.Any())
+				return emptyDeckMessage;
 			var card = GetNextCard(time);
 			if (card != null)
 				return string.Format(theNextQuestionIs, card.Question);
-			return thereIsNoNextQuestion;
+			var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
+			return thereIsNoNextQuestion + string.Format("Come back at this time: {0} (in {1})\n", nextCardTime, nextCardTime - time);
 		}
 
 

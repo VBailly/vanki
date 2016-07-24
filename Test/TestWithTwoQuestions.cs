@@ -90,7 +90,7 @@ namespace Test
 
 			var response = Commands.AskForNextQuestion(time);
 
-			Assert.AreEqual(ConsoleOutputs.NoNextQuestionMessage, response);
+			Assert.IsTrue(response.Contains(ConsoleOutputs.NoNextQuestionMessage));
 		}
 
 		[Test]
