@@ -27,7 +27,7 @@ namespace Test
 
 			var time = DateTime.Now;
 
-			var response = MainClass.TestableMain (new []{"--add", "What is red?", "a color"}, DateTime.Now);
+			var response = MainClass.TestableMain (new []{"-q", "What is red?", "-a", "a color"}, DateTime.Now);
 			Assert.AreEqual ("New entry registered\n", response);
 
 			response = MainClass.TestableMain (new []{"--next"}, time);
@@ -44,7 +44,7 @@ namespace Test
 
 			var time = DateTime.Now;
 
-			var response = MainClass.TestableMain (new []{"--add", "What is red?", "a color"}, DateTime.Now);
+			var response = MainClass.TestableMain (new []{"-q", "What is red?", "-a", "a color"}, DateTime.Now);
 			Assert.AreEqual ("New entry registered\n", response);
 
 			response = MainClass.TestableMain (new []{"--next"}, time);
@@ -63,12 +63,29 @@ namespace Test
 		}
 
 		[Test ()]
+		public void We_need_to_answer_correct_to_pass ()
+		{
+
+			var time = DateTime.Now;
+
+			var response = MainClass.TestableMain (new []{"-q", "What is red?", "-a", "a color"}, DateTime.Now);
+			Assert.AreEqual ("New entry registered\n", response);
+
+			response = MainClass.TestableMain (new []{"--next"}, time);
+			Assert.AreEqual ("The next question is:\n\"What is red?\"\n", response);
+
+
+		//	response = MainClass.TestableMain (new []{"--answer", "an animal"}, time);
+		//	Assert.AreEqual ("WRONG! The correct answer is \"a color\".\n", response);
+		}
+
+		[Test ()]
 		public void TestCase1 ()
 		{
 
 			var time = DateTime.Now;
 			
-			var response = MainClass.TestableMain (new []{"--add", "What is red?", "a color"}, DateTime.Now);
+			var response = MainClass.TestableMain (new []{"-q", "What is red?", "-a", "a color" }, DateTime.Now);
 			Assert.AreEqual ("New entry registered\n", response);
 
 			response = MainClass.TestableMain (new []{"--next"}, time);

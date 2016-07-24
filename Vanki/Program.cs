@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace Vanki
@@ -19,10 +22,20 @@ namespace Vanki
 
 		public static string TestableMain(string[] args, DateTime time)
 		{
-			if (args.Length == 1)
+			var options = ArgsParser.Parse (args);
+			if (options.ShowNext)
 				return PrintNextQuestion (time);
-			if (args.Length == 2)
+			if (!string.IsNullOrEmpty (options.Question) && !string.IsNullOrEmpty (options.Answer))
+				return AddQuestion (time);
+			if (!string.IsNullOrEmpty (options.Answer))
 				return ProcessAnswer (time);
+
+
+			return "wrong command line arguments";
+		}
+
+		static string AddQuestion(DateTime time)
+		{
 			Storage.SetTime (time);
 			return newEntryRegistered;
 		}
@@ -47,7 +60,6 @@ namespace Vanki
 
 		static string PrintNextQuestion (DateTime time)
 		{
-
 			if (IsLapsePassed (time))
 				return theNextQuestionIsWhatIsRed;
 			return thereIsNoNextQuestion;
