@@ -28,7 +28,7 @@ namespace Vanki
 				return ProcessAnswer (time, options.Answer);
 
 
-			return "wrong command line arguments";
+			return "wrong command line arguments\n";
 		}
 
 		static string AddQuestion(DateTime time, string question, string answer)
