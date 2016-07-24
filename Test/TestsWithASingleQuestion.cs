@@ -201,7 +201,6 @@ namespace Test
 			var time = DateTime.Now;
 			RegisterQuestion(time);
 			AnswerCorrectly(time);
-			AskForNextQuestion(time);
 			time += TimeSpan.FromMinutes(3); // +3
 			AnswerWrongly(time); // reset
 			AnswerCorrectly(time);
@@ -210,6 +209,21 @@ namespace Test
 			var response = AskForNextQuestion(time);
 
 			Assert.AreEqual(NextQuestionMessage, response);
+		}
+
+		[Test]
+		public void Lapse_work_with_more_than_one_hour()
+		{
+			var time = DateTime.Now;
+			RegisterQuestion(time);
+			AnswerCorrectly(time);
+			time += TimeSpan.FromHours(2); // +2h
+			AnswerCorrectly(time);
+			time += TimeSpan.FromHours(3); // +3 after reset
+
+			var response = AskForNextQuestion(time);
+
+			Assert.IsTrue(response.Contains(NoNextQuestionMessage));
 		}
 
 		[Test]
