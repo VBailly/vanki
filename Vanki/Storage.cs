@@ -39,13 +39,20 @@ namespace Vanki
 			}
 		}
 
-
-		public static void SetLapse (int minutes)
+		public static int CurrentInterval
 		{
-			var data = GetData ();
-			data.Element ("lapse").Value = minutes.ToString();
+			get
+			{
+				var data = GetData();
+				return int.Parse(data.Element("lapse").Value);
+			}
+			set
+			{
+				var data = GetData();
+				data.Element("lapse").Value = value.ToString();
 
-			File.WriteAllText (DataBaseFileName, data.ToString ());
+				File.WriteAllText(DataBaseFileName, data.ToString());
+			}
 		}
 
 		public static string GetAnswer()
@@ -63,12 +70,6 @@ namespace Vanki
 			File.WriteAllText(DataBaseFileName, data.ToString());
 		}
 
-		public static int GetLapse()
-		{
-			var data = GetData ();
-
-			return int.Parse(data.Element ("lapse").Value);
-		}
 
 		public static bool DataExist()
 		{

@@ -48,13 +48,13 @@ namespace Vanki
 
 			if (answer != correctAnswer)
 			{
-				Storage.SetLapse(0);
+				Storage.CurrentInterval = 0;
 				Storage.LastAnswerTime = time;
 				return string.Format("WRONG! The correct answer is \"{0}\".\n", correctAnswer);
 
 			}
 			
-			Storage.SetLapse (Math.Max(2, (time - Storage.LastAnswerTime).Minutes * 2));
+			Storage.CurrentInterval = Math.Max(2, (time - Storage.LastAnswerTime).Minutes * 2);
 			Storage.LastAnswerTime = time;
 
 			return thatIsACorrectAnswer;
@@ -62,7 +62,7 @@ namespace Vanki
 
 		static bool IsLapsePassed (DateTime time)
 		{
-			var lapse = Storage.GetLapse();
+			var lapse = Storage.CurrentInterval;
 			var storedTime = Storage.LastAnswerTime;
 			return time > storedTime + TimeSpan.FromMinutes (lapse);
 		}
