@@ -5,7 +5,7 @@ using Vanki;
 
 namespace Test
 {
-	[TestFixture()]
+	[TestFixture]
 	public class Test
 	{
 		private const string NoNextQuestionMessage = "There is no next question\n";
@@ -23,7 +23,7 @@ namespace Test
 		{
 		}
 
-		[Test()]
+		[Test]
 		public void We_can_ask_twice_for_a_question()
 		{
 			var time = DateTime.Now;
@@ -36,7 +36,7 @@ namespace Test
 
 		}
 
-		[Test()]
+		[Test]
 		public void We_cannot_answer_when_there_is_no_question()
 		{
 			var time = DateTime.Now;
@@ -50,7 +50,7 @@ namespace Test
 
 		}
 
-		[Test()]
+		[Test]
 		public void Wrong_answers_dont_pass()
 		{
 			var time = DateTime.Now;
@@ -61,7 +61,7 @@ namespace Test
 			Assert.AreEqual("WRONG! The correct answer is \"a color\".\n", response);
 		}
 
-		[Test()]
+		[Test]
 		public void An_wrong_answer_is_not_treated_if_no_question_is_pending()
 		{
 			var time = DateTime.Now;
@@ -73,7 +73,7 @@ namespace Test
 			Assert.AreEqual("You cannot answer because there is no question pending\n", response);
 		}
 
-		[Test()]
+		[Test]
 		public void Register_a_new_entry()
 		{
 			var response = RegisterQuestion();
@@ -81,7 +81,7 @@ namespace Test
 			Assert.AreEqual("New entry registered\n", response);
 		}
 
-		[Test()]
+		[Test]
 		public void A_question_is_available_straight_after_being_registered()
 		{
 			RegisterQuestion();
@@ -91,7 +91,7 @@ namespace Test
 			Assert.AreEqual(NextQuestionMessage, response);
 		}
 
-		[Test()]
+		[Test]
 		public void Giving_a_correct_answer_for_the_first_time()
 		{
 			RegisterQuestion();
@@ -101,7 +101,7 @@ namespace Test
 			Assert.AreEqual(CorrectAnswerMessage, response);
 		}
 
-		[Test()]
+		[Test]
 		public void There_is_no_question_just_after_having_answered_it()
 		{
 			RegisterQuestion();
@@ -112,7 +112,7 @@ namespace Test
 			Assert.AreEqual(NoNextQuestionMessage, response);
 		}
 
-		[Test()]
+		[Test]
 		public void There_is_still_no_question_1min_after_having_answered_it()
 		{
 			var time = DateTime.Now;
@@ -125,7 +125,7 @@ namespace Test
 			Assert.AreEqual(NoNextQuestionMessage, response);
 		}
 
-		[Test()]
+		[Test]
 		public void There_is_a_question_3min_after_having_answered_it()
 		{
 			var time = DateTime.Now;
@@ -138,7 +138,7 @@ namespace Test
 			Assert.AreEqual(NextQuestionMessage, response);
 		}
 
-		[Test()]
+		[Test]
 		public void We_can_answer_again_after_3min_from_first_answer()
 		{
 			var time = DateTime.Now;
@@ -151,7 +151,7 @@ namespace Test
 			Assert.AreEqual(CorrectAnswerMessage, response);
 		}
 
-		[Test()]
+		[Test]
 		public void There_is_no_next_question_directly_after_the_second_answer()
 		{
 			var time = DateTime.Now;
@@ -165,7 +165,7 @@ namespace Test
 			Assert.AreEqual(NoNextQuestionMessage, response);
 		}
 
-		[Test ()]
+		[Test]
 		public void There_is_no_next_question_5_min_after_the_second_answer ()
 		{
 			var time = DateTime.Now;
@@ -181,7 +181,7 @@ namespace Test
 			Assert.AreEqual(NoNextQuestionMessage, response);
 		}
 
-		[Test()]
+		[Test]
 		public void The_question_stays_next_if_we_answer_wrongly()
 		{
 			var time = DateTime.Now;
@@ -193,7 +193,7 @@ namespace Test
 			Assert.AreEqual(NextQuestionMessage, response);
 		}
 
-		[Test()]
+		[Test]
 		public void A_wrong_answer_resets_the_lapse()
 		{
 			var time = DateTime.Now;
