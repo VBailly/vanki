@@ -149,6 +149,35 @@ namespace Test
 			Assert.AreEqual("That is a correct answer!\n", response);
 		}
 
+		[Test()]
+		public void There_is_no_next_question_directly_after_the_second_answer()
+		{
+			var time = DateTime.Now;
+			RegisterQuestion();
+			AnswerCorrectly(time);
+			time += TimeSpan.FromMinutes(3);
+			AnswerCorrectly(time);
+
+			var response = AskForNextQuestion(time);
+
+			Assert.AreEqual(NoNextQuestionMessage, response);
+		}
+
+		[Test ()]
+		public void There_is_no_next_question_5_min_after_the_second_answer ()
+		{
+			var time = DateTime.Now;
+			RegisterQuestion();
+			AnswerCorrectly(time);
+			time += TimeSpan.FromMinutes(3); // +3
+			AnswerCorrectly(time);
+			AskForNextQuestion(time);
+			time += TimeSpan.FromMinutes(5); // +8
+
+			var response = AskForNextQuestion(time);
+
+			Assert.AreEqual(NoNextQuestionMessage, response);
+		}
 
 		[Test()]
 		public void A_wrong_answer_resets_the_lapse()
@@ -168,32 +197,10 @@ namespace Test
 			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
 			Assert.AreEqual("That is a correct answer!\n", response);
 
-			time += TimeSpan.FromMinutes(3); // +8
+			time += TimeSpan.FromMinutes(3); // +3
 
 			response = AskForNextQuestion(time);
 			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
-		}
-
-
-		[Test ()]
-		public void TestCase1 ()
-		{
-
-			var time = DateTime.Now;
-
-			RegisterQuestion();
-			AnswerCorrectly(time);
-
-			time += TimeSpan.FromMinutes(3); // +3
-			AnswerCorrectly(time);
-
-			var response = AskForNextQuestion(time);
-			Assert.AreEqual(NoNextQuestionMessage, response);
-
-			time += TimeSpan.FromMinutes(5); // +8
-			response = AskForNextQuestion(time);
-			Assert.AreEqual(NoNextQuestionMessage, response);
-
 		}
 
 		static string AnswerCorrectly(DateTime time)
