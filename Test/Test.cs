@@ -9,6 +9,7 @@ namespace Test
 	public class Test
 	{
 		private const string NoNextQuestionMessage = "There is no next question\n";
+		private const string NextQuestionMessage = "The next question is:\n\"What is red?\"\n";
 
 		[SetUp]
 		public void SetUp()
@@ -30,7 +31,7 @@ namespace Test
 
 			var response = AskForNextQuestion(time);
 
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
+			Assert.AreEqual(NextQuestionMessage, response);
 
 		}
 
@@ -86,7 +87,7 @@ namespace Test
 
 			var response = AskForNextQuestion(DateTime.Now);
 
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
+			Assert.AreEqual(NextQuestionMessage, response);
 		}
 
 		[Test()]
@@ -133,7 +134,7 @@ namespace Test
 
 			var response = AskForNextQuestion(time);
 
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
+			Assert.AreEqual(NextQuestionMessage, response);
 		}
 
 		[Test()]
@@ -188,7 +189,7 @@ namespace Test
 
 			var response = AskForNextQuestion(time);
 
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
+			Assert.AreEqual(NextQuestionMessage, response);
 		}
 
 		[Test()]
@@ -199,15 +200,13 @@ namespace Test
 			AnswerCorrectly(time);
 			AskForNextQuestion(time);
 			time += TimeSpan.FromMinutes(3); // +3
-			AnswerWrongly(time);
+			AnswerWrongly(time); // reset
+			AnswerCorrectly(time);
+			time += TimeSpan.FromMinutes(3); // +3 after reset
 
-			var response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
-			Assert.AreEqual("That is a correct answer!\n", response);
+			var response = AskForNextQuestion(time);
 
-			time += TimeSpan.FromMinutes(3); // +3
-
-			response = AskForNextQuestion(time);
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
+			Assert.AreEqual(NextQuestionMessage, response);
 		}
 
 		static string AnswerWrongly(DateTime time)
