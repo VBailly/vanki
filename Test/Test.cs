@@ -11,6 +11,9 @@ namespace Test
 		private const string NoNextQuestionMessage = "There is no next question\n";
 		private const string NextQuestionMessage = "The next question is:\n\"What is red?\"\n";
 		private const string CorrectAnswerMessage = "That is a correct answer!\n";
+		private const string WrongAnswerMessage = "WRONG! The correct answer is \"a color\".\n";
+		private const string CannotAnswerMessage = "You cannot answer because there is no question pending\n";
+		private const string NewEntryMessage = "New entry registered\n";
 
 		[SetUp]
 		public void SetUp()
@@ -46,7 +49,7 @@ namespace Test
 
 			var response = AnswerCorrectly(time);
 
-			Assert.AreEqual("You cannot answer because there is no question pending\n", response);
+			Assert.AreEqual(CannotAnswerMessage, response);
 
 		}
 
@@ -58,7 +61,7 @@ namespace Test
 
 			var response = AnswerWrongly(time);
 
-			Assert.AreEqual("WRONG! The correct answer is \"a color\".\n", response);
+			Assert.AreEqual(WrongAnswerMessage, response);
 		}
 
 		[Test]
@@ -70,7 +73,7 @@ namespace Test
 
 			var response = AnswerWrongly(time);
 
-			Assert.AreEqual("You cannot answer because there is no question pending\n", response);
+			Assert.AreEqual(CannotAnswerMessage, response);
 		}
 
 		[Test]
@@ -78,7 +81,7 @@ namespace Test
 		{
 			var response = RegisterQuestion();
 
-			Assert.AreEqual("New entry registered\n", response);
+			Assert.AreEqual(NewEntryMessage, response);
 		}
 
 		[Test]
