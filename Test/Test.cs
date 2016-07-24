@@ -54,7 +54,7 @@ namespace Test
 			var time = DateTime.Now;
 			RegisterQuestion();
 
-			var response = MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
+			var response = AnswerWrongly(time);
 
 			Assert.AreEqual("WRONG! The correct answer is \"a color\".\n", response);
 		}
@@ -66,7 +66,7 @@ namespace Test
 			RegisterQuestion();
 			AnswerCorrectly(time);
 
-			var response = MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
+			var response = AnswerWrongly(time);
 
 			Assert.AreEqual("You cannot answer because there is no question pending\n", response);
 		}
@@ -187,8 +187,7 @@ namespace Test
 			AnswerCorrectly(time);
 			AskForNextQuestion(time);
 			time += TimeSpan.FromMinutes(3); // +3
-
-			var response = MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
+			string response = AnswerWrongly(time);
 			Assert.AreEqual("WRONG! The correct answer is \"a color\".\n", response);
 
 			response = AskForNextQuestion(time);
@@ -201,6 +200,11 @@ namespace Test
 
 			response = AskForNextQuestion(time);
 			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
+		}
+
+		static string AnswerWrongly(DateTime time)
+		{
+			return MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
 		}
 
 		static string AnswerCorrectly(DateTime time)
