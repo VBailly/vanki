@@ -1,19 +1,18 @@
 ﻿using NUnit.Framework;
 using System;
 using System.IO;
-using Vanki;
 
 namespace Test
 {
 	[TestFixture]
 	public class TestsWithASingleQuestion
 	{
-		private const string NoNextQuestionMessage = "There is no next question\n";
-		private const string NextQuestionMessage = "The next question is:\n\"What is red?\"\n";
-		private const string CorrectAnswerMessage = "That is a correct answer!\n";
-		private const string WrongAnswerMessage = "WRONG! The correct answer is \"a color\".\n";
-		private const string CannotAnswerMessage = "You cannot answer because there is no question pending\n";
-		private const string NewEntryMessage = "New entry registered\n";
+		private const string NoNextQuestionMessage = ConsoleOutputs.NoNextQuestionMessage;
+		private const string NextQuestionMessage = ConsoleOutputs.NextQuestionMessage;
+		private const string CorrectAnswerMessage = ConsoleOutputs.CorrectAnswerMessage;
+		private const string WrongAnswerMessage = ConsoleOutputs.WrongAnswerMessage;
+		private const string CannotAnswerMessage = ConsoleOutputs.CannotAnswerMessage;
+		private const string NewEntryMessage = ConsoleOutputs.NewEntryMessage;
 
 		[SetUp]
 		public void SetUp()
@@ -185,23 +184,6 @@ namespace Test
 		}
 
 		[Test]
-		public void There_is_no_next_question_if_we_dont_register_one()
-		{
-			var response = AskForNextQuestion(DateTime.Now);
-
-			Assert.AreEqual(NoNextQuestionMessage, response);
-		}
-
-		[Test]
-		public void We_cannot_anwer_next_question_if_we_dont_register_one()
-		{
-			var response = AnswerCorrectly(DateTime.Now);
-
-			Assert.AreEqual(CannotAnswerMessage, response);
-		}
-
-
-		[Test]
 		public void The_question_stays_next_if_we_answer_wrongly()
 		{
 			var time = DateTime.Now;
@@ -232,23 +214,24 @@ namespace Test
 
 		static string AnswerWrongly(DateTime time)
 		{
-			return MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
+			return Commands.AnswerWrongly(time);
 		}
 
 		static string AnswerCorrectly(DateTime time)
 		{
-			return MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			return Commands.AnswerCorrectly(time);
 		}
 
 		static string AskForNextQuestion(DateTime time)
 		{
-			return MainClass.TestableMain(new[] { "--next" }, time);
+			return Commands.AskForNextQuestion(time);
 		}
 
 		static string RegisterQuestion()
 		{
-			return MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
+			return Commands.RegisterQuestion();
 		}
+
 	}
 }
 
