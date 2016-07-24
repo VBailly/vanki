@@ -27,10 +27,9 @@ namespace Test
 
 			var time = DateTime.Now;
 
-			var response = MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
-			Assert.AreEqual("New entry registered\n", response);
+			MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
 
-			response = MainClass.TestableMain(new[] { "--next" }, time);
+			var response = MainClass.TestableMain(new[] { "--next" }, time);
 			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
 
 			response = MainClass.TestableMain(new[] { "--next" }, time);
@@ -44,10 +43,9 @@ namespace Test
 
 			var time = DateTime.Now;
 
-			var response = MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
-			Assert.AreEqual("New entry registered\n", response);
+			MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
 
-			response = MainClass.TestableMain(new[] { "--next" }, time);
+			var response = MainClass.TestableMain(new[] { "--next" }, time);
 			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
 
 
@@ -67,10 +65,9 @@ namespace Test
 		{
 			var time = DateTime.Now;
 
-			var response = MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
-			Assert.AreEqual("New entry registered\n", response);
+			MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
 
-			response = MainClass.TestableMain(new[] { "--next" }, time);
+			var response = MainClass.TestableMain(new[] { "--next" }, time);
 			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
 
 			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
@@ -110,10 +107,9 @@ namespace Test
 
 			var time = DateTime.Now;
 
-			var response = MainClass.TestableMain (new []{"-q", "What is red?", "-a", "a color"}, DateTime.Now);
-			Assert.AreEqual ("New entry registered\n", response);
+			MainClass.TestableMain (new []{"-q", "What is red?", "-a", "a color"}, DateTime.Now);
 
-			response = MainClass.TestableMain (new []{"--next"}, time);
+			var response = MainClass.TestableMain (new []{"--next"}, time);
 			Assert.AreEqual ("The next question is:\n\"What is red?\"\n", response);
 
 			response = MainClass.TestableMain (new []{"--answer", "an animal"}, time);
@@ -126,10 +122,9 @@ namespace Test
 
 			var time = DateTime.Now;
 
-			var response = MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
-			Assert.AreEqual("New entry registered\n", response);
+			MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
 
-			response = MainClass.TestableMain(new[] { "--next" }, time);
+			var response = MainClass.TestableMain(new[] { "--next" }, time);
 			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
 
 			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
@@ -142,6 +137,12 @@ namespace Test
 			Assert.AreEqual("You cannot answer because there is no question pending\n", response);
 		}
 
+		[Test()]
+		public void Register_a_new_entry()
+		{
+			var response = MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
+			Assert.AreEqual("New entry registered\n", response);
+		}
 
 		[Test ()]
 		public void TestCase1 ()
@@ -149,10 +150,9 @@ namespace Test
 
 			var time = DateTime.Now;
 			
-			var response = MainClass.TestableMain (new []{"-q", "What is red?", "-a", "a color" }, DateTime.Now);
-			Assert.AreEqual ("New entry registered\n", response);
+			MainClass.TestableMain (new []{"-q", "What is red?", "-a", "a color" }, DateTime.Now);
 
-			response = MainClass.TestableMain (new []{"--next"}, time);
+			var response = MainClass.TestableMain (new []{"--next"}, time);
 			Assert.AreEqual ("The next question is:\n\"What is red?\"\n", response);
 
 			response = MainClass.TestableMain (new []{"--answer", "a color"}, time);
