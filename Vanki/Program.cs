@@ -42,12 +42,11 @@ namespace Vanki
 			
 		static string ProcessAnswer (DateTime time, string answer)
 		{
-			if (answer != "a color")
-			{
-				return "WRONG! The correct answer is \"a color\".\n";
-			}
 			if (!IsLapsePassed(time))
 				return cannotAnswer;
+
+			if (answer != "a color")
+				return "WRONG! The correct answer is \"a color\".\n";
 			
 			Storage.SetLapse (Math.Max(2, (time - Storage.GetTime()).Minutes * 2));
 			Storage.SetTime (time);
