@@ -34,7 +34,7 @@ namespace Vanki
 		static string AddQuestion(DateTime time, string question, string answer)
 		{
 			Storage.LastAnswerTime = time;
-			Storage.SetAnswer(answer);
+			Storage.Answer = answer;
 			Storage.Question = question;
 			return newEntryRegistered;
 		}
@@ -44,7 +44,7 @@ namespace Vanki
 			if (!IsLapsePassed(time) || !Storage.DataExist())
 				return cannotAnswer;
 
-			var correctAnswer = Storage.GetAnswer();
+			var correctAnswer = Storage.Answer;
 
 			if (answer != correctAnswer)
 			{

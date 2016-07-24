@@ -55,19 +55,19 @@ namespace Vanki
 			}
 		}
 
-		public static string GetAnswer()
+		public static string Answer
 		{
-			var data = GetData();
-
-			return data.Element("answer").Value;
-		}
-
-		public static void SetAnswer(string answer)
-		{
-			var data = GetData();
-			data.Element("answer").Value = answer;
-
-			File.WriteAllText(DataBaseFileName, data.ToString());
+			get
+			{
+				var data = GetData();
+				return data.Element("answer").Value;
+			}
+			set
+			{
+				var data = GetData();
+				data.Element("answer").Value = value;
+				File.WriteAllText(DataBaseFileName, data.ToString());
+			}
 		}
 
 
