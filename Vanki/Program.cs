@@ -10,6 +10,7 @@ namespace Vanki
 		static readonly string theNextQuestionIs = "The next question is:\n\"{0}\"\n";
 		const string thereIsNoNextQuestion = "There is no next question\n";
 		const string cannotAnswer = "You cannot answer because there is no question pending\n";
+		static readonly IStorage Storage = new StorageImpl();
 
 		public static void Main (string[] args)
 		{

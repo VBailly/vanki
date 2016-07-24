@@ -4,43 +4,48 @@ using System.IO;
 
 namespace Vanki
 {
-	public static class Storage
+	public class StorageImpl : IStorage
 	{
 		const string DataBaseFileName = "db.xml";
 
-		public static DateTime LastAnswerTime
+		public DateTime LastAnswerTime
 		{
 			get { return DateTime.Parse(GetValue("time")); }
 			set { SetValue("time", value); }
 		}
 
-		public static string Question
+		public string Question
 		{
 			get { return GetValue("question"); }
 			set { SetValue("question", value); }
 		}
 
-		public static int CurrentInterval
+		public int CurrentInterval
 		{
 			get { return int.Parse(GetValue("lapse")); }
 			set { SetValue("lapse", value); }
 		}
 
-		public static string Answer
+		public string Answer
 		{
 			get { return GetValue("answer"); }
 			set { SetValue("answer", value); }
 		}
 
 
-		public static bool DataExist()
+		public bool DataExist()
+		{
+			return PrivateDataExist();
+		}
+
+		static bool PrivateDataExist()
 		{
 			return File.Exists(DataBaseFileName);
 		}
 
 		static string GetValue(string id)
 		{
-			if (!DataExist())
+			if (!PrivateDataExist())
 				return GetNewData().Element(id).Value;
 			return XElement.Load (DataBaseFileName).Element(id).Value;
 		}
@@ -54,7 +59,7 @@ namespace Vanki
 
 		static XElement GetCurrentData()
 		{
-			if (!DataExist())
+			if (!PrivateDataExist())
 				return GetNewData();
 			return XElement.Load(DataBaseFileName);
 		}
