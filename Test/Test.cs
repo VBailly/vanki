@@ -6,7 +6,7 @@ using Vanki;
 namespace Test
 {
 	[TestFixture]
-	public class Test
+	public class TestsWithASingleQuestion
 	{
 		private const string NoNextQuestionMessage = "There is no next question\n";
 		private const string NextQuestionMessage = "The next question is:\n\"What is red?\"\n";
