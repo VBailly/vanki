@@ -7,7 +7,7 @@ namespace Vanki
 	{
 		const string newEntryRegistered = "New entry registered\n";
 		const string thatIsACorrectAnswer = "That is a correct answer!\n";
-		const string theNextQuestionIsWhatIsRed = "The next question is:\n\"What is red?\"\n";
+		static readonly string theNextQuestionIs = "The next question is:\n\"{0}\"\n";
 		const string thereIsNoNextQuestion = "There is no next question\n";
 		const string cannotAnswer = "You cannot answer because there is no question pending\n";
 
@@ -23,7 +23,7 @@ namespace Vanki
 			if (options.ShowNext)
 				return PrintNextQuestion (time);
 			if (!string.IsNullOrEmpty (options.Question) && !string.IsNullOrEmpty (options.Answer))
-				return AddQuestion (time);
+				return AddQuestion (time, options.Question);
 			if (!string.IsNullOrEmpty (options.Answer))
 				return ProcessAnswer (time, options.Answer);
 
@@ -31,9 +31,10 @@ namespace Vanki
 			return "wrong command line arguments";
 		}
 
-		static string AddQuestion(DateTime time)
+		static string AddQuestion(DateTime time, string question)
 		{
 			Storage.SetTime (time);
+			Storage.SetQuestion(question);
 			return newEntryRegistered;
 		}
 			
@@ -66,7 +67,7 @@ namespace Vanki
 		static string PrintNextQuestion (DateTime time)
 		{
 			if (IsLapsePassed (time) && Storage.DataExist())
-				return theNextQuestionIsWhatIsRed;
+				return string.Format(theNextQuestionIs, Storage.GetQuestion());
 			return thereIsNoNextQuestion;
 		}
 

@@ -8,7 +8,7 @@ namespace Test
 	public class TestsWithASingleQuestion
 	{
 		const string NoNextQuestionMessage = ConsoleOutputs.NoNextQuestionMessage;
-		const string NextQuestionMessage = ConsoleOutputs.NextQuestionMessage;
+		static readonly string NextQuestionMessage = string.Format(ConsoleOutputs.NextQuestionMessage, "What is red?");
 		const string CorrectAnswerMessage = ConsoleOutputs.CorrectAnswerMessage;
 		const string WrongAnswerMessage = ConsoleOutputs.WrongAnswerMessage;
 		const string CannotAnswerMessage = ConsoleOutputs.CannotAnswerMessage;
