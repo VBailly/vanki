@@ -7,12 +7,12 @@ namespace Test
 	[TestFixture]
 	public class TestsWithASingleQuestion
 	{
-		private const string NoNextQuestionMessage = ConsoleOutputs.NoNextQuestionMessage;
-		private const string NextQuestionMessage = ConsoleOutputs.NextQuestionMessage;
-		private const string CorrectAnswerMessage = ConsoleOutputs.CorrectAnswerMessage;
-		private const string WrongAnswerMessage = ConsoleOutputs.WrongAnswerMessage;
-		private const string CannotAnswerMessage = ConsoleOutputs.CannotAnswerMessage;
-		private const string NewEntryMessage = ConsoleOutputs.NewEntryMessage;
+		const string NoNextQuestionMessage = ConsoleOutputs.NoNextQuestionMessage;
+		const string NextQuestionMessage = ConsoleOutputs.NextQuestionMessage;
+		const string CorrectAnswerMessage = ConsoleOutputs.CorrectAnswerMessage;
+		const string WrongAnswerMessage = ConsoleOutputs.WrongAnswerMessage;
+		const string CannotAnswerMessage = ConsoleOutputs.CannotAnswerMessage;
+		const string NewEntryMessage = ConsoleOutputs.NewEntryMessage;
 
 		[SetUp]
 		public void SetUp()
