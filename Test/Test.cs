@@ -10,6 +10,7 @@ namespace Test
 	{
 		private const string NoNextQuestionMessage = "There is no next question\n";
 		private const string NextQuestionMessage = "The next question is:\n\"What is red?\"\n";
+		private const string CorrectAnswerMessage = "That is a correct answer!\n";
 
 		[SetUp]
 		public void SetUp()
@@ -97,7 +98,7 @@ namespace Test
 
 			var response = AnswerCorrectly(DateTime.Now);
 
-			Assert.AreEqual("That is a correct answer!\n", response);
+			Assert.AreEqual(CorrectAnswerMessage, response);
 		}
 
 		[Test()]
@@ -147,7 +148,7 @@ namespace Test
 
 			var response = AnswerCorrectly(time);
 
-			Assert.AreEqual("That is a correct answer!\n", response);
+			Assert.AreEqual(CorrectAnswerMessage, response);
 		}
 
 		[Test()]
