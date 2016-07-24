@@ -193,6 +193,15 @@ namespace Test
 		}
 
 		[Test]
+		public void We_cannot_anwer_next_question_if_we_dont_register_one()
+		{
+			var response = AnswerCorrectly(DateTime.Now);
+
+			Assert.AreEqual(CannotAnswerMessage, response);
+		}
+
+
+		[Test]
 		public void The_question_stays_next_if_we_answer_wrongly()
 		{
 			var time = DateTime.Now;

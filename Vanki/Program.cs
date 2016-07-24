@@ -39,7 +39,7 @@ namespace Vanki
 			
 		static string ProcessAnswer (DateTime time, string answer)
 		{
-			if (!IsLapsePassed(time))
+			if (!IsLapsePassed(time) || !Storage.DataExist())
 				return cannotAnswer;
 
 			if (answer != "a color")
