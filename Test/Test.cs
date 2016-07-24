@@ -42,8 +42,7 @@ namespace Test
 			var time = DateTime.Now;
 
 			Register_Question();
-
-			MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			AnswerCorrectly(time);
 
 			var response = AskForNextQuestion(time);
 			Assert.AreEqual("There is no next question\n", response);
@@ -59,8 +58,7 @@ namespace Test
 			var time = DateTime.Now;
 
 			Register_Question();
-
-			MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			AnswerCorrectly(time);
 
 			var response = AskForNextQuestion(time);
 			Assert.AreEqual("There is no next question\n", response);
@@ -95,7 +93,6 @@ namespace Test
 		{
 
 			var time = DateTime.Now;
-
 			Register_Question();
 
 			var response = MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
@@ -109,8 +106,7 @@ namespace Test
 			var time = DateTime.Now;
 
 			Register_Question();
-
-			MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			AnswerCorrectly(time);
 
 			var response = AskForNextQuestion(time);
 			Assert.AreEqual("There is no next question\n", response);
@@ -122,7 +118,7 @@ namespace Test
 		[Test()]
 		public void Register_a_new_entry()
 		{
-			var response = MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
+			var response = Register_Question();
 			Assert.AreEqual("New entry registered\n", response);
 		}
 
@@ -140,7 +136,8 @@ namespace Test
 		{
 			Register_Question();
 
-			var response = MainClass.TestableMain(new[] { "--answer", "a color" }, DateTime.Now);
+			var response = AnswerCorrectly(DateTime.Now);
+
 			Assert.AreEqual("That is a correct answer!\n", response);
 		}
 
@@ -151,32 +148,36 @@ namespace Test
 			var time = DateTime.Now;
 
 			Register_Question();
-
-			MainClass.TestableMain (new []{"--answer", "a color"}, time);
+			AnswerCorrectly(time);
 
 			var response = AskForNextQuestion(time);
-			Assert.AreEqual ("There is no next question\n", response);
+			Assert.AreEqual("There is no next question\n", response);
 
-			time += TimeSpan.FromMinutes (1); // +1
-
-			response = AskForNextQuestion(time);
-			Assert.AreEqual ("There is no next question\n", response);
-
-			time += TimeSpan.FromMinutes (2); // +3
+			time += TimeSpan.FromMinutes(1); // +1
 
 			response = AskForNextQuestion(time);
-			Assert.AreEqual ("The next question is:\n\"What is red?\"\n", response);
+			Assert.AreEqual("There is no next question\n", response);
 
-			response = MainClass.TestableMain (new []{"--answer", "a color"}, time);
-			Assert.AreEqual ("That is a correct answer!\n", response);
+			time += TimeSpan.FromMinutes(2); // +3
 
 			response = AskForNextQuestion(time);
-			Assert.AreEqual ("There is no next question\n", response);
+			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
 
-			time += TimeSpan.FromMinutes (5); // +8
+			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			Assert.AreEqual("That is a correct answer!\n", response);
+
 			response = AskForNextQuestion(time);
-			Assert.AreEqual ("There is no next question\n", response);
+			Assert.AreEqual("There is no next question\n", response);
 
+			time += TimeSpan.FromMinutes(5); // +8
+			response = AskForNextQuestion(time);
+			Assert.AreEqual("There is no next question\n", response);
+
+		}
+
+		static string AnswerCorrectly(DateTime time)
+		{
+			return MainClass.TestableMain(new[] { "--answer", "a color" }, time);
 		}
 
 		static string AskForNextQuestion(DateTime time)
@@ -184,9 +185,9 @@ namespace Test
 			return MainClass.TestableMain(new[] { "--next" }, time);
 		}
 
-		static void Register_Question()
+		static string Register_Question()
 		{
-			MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
+			return MainClass.TestableMain(new[] { "-q", "What is red?", "-a", "a color" }, DateTime.Now);
 		}
 	}
 }
