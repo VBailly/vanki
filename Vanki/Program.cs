@@ -43,12 +43,14 @@ namespace Vanki
 		{
 			if (!IsLapsePassed(time) || !Storage.DataExist())
 				return cannotAnswer;
-			
-			if (answer != Storage.GetAnswer())
+
+			var correctAnswer = Storage.GetAnswer();
+
+			if (answer != correctAnswer)
 			{
 				Storage.SetLapse(0);
 				Storage.SetTime(time);
-				return "WRONG! The correct answer is \"a color\".\n";
+				return string.Format("WRONG! The correct answer is \"{0}\".\n", correctAnswer);
 
 			}
 			

@@ -10,7 +10,7 @@ namespace Test
 		const string NoNextQuestionMessage = ConsoleOutputs.NoNextQuestionMessage;
 		static readonly string NextQuestionMessage = string.Format(ConsoleOutputs.NextQuestionMessage, "What is red?");
 		const string CorrectAnswerMessage = ConsoleOutputs.CorrectAnswerMessage;
-		const string WrongAnswerMessage = ConsoleOutputs.WrongAnswerMessage;
+		static readonly string WrongAnswerMessage = string.Format(ConsoleOutputs.WrongAnswerMessage, "a color");
 		const string CannotAnswerMessage = ConsoleOutputs.CannotAnswerMessage;
 		const string NewEntryMessage = ConsoleOutputs.NewEntryMessage;
 

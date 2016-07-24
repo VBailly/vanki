@@ -10,7 +10,9 @@ namespace Test
 	{
 		static readonly string Question = "What color is the sky?";
 		static readonly string Answer = "blue";
+		static readonly string WrongAnswer = "a fish";
 		static readonly string NextQuestionMessage = string.Format(ConsoleOutputs.NextQuestionMessage, Question);
+		static readonly string WrongAnswerMessage = string.Format(ConsoleOutputs.WrongAnswerMessage, Answer);
 
 		[SetUp]
 		public void SetUp()
@@ -49,6 +51,17 @@ namespace Test
 			var response = Commands.Answer(DateTime.Now, Answer);
 
 			Assert.AreEqual(ConsoleOutputs.CorrectAnswerMessage, response);
+		}
+
+		[Test]
+		public void Wrong_answers_dont_pass()
+		{
+			var time = DateTime.Now;
+			RegisterQuestion();
+
+			var response = Commands.Answer(DateTime.Now, WrongAnswer);
+
+			Assert.AreEqual(WrongAnswerMessage, response);
 		}
 	}
 }
