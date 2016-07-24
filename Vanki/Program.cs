@@ -46,7 +46,12 @@ namespace Vanki
 				return cannotAnswer;
 
 			if (answer != "a color")
+			{
+				Storage.SetLapse(0);
+				Storage.SetTime(time);
 				return "WRONG! The correct answer is \"a color\".\n";
+
+			}
 			
 			Storage.SetLapse (Math.Max(2, (time - Storage.GetTime()).Minutes * 2));
 			Storage.SetTime (time);
