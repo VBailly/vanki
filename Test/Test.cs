@@ -8,7 +8,7 @@ namespace Test
 	[TestFixture()]
 	public class Test
 	{
-
+		private const string NoNextQuestionMessage = "There is no next question\n";
 
 		[SetUp]
 		public void SetUp()
@@ -135,7 +135,7 @@ namespace Test
 
 			var response = AskForNextQuestion(DateTime.Now);
 
-			Assert.AreEqual("There is no next question\n", response);
+			Assert.AreEqual(NoNextQuestionMessage, response);
 		}
 
 		[Test()]
@@ -148,7 +148,7 @@ namespace Test
 
 			var response = AskForNextQuestion(time);
 
-			Assert.AreEqual("There is no next question\n", response);
+			Assert.AreEqual(NoNextQuestionMessage, response);
 
 		}
 
@@ -170,11 +170,11 @@ namespace Test
 			Assert.AreEqual("That is a correct answer!\n", response);
 
 			response = AskForNextQuestion(time);
-			Assert.AreEqual("There is no next question\n", response);
+			Assert.AreEqual(NoNextQuestionMessage, response);
 
 			time += TimeSpan.FromMinutes(5); // +8
 			response = AskForNextQuestion(time);
-			Assert.AreEqual("There is no next question\n", response);
+			Assert.AreEqual(NoNextQuestionMessage, response);
 
 		}
 
