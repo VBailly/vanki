@@ -9,6 +9,7 @@ namespace Test
 	public class TestWithADifferentSingleQuestion
 	{
 		static readonly string Question = "What color is the sky?";
+		static readonly string Answer = "blue";
 		static readonly string NextQuestionMessage = string.Format(ConsoleOutputs.NextQuestionMessage, Question);
 
 		[SetUp]
@@ -37,7 +38,17 @@ namespace Test
 
 		static string RegisterQuestion()
 		{
-			return Commands.RegisterQuestion(Question, "blue");
+			return Commands.RegisterQuestion(Question, Answer);
+		}
+
+		[Test]
+		public void Giving_a_correct_answer_for_the_first_time()
+		{
+			RegisterQuestion();
+
+			var response = Commands.Answer(DateTime.Now, Answer);
+
+			Assert.AreEqual(ConsoleOutputs.CorrectAnswerMessage, response);
 		}
 	}
 }

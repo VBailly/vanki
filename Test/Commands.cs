@@ -5,15 +5,9 @@ namespace Test
 {
 	public static class Commands
 	{
-
-		public static string AnswerWrongly(DateTime time)
+		public static string Answer(DateTime time, string answer)
 		{
-			return MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
-		}
-
-		public static string AnswerCorrectly(DateTime time)
-		{
-			return MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			return MainClass.TestableMain(new[] { "--answer", answer }, time);
 		}
 
 		public static string AskForNextQuestion(DateTime time)

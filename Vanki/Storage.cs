@@ -6,7 +6,7 @@ namespace Vanki
 {
 	public static class Storage
 	{
-		private const string DataBaseFileName = "db.xml";
+		const string DataBaseFileName = "db.xml";
 
 		public static void SetTime (DateTime time)
 		{
@@ -46,6 +46,21 @@ namespace Vanki
 			File.WriteAllText (DataBaseFileName, data.ToString ());
 		}
 
+		public static string GetAnswer()
+		{
+			var data = GetData();
+
+			return data.Element("answer").Value;
+		}
+
+		public static void SetAnswer(string answer)
+		{
+			var data = GetData();
+			data.Element("answer").Value = answer;
+
+			File.WriteAllText(DataBaseFileName, data.ToString());
+		}
+
 		public static int GetLapse()
 		{
 			var data = GetData ();
@@ -71,11 +86,14 @@ namespace Vanki
 			var xTime = new XElement ("time", time.ToString ());
 			var xLapse = new XElement ("lapse", "0");
 			var xQuestion = new XElement("question", "");
+			var xAnswer = new XElement("answer", "");
 
 			var data = new XElement ("Data");
 			data.Add (xTime);
 			data.Add (xLapse);
 			data.Add (xQuestion);
+			data.Add (xAnswer);
+
 
 			return data;
 		}

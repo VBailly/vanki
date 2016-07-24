@@ -24,7 +24,7 @@ namespace Test
 		[Test]
 		public void We_cannot_anwer_next_question_if_we_dont_register_one()
 		{
-			var response = Commands.AnswerCorrectly(DateTime.Now);
+			var response = Commands.Answer(DateTime.Now, "a fish");
 
 			Assert.AreEqual(ConsoleOutputs.CannotAnswerMessage, response);
 		}

@@ -214,12 +214,12 @@ namespace Test
 
 		static string AnswerWrongly(DateTime time)
 		{
-			return Commands.AnswerWrongly(time);
+			return Commands.Answer(time, "an animal");
 		}
 
 		static string AnswerCorrectly(DateTime time)
 		{
-			return Commands.AnswerCorrectly(time);
+			return Commands.Answer(time, "a color");
 		}
 
 		static string AskForNextQuestion(DateTime time)

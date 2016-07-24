@@ -23,7 +23,7 @@ namespace Vanki
 			if (options.ShowNext)
 				return PrintNextQuestion (time);
 			if (!string.IsNullOrEmpty (options.Question) && !string.IsNullOrEmpty (options.Answer))
-				return AddQuestion (time, options.Question);
+				return AddQuestion (time, options.Question, options.Answer);
 			if (!string.IsNullOrEmpty (options.Answer))
 				return ProcessAnswer (time, options.Answer);
 
@@ -31,9 +31,10 @@ namespace Vanki
 			return "wrong command line arguments";
 		}
 
-		static string AddQuestion(DateTime time, string question)
+		static string AddQuestion(DateTime time, string question, string answer)
 		{
 			Storage.SetTime (time);
+			Storage.SetAnswer(answer);
 			Storage.SetQuestion(question);
 			return newEntryRegistered;
 		}
@@ -42,8 +43,8 @@ namespace Vanki
 		{
 			if (!IsLapsePassed(time) || !Storage.DataExist())
 				return cannotAnswer;
-
-			if (answer != "a color")
+			
+			if (answer != Storage.GetAnswer())
 			{
 				Storage.SetLapse(0);
 				Storage.SetTime(time);
