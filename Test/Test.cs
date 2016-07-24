@@ -43,11 +43,9 @@ namespace Test
 
 			Register_Question();
 			AnswerCorrectly(time);
+			AskForNextQuestion(time);
 
-			var response = AskForNextQuestion(time);
-			Assert.AreEqual("There is no next question\n", response);
-
-			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			var response = AnswerCorrectly(time);
 			Assert.AreEqual("You cannot answer because there is no question pending\n", response);
 
 		}
@@ -59,13 +57,11 @@ namespace Test
 
 			Register_Question();
 			AnswerCorrectly(time);
-
-			var response = AskForNextQuestion(time);
-			Assert.AreEqual("There is no next question\n", response);
+			AskForNextQuestion(time);
 
 			time += TimeSpan.FromMinutes(1); // +1
 
-			response = AskForNextQuestion(time);
+			var response = AskForNextQuestion(time);
 			Assert.AreEqual("There is no next question\n", response);
 
 			time += TimeSpan.FromMinutes(2); // +3
@@ -91,27 +87,23 @@ namespace Test
 		[Test()]
 		public void Wrong_answers_dont_pass()
 		{
-
 			var time = DateTime.Now;
 			Register_Question();
 
 			var response = MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
+
 			Assert.AreEqual("WRONG! The correct answer is \"a color\".\n", response);
 		}
 
 		[Test()]
 		public void An_wrong_answer_is_not_treated_if_no_question_is_pending()
 		{
-
 			var time = DateTime.Now;
-
 			Register_Question();
 			AnswerCorrectly(time);
 
-			var response = AskForNextQuestion(time);
-			Assert.AreEqual("There is no next question\n", response);
+			var response = MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
 
-			response = MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
 			Assert.AreEqual("You cannot answer because there is no question pending\n", response);
 		}
 
@@ -119,6 +111,7 @@ namespace Test
 		public void Register_a_new_entry()
 		{
 			var response = Register_Question();
+
 			Assert.AreEqual("New entry registered\n", response);
 		}
 
@@ -128,6 +121,7 @@ namespace Test
 			Register_Question();
 
 			var response = AskForNextQuestion(DateTime.Now);
+
 			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
 		}
 
@@ -141,6 +135,17 @@ namespace Test
 			Assert.AreEqual("That is a correct answer!\n", response);
 		}
 
+		[Test()]
+		public void There_is_no_question_just_after_having_answered_it()
+		{
+			Register_Question();
+			AnswerCorrectly(DateTime.Now);
+
+			var response = AskForNextQuestion(DateTime.Now);
+
+			Assert.AreEqual("There is no next question\n", response);
+		}
+
 		[Test ()]
 		public void TestCase1 ()
 		{
@@ -150,12 +155,9 @@ namespace Test
 			Register_Question();
 			AnswerCorrectly(time);
 
-			var response = AskForNextQuestion(time);
-			Assert.AreEqual("There is no next question\n", response);
-
 			time += TimeSpan.FromMinutes(1); // +1
 
-			response = AskForNextQuestion(time);
+			var response = AskForNextQuestion(time);
 			Assert.AreEqual("There is no next question\n", response);
 
 			time += TimeSpan.FromMinutes(2); // +3
