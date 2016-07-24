@@ -75,8 +75,8 @@ namespace Test
 			Assert.AreEqual ("The next question is:\n\"What is red?\"\n", response);
 
 
-		//	response = MainClass.TestableMain (new []{"--answer", "an animal"}, time);
-		//	Assert.AreEqual ("WRONG! The correct answer is \"a color\".\n", response);
+			response = MainClass.TestableMain (new []{"--answer", "an animal"}, time);
+			Assert.AreEqual ("WRONG! The correct answer is \"a color\".\n", response);
 		}
 
 		[Test ()]

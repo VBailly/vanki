@@ -28,7 +28,7 @@ namespace Vanki
 			if (!string.IsNullOrEmpty (options.Question) && !string.IsNullOrEmpty (options.Answer))
 				return AddQuestion (time);
 			if (!string.IsNullOrEmpty (options.Answer))
-				return ProcessAnswer (time);
+				return ProcessAnswer (time, options.Answer);
 
 
 			return "wrong command line arguments";
@@ -40,8 +40,12 @@ namespace Vanki
 			return newEntryRegistered;
 		}
 			
-		static string ProcessAnswer (DateTime time)
+		static string ProcessAnswer (DateTime time, string answer)
 		{
+			if (answer != "a color")
+			{
+				return "WRONG! The correct answer is \"a color\".\n";
+			}
 			if (!IsLapsePassed(time))
 				return cannotAnswer;
 			
