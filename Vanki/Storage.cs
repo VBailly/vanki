@@ -10,64 +10,26 @@ namespace Vanki
 
 		public static DateTime LastAnswerTime
 		{
-			get
-			{
-				var data = GetData();
-				return DateTime.Parse(data.Element ("time").Value);
-			}
-			set
-			{
-				var data = GetData();
-				data.Element ("time").Value = value.ToString();
-				File.WriteAllText (DataBaseFileName, data.ToString ());
-			}
+			get { return DateTime.Parse(GetValue("time")); }
+			set { SetValue("time", value); }
 		}
 
 		public static string Question
 		{
-			get
-			{
-				var data = GetData();
-				return data.Element("question").Value;
-			}
-			set
-			{
-				var data = GetData();
-				data.Element("question").Value = value;
-
-				File.WriteAllText(DataBaseFileName, data.ToString());
-			}
+			get { return GetValue("question"); }
+			set { SetValue("question", value); }
 		}
 
 		public static int CurrentInterval
 		{
-			get
-			{
-				var data = GetData();
-				return int.Parse(data.Element("lapse").Value);
-			}
-			set
-			{
-				var data = GetData();
-				data.Element("lapse").Value = value.ToString();
-
-				File.WriteAllText(DataBaseFileName, data.ToString());
-			}
+			get { return int.Parse(GetValue("lapse")); }
+			set { SetValue("lapse", value); }
 		}
 
 		public static string Answer
 		{
-			get
-			{
-				var data = GetData();
-				return data.Element("answer").Value;
-			}
-			set
-			{
-				var data = GetData();
-				data.Element("answer").Value = value;
-				File.WriteAllText(DataBaseFileName, data.ToString());
-			}
+			get { return GetValue("answer"); }
+			set { SetValue("answer", value); }
 		}
 
 
@@ -76,14 +38,28 @@ namespace Vanki
 			return File.Exists(DataBaseFileName);
 		}
 
-		public static XElement GetData()
+		static string GetValue(string id)
+		{
+			if (!DataExist())
+				return GetNewData().Element(id).Value;
+			return XElement.Load (DataBaseFileName).Element(id).Value;
+		}
+
+		static void SetValue(string id, object value)
+		{
+			var data = GetCurrentData();
+			data.Element(id).Value = value.ToString();
+			File.WriteAllText(DataBaseFileName, data.ToString());
+		}
+
+		static XElement GetCurrentData()
 		{
 			if (!DataExist())
 				return GetNewData();
-			return XElement.Load (DataBaseFileName);
+			return XElement.Load(DataBaseFileName);
 		}
 
-		public static XElement GetNewData()
+		static XElement GetNewData()
 		{
 			var time = DateTime.Now;
 			var xTime = new XElement ("time", time.ToString ());
