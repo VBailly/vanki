@@ -49,34 +49,6 @@ namespace Test
 		}
 
 		[Test()]
-		public void A_wrong_answer_resets_the_lapse()
-		{
-			var time = DateTime.Now;
-
-			RegisterQuestion();
-			AnswerCorrectly(time);
-			AskForNextQuestion(time);
-			time += TimeSpan.FromMinutes(3); // +3
-
-			var response = AskForNextQuestion(time);
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
-
-			response = MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
-			Assert.AreEqual("WRONG! The correct answer is \"a color\".\n", response);
-
-			response = AskForNextQuestion(time);
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
-
-			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
-			Assert.AreEqual("That is a correct answer!\n", response);
-
-			time += TimeSpan.FromMinutes(3); // +8
-
-			response = AskForNextQuestion(time);
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
-		}
-
-		[Test()]
 		public void Wrong_answers_dont_pass()
 		{
 			var time = DateTime.Now;
@@ -149,8 +121,45 @@ namespace Test
 			var response = AskForNextQuestion(time);
 
 			Assert.AreEqual(NoNextQuestionMessage, response);
-
 		}
+
+		[Test()]
+		public void There_is_a_question_3min_after_having_answered_it()
+		{
+			var time = DateTime.Now;
+			RegisterQuestion();
+			AnswerCorrectly(time);
+			time += TimeSpan.FromMinutes(3);
+
+			var response = AskForNextQuestion(time);
+
+			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
+		}
+
+		[Test()]
+		public void A_wrong_answer_resets_the_lapse()
+		{
+			var time = DateTime.Now;
+			RegisterQuestion();
+			AnswerCorrectly(time);
+			AskForNextQuestion(time);
+			time += TimeSpan.FromMinutes(3); // +3
+
+			var response = MainClass.TestableMain(new[] { "--answer", "an animal" }, time);
+			Assert.AreEqual("WRONG! The correct answer is \"a color\".\n", response);
+
+			response = AskForNextQuestion(time);
+			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
+
+			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			Assert.AreEqual("That is a correct answer!\n", response);
+
+			time += TimeSpan.FromMinutes(3); // +8
+
+			response = AskForNextQuestion(time);
+			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
+		}
+
 
 		[Test ()]
 		public void TestCase1 ()
@@ -163,10 +172,7 @@ namespace Test
 
 			time += TimeSpan.FromMinutes(3); // +3
 
-			var response = AskForNextQuestion(time);
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
-
-			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			var response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
 			Assert.AreEqual("That is a correct answer!\n", response);
 
 			response = AskForNextQuestion(time);
