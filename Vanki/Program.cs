@@ -65,7 +65,7 @@ namespace Vanki
 
 		static string PrintNextQuestion (DateTime time)
 		{
-			if (IsLapsePassed (time))
+			if (IsLapsePassed (time) && Storage.DataExist())
 				return theNextQuestionIsWhatIsRed;
 			return thereIsNoNextQuestion;
 		}
