@@ -180,6 +180,18 @@ namespace Test
 		}
 
 		[Test()]
+		public void The_question_stays_next_if_we_answer_wrongly()
+		{
+			var time = DateTime.Now;
+			RegisterQuestion();
+			AnswerWrongly(time);
+
+			var response = AskForNextQuestion(time);
+
+			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
+		}
+
+		[Test()]
 		public void A_wrong_answer_resets_the_lapse()
 		{
 			var time = DateTime.Now;
@@ -187,13 +199,9 @@ namespace Test
 			AnswerCorrectly(time);
 			AskForNextQuestion(time);
 			time += TimeSpan.FromMinutes(3); // +3
-			string response = AnswerWrongly(time);
-			Assert.AreEqual("WRONG! The correct answer is \"a color\".\n", response);
+			AnswerWrongly(time);
 
-			response = AskForNextQuestion(time);
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
-
-			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			var response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
 			Assert.AreEqual("That is a correct answer!\n", response);
 
 			time += TimeSpan.FromMinutes(3); // +3
