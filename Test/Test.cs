@@ -29,8 +29,6 @@ namespace Test
 			Register_Question();
 
 			var response = MainClass.TestableMain(new[] { "--next" }, time);
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
-
 			response = MainClass.TestableMain(new[] { "--next" }, time);
 			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
 
@@ -44,11 +42,8 @@ namespace Test
 
 			Register_Question();
 
-			var response = MainClass.TestableMain(new[] { "--next" }, time);
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
 
-
-			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			var response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
 			Assert.AreEqual("That is a correct answer!\n", response);
 
 			response = MainClass.TestableMain(new[] { "--next" }, time);
@@ -66,10 +61,7 @@ namespace Test
 
 			Register_Question();
 
-			var response = MainClass.TestableMain(new[] { "--next" }, time);
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
-
-			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			var response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
 			Assert.AreEqual("That is a correct answer!\n", response);
 
 			response = MainClass.TestableMain(new[] { "--next" }, time);
@@ -108,10 +100,7 @@ namespace Test
 
 			Register_Question();
 
-			var response = MainClass.TestableMain (new []{"--next"}, time);
-			Assert.AreEqual ("The next question is:\n\"What is red?\"\n", response);
-
-			response = MainClass.TestableMain (new []{"--answer", "an animal"}, time);
+			var response = MainClass.TestableMain (new []{"--answer", "an animal"}, time);
 			Assert.AreEqual ("WRONG! The correct answer is \"a color\".\n", response);
 		}
 
@@ -123,10 +112,7 @@ namespace Test
 
 			Register_Question();
 
-			var response = MainClass.TestableMain(new[] { "--next" }, time);
-			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
-
-			response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
+			var response = MainClass.TestableMain(new[] { "--answer", "a color" }, time);
 			Assert.AreEqual("That is a correct answer!\n", response);
 
 			response = MainClass.TestableMain(new[] { "--next" }, time);
@@ -144,6 +130,15 @@ namespace Test
 		}
 
 		[Test ()]
+		public void A_question_is_available_straight_after_being_registered()
+		{
+			Register_Question();
+
+			var response = MainClass.TestableMain(new[] { "--next" }, DateTime.Now);
+			Assert.AreEqual("The next question is:\n\"What is red?\"\n", response);
+		}
+
+		[Test ()]
 		public void TestCase1 ()
 		{
 
@@ -151,10 +146,7 @@ namespace Test
 
 			Register_Question();
 
-			var response = MainClass.TestableMain (new []{"--next"}, time);
-			Assert.AreEqual ("The next question is:\n\"What is red?\"\n", response);
-
-			response = MainClass.TestableMain (new []{"--answer", "a color"}, time);
+			var response = MainClass.TestableMain (new []{"--answer", "a color"}, time);
 			Assert.AreEqual ("That is a correct answer!\n", response);
 
 			response = MainClass.TestableMain (new []{"--next"}, time);
