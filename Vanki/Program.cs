@@ -33,7 +33,7 @@ namespace Vanki
 
 		static string AddQuestion(DateTime time, string question, string answer)
 		{
-			Storage.SetTime (time);
+			Storage.LastAnswerTime = time;
 			Storage.SetAnswer(answer);
 			Storage.SetQuestion(question);
 			return newEntryRegistered;
@@ -49,13 +49,13 @@ namespace Vanki
 			if (answer != correctAnswer)
 			{
 				Storage.SetLapse(0);
-				Storage.SetTime(time);
+				Storage.LastAnswerTime = time;
 				return string.Format("WRONG! The correct answer is \"{0}\".\n", correctAnswer);
 
 			}
 			
-			Storage.SetLapse (Math.Max(2, (time - Storage.GetTime()).Minutes * 2));
-			Storage.SetTime (time);
+			Storage.SetLapse (Math.Max(2, (time - Storage.LastAnswerTime).Minutes * 2));
+			Storage.LastAnswerTime = time;
 
 			return thatIsACorrectAnswer;
 		}
@@ -63,7 +63,7 @@ namespace Vanki
 		static bool IsLapsePassed (DateTime time)
 		{
 			var lapse = Storage.GetLapse();
-			var storedTime = Storage.GetTime ();
+			var storedTime = Storage.LastAnswerTime;
 			return time > storedTime + TimeSpan.FromMinutes (lapse);
 		}
 

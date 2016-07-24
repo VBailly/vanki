@@ -8,20 +8,21 @@ namespace Vanki
 	{
 		const string DataBaseFileName = "db.xml";
 
-		public static void SetTime (DateTime time)
+		public static DateTime LastAnswerTime
 		{
-			var data = GetData ();
-			data.Element ("time").Value = time.ToString();
-
-			File.WriteAllText (DataBaseFileName, data.ToString ());
+			get
+			{
+				var data = GetData();
+				return DateTime.Parse(data.Element ("time").Value);
+			}
+			set
+			{
+				var data = GetData();
+				data.Element ("time").Value = value.ToString();
+				File.WriteAllText (DataBaseFileName, data.ToString ());
+			}
 		}
 
-		public static DateTime GetTime()
-		{
-			var data = GetData ();
-
-			return DateTime.Parse(data.Element ("time").Value);
-		}
 
 		public static void SetQuestion(string question)
 		{
