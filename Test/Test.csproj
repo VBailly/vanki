@@ -39,6 +39,7 @@
     <Compile Include="Commands.cs" />
     <Compile Include="ConsoleOutputs.cs" />
     <Compile Include="TestWithADifferentSingleQuestion.cs" />
+    <Compile Include="TestWithTwoQuestions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

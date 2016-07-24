@@ -40,7 +40,7 @@ namespace Test
 
 		static string RegisterQuestion()
 		{
-			return Commands.RegisterQuestion(Question, Answer);
+			return Commands.RegisterQuestion(Question, Answer, DateTime.Now);
 		}
 
 		[Test]

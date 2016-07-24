@@ -1,4 +1,7 @@
 ﻿using System;
+using Vanki.Model;
+using Vanki.Model.Impl;
+using System.Linq;
 
 
 namespace Vanki
@@ -10,7 +13,7 @@ namespace Vanki
 		static readonly string theNextQuestionIs = "The next question is:\n\"{0}\"\n";
 		const string thereIsNoNextQuestion = "There is no next question\n";
 		const string cannotAnswer = "You cannot answer because there is no question pending\n";
-		static readonly IStorage Storage = new StorageImpl();
+		static readonly Deck deck = new DeckImpl();
 
 		public static void Main (string[] args)
 		{
@@ -34,44 +37,40 @@ namespace Vanki
 
 		static string AddQuestion(DateTime time, string question, string answer)
 		{
-			Storage.LastAnswerTime = time;
-			Storage.Answer = answer;
-			Storage.Question = question;
+			deck.CreateCard(question, answer, time);
 			return newEntryRegistered;
 		}
 			
+
+		static Card GetNextCard(DateTime time)
+		{ 
+			return deck.Cards.Where(c => c.DueTime <= time).OrderBy(c => c.DueTime).FirstOrDefault();
+		}
+
 		static string ProcessAnswer (DateTime time, string answer)
 		{
-			if (!IsLapsePassed(time) || !Storage.DataExist())
+			var card = GetNextCard(time);
+			if (card == null)
 				return cannotAnswer;
 
-			var correctAnswer = Storage.Answer;
+			var correctAnswer = card.Answer;
 
 			if (answer != correctAnswer)
 			{
-				Storage.CurrentInterval = 0;
-				Storage.LastAnswerTime = time;
+				card.Reset(time);
 				return string.Format("WRONG! The correct answer is \"{0}\".\n", correctAnswer);
-
 			}
-			
-			Storage.CurrentInterval = Math.Max(2, (time - Storage.LastAnswerTime).Minutes * 2);
-			Storage.LastAnswerTime = time;
+
+			card.Promote(time);
 
 			return thatIsACorrectAnswer;
 		}
 
-		static bool IsLapsePassed (DateTime time)
-		{
-			var lapse = Storage.CurrentInterval;
-			var storedTime = Storage.LastAnswerTime;
-			return time > storedTime + TimeSpan.FromMinutes (lapse);
-		}
-
 		static string PrintNextQuestion (DateTime time)
 		{
-			if (IsLapsePassed (time) && Storage.DataExist())
-				return string.Format(theNextQuestionIs, Storage.Question);
+			var card = GetNextCard(time);
+			if (card != null)
+				return string.Format(theNextQuestionIs, card.Question);
 			return thereIsNoNextQuestion;
 		}
 

@@ -64,7 +64,7 @@ namespace Test
 		}
 
 		[Test]
-		public void An_wrong_answer_is_not_treated_if_no_question_is_pending()
+		public void A_wrong_answer_is_not_treated_if_no_question_is_pending()
 		{
 			var time = DateTime.Now;
 			RegisterQuestion();
@@ -229,7 +229,7 @@ namespace Test
 
 		static string RegisterQuestion()
 		{
-			return Commands.RegisterQuestion("What is red?", "a color");
+			return Commands.RegisterQuestion("What is red?", "a color", DateTime.Now);
 		}
 
 	}
