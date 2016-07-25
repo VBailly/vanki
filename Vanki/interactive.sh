@@ -8,7 +8,8 @@ function play {
 		mono Vanki.exe -n
 		read answer
 		mono Vanki.exe -a "$answer"
-		echo "-------------------------------------"
+		read answer
+		clear
 	done
 }
 
