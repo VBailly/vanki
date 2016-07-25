@@ -1,13 +1,12 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Storage;
 
 namespace Vanki.Model.Impl
 {
 	public class CardImpl : Card
 	{
-		const string DataBaseFileName = "db.xml";
 
 		string question_;
 
@@ -19,7 +18,7 @@ namespace Vanki.Model.Impl
 			var xCard = createXCard(question, answer);
 			var deck = GetDeck();
 			deck.Add(xCard);
-			File.WriteAllText(DataBaseFileName, deck.ToString());
+            Repository.StoreString(deck.ToString());
 		}
 
 		public CardImpl(XElement xCard)
@@ -94,18 +93,20 @@ namespace Vanki.Model.Impl
 		{
 			var deck = GetDeck();
 			deck.Elements("Card").Single(c => c.Element("question").Value == question_).Element(id).Value = value.ToString();
-			File.WriteAllText(DataBaseFileName, deck.ToString());
+			Repository.StoreString(deck.ToString());
 		}
 
 		static XElement GetDeck()
 		{
-			if (!File.Exists(DataBaseFileName))
+            var db = Repository.GetStoredString();
+
+            if (string.IsNullOrEmpty(db))
 			{
 				var deck = new XElement("Deck");
 				deck.Add(new XAttribute("version", "1"));
 				return deck;
 			}
-            return XElement.Parse(File.ReadAllText(DataBaseFileName));
+            return XElement.Parse(db);
 		}
 
 
