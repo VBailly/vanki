@@ -1,6 +1,6 @@
 ﻿using System;
-using System.IO;
 using NUnit.Framework;
+using Storage;
 
 namespace Test
 {
@@ -17,7 +17,7 @@ namespace Test
 		[SetUp]
 		public void SetUp()
 		{
-			File.Delete("db.xml");
+			Repository.StoreString(string.Empty);
 		}
 
 		[Test]

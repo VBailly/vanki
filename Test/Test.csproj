@@ -50,5 +50,9 @@
       <Project>{E0F251C0-50CD-4C68-ADDA-22E8EF3C76D5}</Project>
       <Name>Vanki</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Storage\Storage.csproj">
+      <Project>{85D1280D-070E-4C09-9A40-AC4E5E43F469}</Project>
+      <Name>Storage</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

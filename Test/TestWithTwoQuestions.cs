@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
-using System.IO;
 using Vanki;
+using Storage;
 
 namespace Test
 {
@@ -17,7 +17,7 @@ namespace Test
 		[SetUp]
 		public void SetUp()
 		{
-			File.Delete("db.xml");
+			Repository.StoreString(string.Empty);
             Clock.Getter = null;
 		}
 

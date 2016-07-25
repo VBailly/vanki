@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System;
+using Storage;
 
 namespace Vanki.Model.Impl
 {
@@ -14,11 +14,13 @@ namespace Vanki.Model.Impl
 		{
 			get
 			{
-				if (!File.Exists(DataBaseFileName))
+                var xml = Repository.GetStoredString();
+                if (string.IsNullOrEmpty(xml))
 				{
 					return new List<Card>();
 				}
-				return XElement.Load(DataBaseFileName).Elements("Card").Select(e => new CardImpl(e));
+
+                return XElement.Parse(xml).Elements("Card").Select(e => new CardImpl(e));
 			}
 		}
 
