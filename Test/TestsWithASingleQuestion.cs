@@ -168,7 +168,7 @@ namespace Test
 		}
 
 		[Test]
-		public void There_is_no_next_question_5_min_after_the_second_answer ()
+		public void There_is_no_next_question_3_min_after_the_second_answer ()
 		{
 			var time = DateTime.Now;
 			RegisterQuestion(time);
@@ -176,7 +176,7 @@ namespace Test
 			time += TimeSpan.FromMinutes(3); // +3
 			AnswerCorrectly(time);
 			AskForNextQuestion(time);
-			time += TimeSpan.FromMinutes(5); // +8
+			time += TimeSpan.FromMinutes(3); // +6
 
 			var response = AskForNextQuestion(time);
 

@@ -73,7 +73,7 @@ namespace Vanki.Model.Impl
 
 		public override void Promote(DateTime time)
 		{
-			CurrentInterval = Math.Max(2, 2 * (int)(time - LastAnswerTime).TotalMinutes);
+			CurrentInterval = Math.Max(2, (int)(1.6 * (time - LastAnswerTime).TotalMinutes));
 			LastAnswerTime = time;
 		}
 
