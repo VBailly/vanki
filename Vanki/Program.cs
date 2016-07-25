@@ -18,39 +18,39 @@ namespace Vanki
 
 		public static void Main (string[] args)
 		{
-			var result = TestableMain (args, DateTime.Now);
+			var result = TestableMain (args);
 			Console.Write (result);
 		}
 
-		public static string TestableMain(string[] args, DateTime time)
+		public static string TestableMain(string[] args)
 		{
 			var options = ArgsParser.Parse (args);
 			if (options.ShowNext)
-				return PrintNextQuestion (time);
+				return PrintNextQuestion ();
 			if (!string.IsNullOrEmpty (options.Question) && !string.IsNullOrEmpty (options.Answer))
-				return AddQuestion (time, options.Question, options.Answer);
+				return AddQuestion (options.Question, options.Answer);
 			if (!string.IsNullOrEmpty (options.Answer))
-				return ProcessAnswer (time, options.Answer);
+				return ProcessAnswer (options.Answer);
 
 
 			return "wrong command line arguments\n";
 		}
 
-		static string AddQuestion(DateTime time, string question, string answer)
+		static string AddQuestion(string question, string answer)
 		{
-			deck.CreateCard(question, answer, time);
+			deck.CreateCard(question, answer);
 			return newEntryRegistered;
 		}
 			
 
-		static Card GetNextCard(DateTime time)
+		static Card GetNextCard()
 		{ 
-			return deck.Cards.Where(c => c.DueTime <= time).OrderBy(c => c.DueTime).FirstOrDefault();
+            return deck.Cards.Where(c => c.DueTime <= Clock.CurrentTime).OrderBy(c => c.DueTime).FirstOrDefault();
 		}
 
-		static string ProcessAnswer (DateTime time, string answer)
+		static string ProcessAnswer (string answer)
 		{
-			var card = GetNextCard(time);
+			var card = GetNextCard();
 			if (card == null)
 				return cannotAnswer;
 
@@ -58,24 +58,24 @@ namespace Vanki
 
 			if (answer != correctAnswer)
 			{
-				card.Reset(time);
+				card.Reset();
 				return string.Format("WRONG! The correct answer is \"{0}\".\n", correctAnswer);
 			}
 
-			card.Promote(time);
+			card.Promote();
 
 			return thatIsACorrectAnswer;
 		}
 
-		static string PrintNextQuestion (DateTime time)
+		static string PrintNextQuestion ()
 		{
 			if (!deck.Cards.Any())
 				return emptyDeckMessage;
-			var card = GetNextCard(time);
+			var card = GetNextCard();
 			if (card != null)
 				return string.Format(theNextQuestionIs, card.Question);
 			var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
-			return thereIsNoNextQuestion + string.Format("Come back at this time: {0} (in {1})\n", nextCardTime, nextCardTime - time);
+            return thereIsNoNextQuestion + string.Format("Come back at this time: {0} (in {1})\n", nextCardTime, nextCardTime - Clock.CurrentTime);
 		}
 
 

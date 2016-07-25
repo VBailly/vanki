@@ -9,8 +9,8 @@ namespace Vanki.Model
 
 		public abstract DateTime DueTime { get; }
 
-		public abstract void Promote(DateTime time);
-		public abstract void Reset(DateTime time);
+		public abstract void Promote();
+		public abstract void Reset();
 	}
 }
 

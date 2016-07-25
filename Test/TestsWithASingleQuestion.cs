@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.IO;
+using Vanki;
 
 namespace Test
 {
@@ -18,6 +19,7 @@ namespace Test
 		public void SetUp()
 		{
 			File.Delete("db.xml");
+			Clock.Getter = null;
 		}
 
 		[TearDown]
@@ -28,11 +30,10 @@ namespace Test
 		[Test]
 		public void We_can_ask_twice_for_a_question()
 		{
-			var time = DateTime.Now;
-			RegisterQuestion(time);
-			AskForNextQuestion(time);
+			RegisterQuestion();
+			AskForNextQuestion();
 
-			var response = AskForNextQuestion(time);
+			var response = AskForNextQuestion();
 
 			Assert.AreEqual(NextQuestionMessage, response);
 
@@ -41,12 +42,11 @@ namespace Test
 		[Test]
 		public void We_cannot_answer_when_there_is_no_question()
 		{
-			var time = DateTime.Now;
-			RegisterQuestion(time);
-			AnswerCorrectly(time);
-			AskForNextQuestion(time);
+			RegisterQuestion();
+			AnswerCorrectly();
+			AskForNextQuestion();
 
-			var response = AnswerCorrectly(time);
+			var response = AnswerCorrectly();
 
 			Assert.AreEqual(CannotAnswerMessage, response);
 
@@ -55,10 +55,9 @@ namespace Test
 		[Test]
 		public void Wrong_answers_dont_pass()
 		{
-			var time = DateTime.Now;
-			RegisterQuestion(time);
+			RegisterQuestion();
 
-			var response = AnswerWrongly(time);
+			var response = AnswerWrongly();
 
 			Assert.AreEqual(WrongAnswerMessage, response);
 		}
@@ -66,11 +65,10 @@ namespace Test
 		[Test]
 		public void A_wrong_answer_is_not_treated_if_no_question_is_pending()
 		{
-			var time = DateTime.Now;
-			RegisterQuestion(time);
-			AnswerCorrectly(time);
+			RegisterQuestion();
+			AnswerCorrectly();
 
-			var response = AnswerWrongly(time);
+			var response = AnswerWrongly();
 
 			Assert.AreEqual(CannotAnswerMessage, response);
 		}
@@ -78,7 +76,7 @@ namespace Test
 		[Test]
 		public void Register_a_new_entry()
 		{
-			var response = RegisterQuestion(DateTime.Now);
+			var response = RegisterQuestion();
 
 			Assert.AreEqual(NewEntryMessage, response);
 		}
@@ -86,9 +84,9 @@ namespace Test
 		[Test]
 		public void A_question_is_available_straight_after_being_registered()
 		{
-			RegisterQuestion(DateTime.Now);
+			RegisterQuestion();
 
-			var response = AskForNextQuestion(DateTime.Now);
+			var response = AskForNextQuestion();
 
 			Assert.AreEqual(NextQuestionMessage, response);
 		}
@@ -96,9 +94,9 @@ namespace Test
 		[Test]
 		public void Giving_a_correct_answer_for_the_first_time()
 		{
-			RegisterQuestion(DateTime.Now);
+			RegisterQuestion();
 
-			var response = AnswerCorrectly(DateTime.Now);
+			var response = AnswerCorrectly();
 
 			Assert.AreEqual(CorrectAnswerMessage, response);
 		}
@@ -106,10 +104,10 @@ namespace Test
 		[Test]
 		public void There_is_no_question_just_after_having_answered_it()
 		{
-			RegisterQuestion(DateTime.Now);
-			AnswerCorrectly(DateTime.Now);
+			RegisterQuestion();
+			AnswerCorrectly();
 
-			var response = AskForNextQuestion(DateTime.Now);
+			var response = AskForNextQuestion();
 
 			Assert.IsTrue(response.Contains(NoNextQuestionMessage));
 		}
@@ -117,12 +115,12 @@ namespace Test
 		[Test]
 		public void There_is_still_no_question_1min_after_having_answered_it()
 		{
-			var time = DateTime.Now;
-			RegisterQuestion(time);
-			AnswerCorrectly(time);
-			time += TimeSpan.FromMinutes(1);
 
-			var response = AskForNextQuestion(time);
+			RegisterQuestion();
+			AnswerCorrectly();
+            Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(1);
+
+			var response = AskForNextQuestion();
 
 			Assert.IsTrue(response.Contains(NoNextQuestionMessage));
 		}
@@ -131,11 +129,11 @@ namespace Test
 		public void There_is_a_question_3min_after_having_answered_it()
 		{
 			var time = DateTime.Now;
-			RegisterQuestion(time);
-			AnswerCorrectly(time);
-			time += TimeSpan.FromMinutes(3);
+			RegisterQuestion();
+			AnswerCorrectly();
+			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(3);
 
-			var response = AskForNextQuestion(time);
+			var response = AskForNextQuestion();
 
 			Assert.AreEqual(NextQuestionMessage, response);
 		}
@@ -143,12 +141,11 @@ namespace Test
 		[Test]
 		public void We_can_answer_again_after_3min_from_first_answer()
 		{
-			var time = DateTime.Now;
-			RegisterQuestion(time);
-			AnswerCorrectly(time);
-			time += TimeSpan.FromMinutes(3);
+			RegisterQuestion();
+			AnswerCorrectly();
+			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(3);
 
-			var response = AnswerCorrectly(time);
+			var response = AnswerCorrectly();
 
 			Assert.AreEqual(CorrectAnswerMessage, response);
 		}
@@ -156,13 +153,12 @@ namespace Test
 		[Test]
 		public void There_is_no_next_question_directly_after_the_second_answer()
 		{
-			var time = DateTime.Now;
-			RegisterQuestion(time);
-			AnswerCorrectly(time);
-			time += TimeSpan.FromMinutes(3);
-			AnswerCorrectly(time);
+			RegisterQuestion();
+			AnswerCorrectly();
+			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(3);
+			AnswerCorrectly();
 
-			var response = AskForNextQuestion(time);
+			var response = AskForNextQuestion();
 
 			Assert.IsTrue(response.Contains(NoNextQuestionMessage));
 		}
@@ -170,15 +166,14 @@ namespace Test
 		[Test]
 		public void There_is_no_next_question_3_min_after_the_second_answer ()
 		{
-			var time = DateTime.Now;
-			RegisterQuestion(time);
-			AnswerCorrectly(time);
-			time += TimeSpan.FromMinutes(3); // +3
-			AnswerCorrectly(time);
-			AskForNextQuestion(time);
-			time += TimeSpan.FromMinutes(3); // +6
+			RegisterQuestion();
+			AnswerCorrectly();
+			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(3);
+			AnswerCorrectly();
+			AskForNextQuestion();
+			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(6);
 
-			var response = AskForNextQuestion(time);
+			var response = AskForNextQuestion();
 
 			Assert.IsTrue(response.Contains(NoNextQuestionMessage));
 		}
@@ -186,11 +181,10 @@ namespace Test
 		[Test]
 		public void The_question_stays_next_if_we_answer_wrongly()
 		{
-			var time = DateTime.Now;
-			RegisterQuestion(time);
-			AnswerWrongly(time);
+			RegisterQuestion();
+			AnswerWrongly();
 
-			var response = AskForNextQuestion(time);
+			var response = AskForNextQuestion();
 
 			Assert.AreEqual(NextQuestionMessage, response);
 		}
@@ -199,14 +193,14 @@ namespace Test
 		public void A_wrong_answer_resets_the_lapse()
 		{
 			var time = DateTime.Now;
-			RegisterQuestion(time);
-			AnswerCorrectly(time);
-			time += TimeSpan.FromMinutes(3); // +3
-			AnswerWrongly(time); // reset
-			AnswerCorrectly(time);
-			time += TimeSpan.FromMinutes(3); // +3 after reset
+			RegisterQuestion();
+			AnswerCorrectly();
+			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(3);
+			AnswerWrongly(); // reset
+			AnswerCorrectly();
+			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(6);
 
-			var response = AskForNextQuestion(time);
+			var response = AskForNextQuestion();
 
 			Assert.AreEqual(NextQuestionMessage, response);
 		}
@@ -214,14 +208,13 @@ namespace Test
 		[Test]
 		public void Lapse_work_with_more_than_one_hour()
 		{
-			var time = DateTime.Now;
-			RegisterQuestion(time);
-			AnswerCorrectly(time);
-			time += TimeSpan.FromHours(2); // +2h
-			AnswerCorrectly(time);
-			time += TimeSpan.FromHours(3); // +3 after reset
+			RegisterQuestion();
+			AnswerCorrectly();
+			Clock.Getter = () => DateTime.Now + TimeSpan.FromHours(2);
+			AnswerCorrectly();
+			Clock.Getter = () => DateTime.Now + TimeSpan.FromHours(5);
 
-			var response = AskForNextQuestion(time);
+			var response = AskForNextQuestion();
 
 			Assert.IsTrue(response.Contains(NoNextQuestionMessage));
 		}
@@ -230,34 +223,34 @@ namespace Test
 		public void The_waiting_time_is_displayed()
 		{
 			var time = DateTime.Parse("7/24/2016 4:49:13 PM");
-
-			RegisterQuestion(time);
-			time += TimeSpan.FromSeconds(3); // +3
-			AnswerCorrectly(time);
-			time += TimeSpan.FromSeconds(3); // +3
-			var response = AskForNextQuestion(time);
+            Clock.Getter = () => time;
+			RegisterQuestion();
+			Clock.Getter = () => time + TimeSpan.FromSeconds(3); 
+			AnswerCorrectly();
+			Clock.Getter = () => time + TimeSpan.FromSeconds(6); 
+			var response = AskForNextQuestion();
 
 			Assert.AreEqual("There is no next question\nCome back at this time: 7/24/2016 4:51:16 PM (in 00:01:57)\n", response);
 		}
 
-		static string AnswerWrongly(DateTime time)
+		static string AnswerWrongly()
 		{
-			return Commands.Answer(time, "an animal");
+			return Commands.Answer("an animal");
 		}
 
-		static string AnswerCorrectly(DateTime time)
+		static string AnswerCorrectly()
 		{
-			return Commands.Answer(time, "a color");
+			return Commands.Answer("a color");
 		}
 
-		static string AskForNextQuestion(DateTime time)
+		static string AskForNextQuestion()
 		{
-			return Commands.AskForNextQuestion(time);
+			return Commands.AskForNextQuestion();
 		}
 
-		static string RegisterQuestion(DateTime time)
+		static string RegisterQuestion()
 		{
-			return Commands.RegisterQuestion("What is red?", "a color", time);
+			return Commands.RegisterQuestion("What is red?", "a color");
 		}
 
 	}

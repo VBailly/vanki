@@ -33,14 +33,14 @@ namespace Test
 		{
 			RegisterQuestion();
 
-			var response = Commands.AskForNextQuestion(DateTime.Now);
+			var response = Commands.AskForNextQuestion();
 
 			Assert.AreEqual(NextQuestionMessage, response);
 		}
 
 		static string RegisterQuestion()
 		{
-			return Commands.RegisterQuestion(Question, Answer, DateTime.Now);
+			return Commands.RegisterQuestion(Question, Answer);
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace Test
 		{
 			RegisterQuestion();
 
-			var response = Commands.Answer(DateTime.Now, Answer);
+			var response = Commands.Answer(Answer);
 
 			Assert.AreEqual(ConsoleOutputs.CorrectAnswerMessage, response);
 		}
@@ -59,7 +59,7 @@ namespace Test
 			var time = DateTime.Now;
 			RegisterQuestion();
 
-			var response = Commands.Answer(DateTime.Now, WrongAnswer);
+			var response = Commands.Answer(WrongAnswer);
 
 			Assert.AreEqual(WrongAnswerMessage, response);
 		}

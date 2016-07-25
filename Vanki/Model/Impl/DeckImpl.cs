@@ -22,10 +22,10 @@ namespace Vanki.Model.Impl
 			}
 		}
 
-		public override void CreateCard(string question, string answer, DateTime time)
+		public override void CreateCard(string question, string answer)
 		{
 #pragma warning disable RECS0026 // Possible unassigned object created by 'new'
-			new CardImpl(question, answer, time);
+			new CardImpl(question, answer);
 #pragma warning restore RECS0026 // Possible unassigned object created by 'new'
 		}
 	}

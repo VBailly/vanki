@@ -5,19 +5,19 @@ namespace Test
 {
 	public static class Commands
 	{
-		public static string Answer(DateTime time, string answer)
+		public static string Answer(string answer)
 		{
-			return MainClass.TestableMain(new[] { "--answer", answer }, time);
+			return MainClass.TestableMain(new[] { "--answer", answer });
 		}
 
-		public static string AskForNextQuestion(DateTime time)
+		public static string AskForNextQuestion()
 		{
-			return MainClass.TestableMain(new[] { "--next" }, time);
+			return MainClass.TestableMain(new[] { "--next" });
 		}
 
-		public static string RegisterQuestion(string question, string answer, DateTime time)
+		public static string RegisterQuestion(string question, string answer)
 		{
-			return MainClass.TestableMain(new[] { "-q", question, "-a", answer }, time);
+			return MainClass.TestableMain(new[] { "-q", question, "-a", answer });
 		}
 	}
 }

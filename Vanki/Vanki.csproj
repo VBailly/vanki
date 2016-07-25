@@ -47,6 +47,7 @@
     <Compile Include="Model\Deck.cs" />
     <Compile Include="Model\Impl\CardImpl.cs" />
     <Compile Include="Model\Impl\DeckImpl.cs" />
+    <Compile Include="Clock.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

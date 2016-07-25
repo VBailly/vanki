@@ -12,11 +12,11 @@ namespace Vanki.Model.Impl
 		string question_;
 
 
-		public CardImpl(string question, string answer, DateTime time)
+		public CardImpl(string question, string answer)
 		{
 			question_ = question;
 
-			var xCard = createXCard(question, answer, time);
+			var xCard = createXCard(question, answer);
 			var deck = GetDeck();
 			deck.Add(xCard);
 			File.WriteAllText(DataBaseFileName, deck.ToString());
@@ -27,9 +27,9 @@ namespace Vanki.Model.Impl
 			question_ = xCard.Element("question").Value;
 		}
 
-		XElement createXCard(string question, string answer, DateTime time)
+		XElement createXCard(string question, string answer)
 		{
-			var xTime = new XElement("time", time.ToString());
+			var xTime = new XElement("time", Clock.CurrentTime.ToString());
 			var xLapse = new XElement("lapse", "0");
 			var xQuestion = new XElement("question", question);
 			var xAnswer = new XElement("answer", answer);
@@ -71,16 +71,17 @@ namespace Vanki.Model.Impl
 			set { SetValue("lapse", value); }
 		}
 
-		public override void Promote(DateTime time)
+		public override void Promote()
 		{
+			var time = Clock.CurrentTime;
 			CurrentInterval = Math.Max(2, (int)(1.6 * (time - LastAnswerTime).TotalMinutes));
 			LastAnswerTime = time;
 		}
 
-		public override void Reset(DateTime time)
+		public override void Reset()
 		{
 			CurrentInterval = 0;
-			LastAnswerTime = time;
+			LastAnswerTime = Clock.CurrentTime;
 		}
 
 		string GetValue(string id)
