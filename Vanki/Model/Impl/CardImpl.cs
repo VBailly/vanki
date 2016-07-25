@@ -105,7 +105,7 @@ namespace Vanki.Model.Impl
 				deck.Add(new XAttribute("version", "1"));
 				return deck;
 			}
-			return XElement.Load(DataBaseFileName);
+            return XElement.Parse(File.ReadAllText(DataBaseFileName));
 		}
 
 
