@@ -28,13 +28,13 @@ namespace Vanki.Model.Impl
 
 		XElement createXCard(string question, string answer)
 		{
-			var xTime = new XElement("time", Clock.CurrentTime.ToString());
+            var xTime = new XElement("time", Clock.CurrentTime.ToUniversalTime().ToString());
 			var xLapse = new XElement("lapse", "0");
 			var xQuestion = new XElement("question", question);
 			var xAnswer = new XElement("answer", answer);
 
 			var xCard = new XElement("Card");
-			xCard.Add(new XAttribute("version", "1"));
+			xCard.Add(new XAttribute("version", "2"));
 			xCard.Add(xTime);
 			xCard.Add(xLapse);
 			xCard.Add(xQuestion);
@@ -60,8 +60,16 @@ namespace Vanki.Model.Impl
 
 		DateTime LastAnswerTime
 		{
-			get { return DateTime.Parse(GetValue("time")); }
-			set { SetValue("time", value); }
+            get
+            {
+                if (GetVersion() == "1")
+                    return DateTime.Parse(GetValue("time"));
+                else
+                    return DateTime.Parse(GetValue("time")).ToLocalTime(); 
+            }
+			set {
+                SetVersion("2");
+                SetValue("time", value.ToUniversalTime()); }
 		}
 
 		int CurrentInterval
@@ -89,7 +97,21 @@ namespace Vanki.Model.Impl
 			return deck.Elements("Card").Single(c => c.Element("question").Value == question_).Element(id).Value;
 		}
 
-		void SetValue(string id, object value)
+        string GetVersion()
+        {
+            var deck = GetDeck();
+            return deck.Elements("Card").Single(c => c.Element("question").Value == question_).Attribute("version").Value;
+        }
+
+        void SetVersion(string version)
+        {
+            var deck = GetDeck();
+            deck.Elements("Card").Single(c => c.Element("question").Value == question_).Attribute("version").Value = version;
+            Repository.StoreString(deck.ToString());
+        }
+
+
+        void SetValue(string id, object value)
 		{
 			var deck = GetDeck();
 			deck.Elements("Card").Single(c => c.Element("question").Value == question_).Element(id).Value = value.ToString();
