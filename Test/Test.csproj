@@ -41,6 +41,8 @@
     <Compile Include="TestWithADifferentSingleQuestion.cs" />
     <Compile Include="TestWithTwoQuestions.cs" />
     <Compile Include="TestWithClues.cs" />
+    <Compile Include="TestTimeInDifferentTimeZones.cs" />
+    <Compile Include="TestVersionsUpgrades.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

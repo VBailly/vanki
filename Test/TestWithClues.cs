@@ -58,6 +58,8 @@ namespace Test
 
             Assert.AreEqual(string.Empty, result);
         }
+
+        // need to add a test for the upgrade for version 2
     }
 }
 
