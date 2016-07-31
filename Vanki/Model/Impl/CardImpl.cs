@@ -32,6 +32,7 @@ namespace Vanki.Model.Impl
 			var xLapse = new XElement("lapse", "0");
 			var xQuestion = new XElement("question", question);
 			var xAnswer = new XElement("answer", answer);
+            var xClue = new XElement("clue", "0");
 
 			var xCard = new XElement("Card");
 			xCard.Add(new XAttribute("version", "2"));
@@ -39,9 +40,18 @@ namespace Vanki.Model.Impl
 			xCard.Add(xLapse);
 			xCard.Add(xQuestion);
 			xCard.Add(xAnswer);
+            xCard.Add(xClue);
 
 			return xCard;
 		}
+
+        public override int Clue
+        {
+            get
+            {
+                return int.Parse(GetValue("clue"));
+            }
+        }
 
 		public override string Answer
 		{
@@ -78,7 +88,7 @@ namespace Vanki.Model.Impl
 			set { SetValue("lapse", value); }
 		}
 
-		public override void Promote()
+        public override void Promote()
 		{
 			var time = Clock.CurrentTime;
 			CurrentInterval = Math.Max(2, (int)(1.6 * (time - LastAnswerTime).TotalMinutes));
@@ -131,7 +141,10 @@ namespace Vanki.Model.Impl
             return XElement.Parse(db);
 		}
 
-
-	}
+        public override void IncreaseClue()
+        {
+            SetValue("clue", Clue + 1);
+        }
+    }
 }
 

@@ -7,7 +7,7 @@ namespace Test
 	{
 		public static string Answer(string answer)
 		{
-			return MainClass.TestableMain(new[] { "--answer", answer });
+            return MainClass.TestableMain(new[] { "--answer", answer });
 		}
 
 		public static string AskForNextQuestion()
@@ -19,6 +19,11 @@ namespace Test
 		{
 			return MainClass.TestableMain(new[] { "-q", question, "-a", answer });
 		}
-	}
+
+        internal static object AskForAClue()
+        {
+            return MainClass.TestableMain(new[] { "--clue"});
+        }
+   }
 }
 

@@ -30,11 +30,23 @@ namespace Vanki
                 return AddQuestion(options.Question, options.Answer);
             if (!string.IsNullOrEmpty(options.Answer))
                 return ProcessAnswer(options.Answer);
+            if (options.Clue)
+                return GetAClue();
             
             return "wrong command line arguments";
 		}
 
-		static string AddQuestion(string question, string answer)
+        static string GetAClue()
+        {
+            var card = GetNextCard();
+            if (card == null)
+                return string.Empty;
+            card.IncreaseClue();
+            var answer = card.Answer;
+            return string.Join(".", answer.Split(' ').Select(s => new string(s.Take(card.Clue).ToArray())));
+        }
+
+        static string AddQuestion(string question, string answer)
 		{
 			deck.CreateCard(question, answer);
             return string.Empty;
