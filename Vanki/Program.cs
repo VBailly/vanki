@@ -8,38 +8,36 @@ namespace Vanki
 {
 	public class MainClass
 	{
-		const string newEntryRegistered = "New entry registered\n";
-		const string thatIsACorrectAnswer = "That is a correct answer!\n";
-		static readonly string theNextQuestionIs = "The next question is:\n\"{0}\"\n";
-		const string thereIsNoNextQuestion = "There is no next question\n";
-		const string cannotAnswer = "You cannot answer because there is no question pending\n";
-		const string emptyDeckMessage = "There is no questions, the deck is empty\n";
+		const string thereIsNoNextQuestion = "There is no next question";
+		const string cannotAnswer = "You cannot answer because there is no question pending";
+		const string emptyDeckMessage = "There is no questions, the deck is empty";
 		static readonly Deck deck = new DeckImpl();
 
 		public static void Main (string[] args)
 		{
 			var result = TestableMain (args);
-			Console.Write (result);
+            if (!string.IsNullOrEmpty(result))
+			    Console.Write (result + "\n");
 		}
 
 		public static string TestableMain(string[] args)
 		{
 			var options = ArgsParser.Parse (args);
-			if (options.ShowNext)
-				return PrintNextQuestion ();
-			if (!string.IsNullOrEmpty (options.Question) && !string.IsNullOrEmpty (options.Answer))
-				return AddQuestion (options.Question, options.Answer);
-			if (!string.IsNullOrEmpty (options.Answer))
-				return ProcessAnswer (options.Answer);
 
-
-			return "wrong command line arguments\n";
+            if (options.ShowNext)
+                return PrintNextQuestion();
+            if (!string.IsNullOrEmpty(options.Question) && !string.IsNullOrEmpty(options.Answer))
+                return AddQuestion(options.Question, options.Answer);
+            if (!string.IsNullOrEmpty(options.Answer))
+                return ProcessAnswer(options.Answer);
+            
+            return "wrong command line arguments";
 		}
 
 		static string AddQuestion(string question, string answer)
 		{
 			deck.CreateCard(question, answer);
-			return newEntryRegistered;
+            return string.Empty;
 		}
 			
 
@@ -59,12 +57,12 @@ namespace Vanki
 			if (answer != correctAnswer)
 			{
 				card.Reset();
-				return string.Format("WRONG! The correct answer is \"{0}\".\n", correctAnswer);
+				return correctAnswer;
 			}
 
 			card.Promote();
 
-			return thatIsACorrectAnswer;
+            return string.Empty;
 		}
 
 		static string PrintNextQuestion ()
@@ -73,9 +71,9 @@ namespace Vanki
 				return emptyDeckMessage;
 			var card = GetNextCard();
 			if (card != null)
-				return string.Format(theNextQuestionIs, card.Question);
+				return card.Question;
 			var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
-            return thereIsNoNextQuestion + string.Format("Come back at this time: {0} (in {1})\n", nextCardTime, nextCardTime - Clock.CurrentTime);
+            return thereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime, nextCardTime - Clock.CurrentTime);
 		}
 
 

@@ -10,8 +10,8 @@ namespace Test
 	{
 		static readonly string Question1 = "What is the color of a red fish?";
 		static readonly string Question2 = "What is the color of a blue fish?";
-		static readonly string NextQuestion1Message = string.Format(ConsoleOutputs.NextQuestionMessage, Question1);
-		static readonly string NextQuestion2Message = string.Format(ConsoleOutputs.NextQuestionMessage, Question2);
+		static readonly string NextQuestion1Message = Question1;
+		static readonly string NextQuestion2Message = Question2;
 
 
 		[SetUp]
@@ -44,7 +44,7 @@ namespace Test
 			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(4);
 			var response = Commands.Answer("red");
 
-			Assert.AreEqual(ConsoleOutputs.CorrectAnswerMessage, response);
+            Assert.AreEqual(string.Empty, response);
 		}
 
 		[Test]
@@ -75,7 +75,7 @@ namespace Test
 			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(6);
 			var response = Commands.Answer("blue");
 
-			Assert.AreEqual(ConsoleOutputs.CorrectAnswerMessage, response);
+            Assert.AreEqual(string.Empty, response);
 		}
 
 		[Test]

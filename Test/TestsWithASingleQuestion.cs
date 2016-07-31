@@ -9,11 +9,9 @@ namespace Test
 	public class TestsWithASingleQuestion
 	{
 		const string NoNextQuestionMessage = ConsoleOutputs.NoNextQuestionMessage;
-		static readonly string NextQuestionMessage = string.Format(ConsoleOutputs.NextQuestionMessage, "What is red?");
-		const string CorrectAnswerMessage = ConsoleOutputs.CorrectAnswerMessage;
-		static readonly string WrongAnswerMessage = string.Format(ConsoleOutputs.WrongAnswerMessage, "a color");
+		static readonly string NextQuestionMessage = "What is red?";
+		static readonly string WrongAnswerMessage = "a color";
 		const string CannotAnswerMessage = ConsoleOutputs.CannotAnswerMessage;
-		const string NewEntryMessage = ConsoleOutputs.NewEntryMessage;
 
 		[SetUp]
 		public void SetUp()
@@ -78,7 +76,7 @@ namespace Test
 		{
 			var response = RegisterQuestion();
 
-			Assert.AreEqual(NewEntryMessage, response);
+            Assert.AreEqual(string.Empty, response);
 		}
 
 		[Test]
@@ -98,7 +96,7 @@ namespace Test
 
 			var response = AnswerCorrectly();
 
-			Assert.AreEqual(CorrectAnswerMessage, response);
+            Assert.AreEqual(string.Empty, response);
 		}
 
 		[Test]
@@ -147,7 +145,7 @@ namespace Test
 
 			var response = AnswerCorrectly();
 
-			Assert.AreEqual(CorrectAnswerMessage, response);
+            Assert.AreEqual(string.Empty, response);
 		}
 
 		[Test]

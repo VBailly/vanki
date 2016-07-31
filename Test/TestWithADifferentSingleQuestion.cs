@@ -11,8 +11,8 @@ namespace Test
 		static readonly string Question = "What color is the sky?";
 		static readonly string Answer = "blue";
 		static readonly string WrongAnswer = "a fish";
-		static readonly string NextQuestionMessage = string.Format(ConsoleOutputs.NextQuestionMessage, Question);
-		static readonly string WrongAnswerMessage = string.Format(ConsoleOutputs.WrongAnswerMessage, Answer);
+		static readonly string NextQuestionMessage = Question;
+		static readonly string WrongAnswerMessage = Answer;
 
 		[SetUp]
 		public void SetUp()
@@ -25,7 +25,7 @@ namespace Test
 		{
 			var response = RegisterQuestion();
 
-			Assert.AreEqual(ConsoleOutputs.NewEntryMessage, response);
+            Assert.AreEqual(string.Empty, response);
 		}
 
 		[Test]
@@ -50,7 +50,7 @@ namespace Test
 
 			var response = Commands.Answer(Answer);
 
-			Assert.AreEqual(ConsoleOutputs.CorrectAnswerMessage, response);
+            Assert.AreEqual(string.Empty, response);
 		}
 
 		[Test]
