@@ -43,6 +43,15 @@ namespace Test
         }
 
         [Test]
+        public void Commas_are_kept_in_the_clue()
+        {
+            Commands.RegisterQuestion("Border collie is ____ ___?", "a kind, of dog");
+            var result = Commands.AskForAClue();
+
+            Assert.AreEqual("a.k, o.d", result);
+        }
+
+        [Test]
         public void Asking_for_a_clue_when_no_question_is_pending_returns_an_empty_string()
         {
             var result = Commands.AskForAClue();

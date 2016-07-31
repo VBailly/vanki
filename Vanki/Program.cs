@@ -43,7 +43,8 @@ namespace Vanki
                 return string.Empty;
             card.IncreaseClue();
             var answer = card.Answer;
-            return string.Join(".", answer.Split(' ').Select(s => new string(s.Take(card.Clue).ToArray())));
+            var answers = answer.Split(',').Select(s => s.Trim());
+            return string.Join(", ", answers.Select(w => string.Join(".", w.Split(' ').Select(s => new string(s.Take(card.Clue).ToArray())))));
         }
 
         static string AddQuestion(string question, string answer)
