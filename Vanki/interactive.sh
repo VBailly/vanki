@@ -5,8 +5,16 @@ function play {
 
 	while true
 	do
-		mono Vanki.exe -n
+		next=$(mono Vanki.exe -n)
+		echo $next
 		read answer
+		while [[ $next == *"Come back at"* ]] 
+		do
+			next=$(mono Vanki.exe -n)
+			clear
+			echo $next
+			read answer
+		done
 		while [[ -z "$answer" ]]
 		do
 			mono Vanki.exe --clue
