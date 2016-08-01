@@ -35,7 +35,7 @@ namespace Vanki.Model.Impl
             var xClue = new XElement("clue", "0");
 
 			var xCard = new XElement("Card");
-			xCard.Add(new XAttribute("version", "2"));
+			xCard.Add(new XAttribute("version", "3"));
 			xCard.Add(xTime);
 			xCard.Add(xLapse);
 			xCard.Add(xQuestion);
@@ -49,6 +49,9 @@ namespace Vanki.Model.Impl
         {
             get
             {
+                var version = GetVersion();
+                if (version == "1" || version == "2")
+                    return 0;
                 return int.Parse(GetValue("clue"));
             }
         }
@@ -74,12 +77,13 @@ namespace Vanki.Model.Impl
             {
                 if (GetVersion() == "1")
                     return DateTime.Parse(GetValue("time"));
-                else
-                    return DateTime.Parse(GetValue("time")).ToLocalTime(); 
+                return DateTime.Parse(GetValue("time")).ToLocalTime(); 
             }
-			set {
-                SetVersion("2");
-                SetValue("time", value.ToUniversalTime()); }
+			set
+            {
+                SetVersion("3");
+                SetValue("time", value.ToUniversalTime()); 
+            }
 		}
 
 		int CurrentInterval
@@ -93,6 +97,7 @@ namespace Vanki.Model.Impl
 			var time = Clock.CurrentTime;
 			CurrentInterval = Math.Max(2, (int)(1.6 * (time - LastAnswerTime).TotalMinutes));
 			LastAnswerTime = time;
+            DecreaseClue();
 		}
 
 		public override void Reset()
@@ -101,22 +106,27 @@ namespace Vanki.Model.Impl
 			LastAnswerTime = Clock.CurrentTime;
 		}
 
+        XElement GetCard(XElement deck)
+        {
+            return deck.Elements("Card").Single(c => c.Element("question").Value == question_);
+        }
+
 		string GetValue(string id)
 		{
-			var deck = GetDeck();
-			return deck.Elements("Card").Single(c => c.Element("question").Value == question_).Element(id).Value;
+            var deck = GetDeck();
+            return GetCard(deck).Element(id).Value;
 		}
 
         string GetVersion()
         {
             var deck = GetDeck();
-            return deck.Elements("Card").Single(c => c.Element("question").Value == question_).Attribute("version").Value;
+            return GetCard(deck).Attribute("version").Value;
         }
 
         void SetVersion(string version)
         {
             var deck = GetDeck();
-            deck.Elements("Card").Single(c => c.Element("question").Value == question_).Attribute("version").Value = version;
+            GetCard(deck).Attribute("version").Value = version;
             Repository.StoreString(deck.ToString());
         }
 
@@ -124,7 +134,13 @@ namespace Vanki.Model.Impl
         void SetValue(string id, object value)
 		{
 			var deck = GetDeck();
-			deck.Elements("Card").Single(c => c.Element("question").Value == question_).Element(id).Value = value.ToString();
+            var element = GetCard(deck).Element(id);
+            if (element == null)
+            {
+                element = new XElement(id);
+                GetCard(deck).Add(element);
+            }
+            element.Value = value.ToString();
 			Repository.StoreString(deck.ToString());
 		}
 
@@ -143,7 +159,14 @@ namespace Vanki.Model.Impl
 
         public override void IncreaseClue()
         {
+            SetVersion("3");
             SetValue("clue", Clue + 1);
+        }
+
+        private void DecreaseClue()
+        {
+            SetVersion("3");
+            SetValue("clue", Math.Max(0, Clue - 1));
         }
     }
 }

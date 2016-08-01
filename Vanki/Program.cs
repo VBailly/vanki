@@ -42,9 +42,7 @@ namespace Vanki
             if (card == null)
                 return string.Empty;
             card.IncreaseClue();
-            var answer = card.Answer;
-            var answers = answer.Split(',').Select(s => s.Trim());
-            return string.Join(", ", answers.Select(w => string.Join(".", w.Split(' ').Select(s => new string(s.Take(card.Clue).ToArray())))));
+            return GetHint(card.Answer, card.Clue);
         }
 
         static string AddQuestion(string question, string answer)
@@ -58,6 +56,12 @@ namespace Vanki
 		{ 
             return deck.Cards.Where(c => c.DueTime <= Clock.CurrentTime).OrderBy(c => c.DueTime).FirstOrDefault();
 		}
+
+        static string GetHint(string answer, int size)
+        {
+            var answers = answer.Split(',').Select(s => s.Trim());
+            return string.Join(", ", answers.Select(w => string.Join(".", w.Split(' ').Select(s => new string(s.Take(size).ToArray())))));
+        }
 
 		static string ProcessAnswer (string answer)
 		{
@@ -83,8 +87,14 @@ namespace Vanki
 			if (!deck.Cards.Any())
 				return emptyDeckMessage;
 			var card = GetNextCard();
-			if (card != null)
-				return card.Question;
+            if (card != null)
+            {
+                if (card.Clue == 0)
+                    return card.Question;
+                else
+                    return card.Question + "\nclue: " + GetHint(card.Answer, card.Clue);
+            }
+				
 			var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
             return thereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime, nextCardTime - Clock.CurrentTime);
 		}

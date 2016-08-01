@@ -59,7 +59,29 @@ namespace Test
             Assert.AreEqual(string.Empty, result);
         }
 
-        // need to add a test for the upgrade for version 2
+        [Test]
+        public void Answering_decreases_the_clue_by_one()
+        {
+            Commands.RegisterQuestion("What is red?", "a color");
+            Commands.AskForAClue();
+            Commands.Answer("a color");
+
+            Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(5);
+            var result = Commands.AskForNextQuestion();
+
+            Assert.AreEqual("What is red?", result);
+        }
+
+        [Test]
+        public void The_next_question_is_shown_with_a_clue_if_any()
+        {
+            Commands.RegisterQuestion("What is red?", "a color");
+            Commands.AskForAClue();
+
+            var result = Commands.AskForNextQuestion();
+
+            Assert.AreEqual("What is red?\nclue: a.c", result);
+        }
     }
 }
 
