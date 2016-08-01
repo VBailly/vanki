@@ -7,6 +7,11 @@ function play {
 	do
 		mono Vanki.exe -n
 		read answer
+		while [[ -z "$answer" ]]
+		do
+			mono Vanki.exe --clue
+			read answer
+		done
 		mono Vanki.exe -a "$answer"
 		read answer
 		clear
