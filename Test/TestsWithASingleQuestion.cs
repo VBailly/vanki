@@ -231,6 +231,21 @@ namespace Test
 			Assert.AreEqual("There is no next question\nCome back at this time: 7/24/2016 4:51:16 PM (in 00:01:57)\n", response);
 		}
 
+
+        [Test]
+        public void The_time_between_registration_and_first_answer_is_ignored()
+        {
+            RegisterQuestion();
+            var time = Clock.CurrentTime;
+            Clock.Getter = () => time + TimeSpan.FromHours(6);
+            AnswerCorrectly();
+            time = Clock.CurrentTime;
+            Clock.Getter = () => time + TimeSpan.FromMinutes(6);
+            var response = AskForNextQuestion();
+
+            Assert.AreEqual(NextQuestionMessage, response);
+        }
+
 		static string AnswerWrongly()
 		{
 			return Commands.Answer("an animal");
