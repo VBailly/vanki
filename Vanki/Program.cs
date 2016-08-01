@@ -41,7 +41,7 @@ namespace Vanki
             var card = GetNextCard();
             if (card == null)
                 return string.Empty;
-            card.Reset();
+            card.ResetLapse();
             card.IncreaseClue();
             return GetHint(card.Answer, card.Clue);
         }

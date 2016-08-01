@@ -112,6 +112,27 @@ namespace Test
 
             Assert.AreEqual("What is red?", result);
         }
+
+        [Test]
+        public void Asking_for_a_clue_does_not_update_the_date()
+        {
+            Commands.RegisterQuestion("What is red?", "a color");
+
+            var time = Clock.CurrentTime;
+            Clock.Getter = () => time + TimeSpan.FromMinutes(5);
+
+            Commands.RegisterQuestion("What is blue?", "a color");
+
+            time = Clock.CurrentTime;
+            Clock.Getter = () => time + TimeSpan.FromMinutes(5);
+
+            Commands.AskForAClue();
+
+            var result = Commands.AskForNextQuestion();
+
+            Assert.AreEqual("What is red?\nclue: a.c", result);
+
+        }
     }
 }
 

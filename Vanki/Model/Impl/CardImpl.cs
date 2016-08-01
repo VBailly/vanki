@@ -49,10 +49,8 @@ namespace Vanki.Model.Impl
         {
             get
             {
-                var version = GetVersion();
-                if (version == "1" || version == "2")
-                    return 0;
-                return int.Parse(GetValue("clue"));
+                var clue = GetValue("clue");
+                return clue == null?  0 : int.Parse(clue);
             }
         }
 
@@ -117,7 +115,7 @@ namespace Vanki.Model.Impl
 		string GetValue(string id)
 		{
             var deck = GetDeck();
-            return GetCard(deck).Element(id).Value;
+            return GetCard(deck).Element(id)?.Value;
 		}
 
         string GetVersion()
@@ -170,6 +168,11 @@ namespace Vanki.Model.Impl
         {
             SetVersion("3");
             SetValue("clue", Math.Max(0, Clue - 1));
+        }
+
+        public override void ResetLapse()
+        {
+            CurrentInterval = 0;
         }
     }
 }

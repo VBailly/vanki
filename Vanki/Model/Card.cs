@@ -12,6 +12,7 @@ namespace Vanki.Model
 
 		public abstract void Promote();
 		public abstract void Reset();
+        public abstract void ResetLapse();
         public abstract void IncreaseClue();
 	}
 }
