@@ -82,6 +82,36 @@ namespace Test
 
             Assert.AreEqual("What is red?\nclue: a.c", result);
         }
+
+        [Test]
+        public void Asking_for_a_clue_resets_the_score()
+        {
+            Commands.RegisterQuestion("What is red?", "a color");
+            Commands.Answer("a color");
+
+            var time = Clock.CurrentTime;
+            Clock.Getter = () => time + TimeSpan.FromMinutes(5);
+
+            Commands.Answer("a color");
+
+            time = Clock.CurrentTime;
+            Clock.Getter = () => time + TimeSpan.FromHours(5);
+
+            Commands.Answer("a color");
+
+            time = Clock.CurrentTime;
+            Clock.Getter = () => time + TimeSpan.FromHours(15);
+
+            Commands.AskForAClue();
+            Commands.Answer("a color");
+
+            time = Clock.CurrentTime;
+            Clock.Getter = () => time + TimeSpan.FromMinutes(5);
+
+            var result = Commands.AskForNextQuestion();
+
+            Assert.AreEqual("What is red?", result);
+        }
     }
 }
 
