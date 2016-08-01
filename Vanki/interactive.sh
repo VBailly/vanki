@@ -5,6 +5,7 @@ function play {
 
 	while true
 	do
+		clear
 		next=$(mono Vanki.exe -n)
 		echo $next
 		read answer
