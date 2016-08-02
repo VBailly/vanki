@@ -145,7 +145,7 @@ namespace Test
 
             Commands.Answer("an idiot");
 
-            IncreaseTime(0, 5);
+            IncreaseTime(0, 1);
 
             var result = Commands.AskForNextQuestion();
             Assert.AreEqual("What is red?\nclue: a.c", result);
