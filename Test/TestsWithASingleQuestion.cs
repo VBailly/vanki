@@ -236,10 +236,10 @@ namespace Test
         public void The_time_between_registration_and_first_answer_is_ignored()
         {
             RegisterQuestion();
-            var time = Clock.CurrentTime;
+            var time = Clock.CurrentLocalTime;
             Clock.Getter = () => time + TimeSpan.FromHours(6);
             AnswerCorrectly();
-            time = Clock.CurrentTime;
+            time = Clock.CurrentLocalTime;
             Clock.Getter = () => time + TimeSpan.FromMinutes(6);
             var response = AskForNextQuestion();
 

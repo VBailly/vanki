@@ -28,7 +28,7 @@ namespace Vanki.Model.Impl
 
 		XElement createXCard(string question, string answer)
 		{
-            var xTime = new XElement("time", Clock.CurrentTime.ToUniversalTime().ToString());
+            var xTime = new XElement("time", Clock.CurrentGlobalTime.ToString());
 			var xLapse = new XElement("lapse", "0");
 			var xQuestion = new XElement("question", question);
 			var xAnswer = new XElement("answer", answer);
@@ -75,7 +75,7 @@ namespace Vanki.Model.Impl
             {
                 if (GetVersion() == "1")
                     return DateTime.Parse(GetValue("time"));
-                return DateTime.Parse(GetValue("time")).ToLocalTime(); 
+                return Clock.ToLocalTime(DateTime.Parse(GetValue("time"))); 
             }
 			set
             {
@@ -92,7 +92,7 @@ namespace Vanki.Model.Impl
 
         public override void Promote()
 		{
-			var time = Clock.CurrentTime;
+            var time = Clock.CurrentLocalTime;
             if (CurrentInterval == 0)
                 CurrentInterval = 2;
             else
@@ -104,7 +104,7 @@ namespace Vanki.Model.Impl
 		public override void Reset()
 		{
 			CurrentInterval = 0;
-			LastAnswerTime = Clock.CurrentTime;
+            LastAnswerTime = Clock.CurrentLocalTime;
 		}
 
         XElement GetCard(XElement deck)

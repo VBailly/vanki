@@ -55,7 +55,7 @@ namespace Vanki
 
 		static Card GetNextCard()
 		{ 
-            return deck.Cards.Where(c => c.DueTime <= Clock.CurrentTime).OrderBy(c => c.DueTime).FirstOrDefault();
+            return deck.Cards.Where(c => c.DueTime <= Clock.CurrentLocalTime).OrderBy(c => c.DueTime).FirstOrDefault();
 		}
 
         static string GetHint(string answer, int size)
@@ -97,7 +97,7 @@ namespace Vanki
             }
 				
 			var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
-            return thereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime, nextCardTime - Clock.CurrentTime);
+            return thereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime, nextCardTime - Clock.CurrentLocalTime);
 		}
 
 

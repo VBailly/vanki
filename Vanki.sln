@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage", "Storage\Storage.csproj", "{85D1280D-070E-4C09-9A40-AC4E5E43F469}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clock", "Clock\Clock.csproj", "{E1DA16D5-BDC3-49EC-833A-5EC0E9BF0D0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -25,5 +27,9 @@ Global
 		{85D1280D-070E-4C09-9A40-AC4E5E43F469}.Debug|x86.Build.0 = Debug|Any CPU
 		{85D1280D-070E-4C09-9A40-AC4E5E43F469}.Release|x86.ActiveCfg = Release|Any CPU
 		{85D1280D-070E-4C09-9A40-AC4E5E43F469}.Release|x86.Build.0 = Release|Any CPU
+		{E1DA16D5-BDC3-49EC-833A-5EC0E9BF0D0E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E1DA16D5-BDC3-49EC-833A-5EC0E9BF0D0E}.Debug|x86.Build.0 = Debug|Any CPU
+		{E1DA16D5-BDC3-49EC-833A-5EC0E9BF0D0E}.Release|x86.ActiveCfg = Release|Any CPU
+		{E1DA16D5-BDC3-49EC-833A-5EC0E9BF0D0E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

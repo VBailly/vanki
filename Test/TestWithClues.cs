@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using Storage;
-using Vanki;
 
 namespace Test
 {
@@ -153,7 +152,7 @@ namespace Test
 
         static void IncreaseTime(int hours, int minutes)
         {
-            var time = Clock.CurrentTime;
+            var time = Clock.CurrentLocalTime;
             Clock.Getter = () => time + TimeSpan.FromMinutes(minutes) + TimeSpan.FromHours(hours);
         }
     }
