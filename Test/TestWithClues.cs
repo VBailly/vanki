@@ -66,7 +66,7 @@ namespace Test
             Commands.AskForAClue();
             Commands.Answer("a color");
 
-            Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(5);
+            IncreaseTime(0, 5);
             var result = Commands.AskForNextQuestion();
 
             Assert.AreEqual("What is red?", result);
@@ -89,24 +89,20 @@ namespace Test
             Commands.RegisterQuestion("What is red?", "a color");
             Commands.Answer("a color");
 
-            var time = Clock.CurrentTime;
-            Clock.Getter = () => time + TimeSpan.FromMinutes(5);
+            IncreaseTime(0, 5);
 
             Commands.Answer("a color");
 
-            time = Clock.CurrentTime;
-            Clock.Getter = () => time + TimeSpan.FromHours(5);
+            IncreaseTime(5, 0);
 
             Commands.Answer("a color");
 
-            time = Clock.CurrentTime;
-            Clock.Getter = () => time + TimeSpan.FromHours(15);
+            IncreaseTime(15, 0);
 
             Commands.AskForAClue();
             Commands.Answer("a color");
 
-            time = Clock.CurrentTime;
-            Clock.Getter = () => time + TimeSpan.FromMinutes(5);
+            IncreaseTime(0, 5);
 
             var result = Commands.AskForNextQuestion();
 
@@ -117,21 +113,48 @@ namespace Test
         public void Asking_for_a_clue_does_not_update_the_date()
         {
             Commands.RegisterQuestion("What is red?", "a color");
-
-            var time = Clock.CurrentTime;
-            Clock.Getter = () => time + TimeSpan.FromMinutes(5);
+            IncreaseTime(0,5);
 
             Commands.RegisterQuestion("What is blue?", "a color");
 
-            time = Clock.CurrentTime;
-            Clock.Getter = () => time + TimeSpan.FromMinutes(5);
+            IncreaseTime(0, 5);
 
             Commands.AskForAClue();
 
             var result = Commands.AskForNextQuestion();
 
             Assert.AreEqual("What is red?\nclue: a.c", result);
+        }
 
+
+        [Test]
+        public void Wrong_answers_do_not_change_the_clue_level()
+        {
+            Commands.RegisterQuestion("What is red?", "a color");
+            IncreaseTime(0, 5);
+            Commands.AskForAClue();
+            Commands.AskForAClue();
+
+            // 2 clues
+
+            Commands.Answer("a color");
+
+            // 1 clue
+
+            IncreaseTime(1, 0);
+
+            Commands.Answer("an idiot");
+
+            IncreaseTime(0, 5);
+
+            var result = Commands.AskForNextQuestion();
+            Assert.AreEqual("What is red?\nclue: a.c", result);
+        }
+
+        static void IncreaseTime(int hours, int minutes)
+        {
+            var time = Clock.CurrentTime;
+            Clock.Getter = () => time + TimeSpan.FromMinutes(minutes) + TimeSpan.FromHours(hours);
         }
     }
 }
