@@ -11,7 +11,7 @@ namespace Test
         public void SetUp()
         {
             Repository.StoreString(string.Empty);
-            Clock.Getter = null;
+            Clock.LocalTimeGetter = null;
         }
 
         [Test]
@@ -153,7 +153,7 @@ namespace Test
         static void IncreaseTime(int hours, int minutes)
         {
             var time = Clock.CurrentLocalTime;
-            Clock.Getter = () => time + TimeSpan.FromMinutes(minutes) + TimeSpan.FromHours(hours);
+            Clock.LocalTimeGetter = () => time + TimeSpan.FromMinutes(minutes) + TimeSpan.FromHours(hours);
         }
     }
 }

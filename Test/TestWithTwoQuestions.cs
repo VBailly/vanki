@@ -18,7 +18,7 @@ namespace Test
 		public void SetUp()
 		{
 			Repository.StoreString(string.Empty);
-            Clock.Getter = null;
+            Clock.LocalTimeGetter = null;
 		}
 
 		[Test]
@@ -26,9 +26,9 @@ namespace Test
 		{
 			var time = DateTime.Now;
 			Commands.RegisterQuestion(Question1, "red");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(2);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
 			Commands.RegisterQuestion(Question2, "blue");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(4);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
 			var response = Commands.AskForNextQuestion();
 
 			Assert.AreEqual(NextQuestion1Message, response);
@@ -39,9 +39,9 @@ namespace Test
 		{
 			var time = DateTime.Now;
 			Commands.RegisterQuestion(Question1, "red");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(2);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
 			Commands.RegisterQuestion(Question2, "blue");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(4);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
 			var response = Commands.Answer("red");
 
             Assert.AreEqual(string.Empty, response);
@@ -52,11 +52,11 @@ namespace Test
 		{
 			var time = DateTime.Now;
 			Commands.RegisterQuestion(Question1, "red");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(2);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
 			Commands.RegisterQuestion(Question2, "blue");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(4);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
 			Commands.Answer("red");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(6);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(6);
 
 			var response = Commands.AskForNextQuestion();
 
@@ -68,11 +68,11 @@ namespace Test
 		{
 			var time = DateTime.Now;
 			Commands.RegisterQuestion(Question1, "red");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(2);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
 			Commands.RegisterQuestion(Question2, "blue");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(4);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
 			Commands.Answer("red");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(6);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(6);
 			var response = Commands.Answer("blue");
 
             Assert.AreEqual(string.Empty, response);
@@ -83,11 +83,11 @@ namespace Test
 		{
 			var time = DateTime.Now;
 			Commands.RegisterQuestion(Question1, "red");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(2);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
 			Commands.RegisterQuestion(Question2, "blue");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(4);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
 			Commands.Answer("red");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(6);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(6);
 			Commands.Answer("blue");
 
 			var response = Commands.AskForNextQuestion();
@@ -100,13 +100,13 @@ namespace Test
 		{
 			var time = DateTime.Now;
 			Commands.RegisterQuestion(Question1, "red");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(2);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
 			Commands.RegisterQuestion(Question2, "blue");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(4);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
 			Commands.Answer("red");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromSeconds(6);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(6);
 			Commands.Answer("blue");
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(9);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(9);
 
 			var response = Commands.AskForNextQuestion();
 

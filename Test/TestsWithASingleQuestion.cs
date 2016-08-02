@@ -17,7 +17,7 @@ namespace Test
 		public void SetUp()
 		{
             Repository.StoreString(string.Empty);
-			Clock.Getter = null;
+			Clock.LocalTimeGetter = null;
 		}
 
 		[TearDown]
@@ -116,7 +116,7 @@ namespace Test
 
 			RegisterQuestion();
 			AnswerCorrectly();
-            Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(1);
+            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(1);
 
 			var response = AskForNextQuestion();
 
@@ -129,7 +129,7 @@ namespace Test
 			var time = DateTime.Now;
 			RegisterQuestion();
 			AnswerCorrectly();
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(3);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(3);
 
 			var response = AskForNextQuestion();
 
@@ -141,7 +141,7 @@ namespace Test
 		{
 			RegisterQuestion();
 			AnswerCorrectly();
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(3);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(3);
 
 			var response = AnswerCorrectly();
 
@@ -153,7 +153,7 @@ namespace Test
 		{
 			RegisterQuestion();
 			AnswerCorrectly();
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(3);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(3);
 			AnswerCorrectly();
 
 			var response = AskForNextQuestion();
@@ -166,10 +166,10 @@ namespace Test
 		{
 			RegisterQuestion();
 			AnswerCorrectly();
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(3);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(3);
 			AnswerCorrectly();
 			AskForNextQuestion();
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(6);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(6);
 
 			var response = AskForNextQuestion();
 
@@ -193,10 +193,10 @@ namespace Test
 			var time = DateTime.Now;
 			RegisterQuestion();
 			AnswerCorrectly();
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(3);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(3);
 			AnswerWrongly(); // reset
 			AnswerCorrectly();
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromMinutes(6);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(6);
 
 			var response = AskForNextQuestion();
 
@@ -208,9 +208,9 @@ namespace Test
 		{
 			RegisterQuestion();
 			AnswerCorrectly();
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromHours(2);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromHours(2);
 			AnswerCorrectly();
-			Clock.Getter = () => DateTime.Now + TimeSpan.FromHours(5);
+			Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromHours(5);
 
 			var response = AskForNextQuestion();
 
@@ -221,11 +221,11 @@ namespace Test
 		public void The_waiting_time_is_displayed()
 		{
 			var time = DateTime.Parse("7/24/2016 4:49:13 PM");
-            Clock.Getter = () => time;
+            Clock.LocalTimeGetter = () => time;
 			RegisterQuestion();
-			Clock.Getter = () => time + TimeSpan.FromSeconds(3); 
+			Clock.LocalTimeGetter = () => time + TimeSpan.FromSeconds(3); 
 			AnswerCorrectly();
-			Clock.Getter = () => time + TimeSpan.FromSeconds(6); 
+			Clock.LocalTimeGetter = () => time + TimeSpan.FromSeconds(6); 
 			var response = AskForNextQuestion();
 
 			Assert.AreEqual("There is no next question\nCome back at this time: 7/24/2016 4:51:16 PM (in 00:01:57)\n", response);
@@ -237,10 +237,10 @@ namespace Test
         {
             RegisterQuestion();
             var time = Clock.CurrentLocalTime;
-            Clock.Getter = () => time + TimeSpan.FromHours(6);
+            Clock.LocalTimeGetter = () => time + TimeSpan.FromHours(6);
             AnswerCorrectly();
             time = Clock.CurrentLocalTime;
-            Clock.Getter = () => time + TimeSpan.FromMinutes(6);
+            Clock.LocalTimeGetter = () => time + TimeSpan.FromMinutes(6);
             var response = AskForNextQuestion();
 
             Assert.AreEqual(NextQuestionMessage, response);
