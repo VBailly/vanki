@@ -38,6 +38,7 @@ namespace Test
             Commands.Answer("a color");
 
             time += TimeSpan.FromHours(5);
+            Clock.LocalTimeGetter = () => time;
             Clock.HoursDifferenceFromGlobal = () => 5;
 
             var response = Commands.AskForNextQuestion();
@@ -61,6 +62,7 @@ namespace Test
             Commands.Answer("a color");
 
             time -= TimeSpan.FromHours(5);
+            Clock.LocalTimeGetter = () => time;
             Clock.HoursDifferenceFromGlobal = () => -5;
 
             var response = Commands.AskForNextQuestion();
