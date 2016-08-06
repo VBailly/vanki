@@ -99,6 +99,16 @@ namespace Test
             Assert.AreEqual(string.Empty, response);
 		}
 
+        [Test]
+        public void Answer_is_case_insensitive()
+        {
+            RegisterQuestion();
+
+            var response = Commands.Answer("A cOloR");
+
+            Assert.AreEqual(string.Empty, response);
+        }
+
 		[Test]
 		public void There_is_no_question_just_after_having_answered_it()
 		{

@@ -72,7 +72,7 @@ namespace Vanki
 
 			var correctAnswer = card.Answer;
 
-			if (answer != correctAnswer)
+            if (answer.ToLower() != correctAnswer.ToLower())
 			{
 				card.Reset();
 				return correctAnswer;
