@@ -32,9 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml.Serialization" />
-    <Reference Include="System.Xml" />
     <Reference Include="NDesk.Options">
       <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
     </Reference>
@@ -65,13 +62,13 @@
     <Folder Include="Model\Impl\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Storage\Storage.csproj">
-      <Project>{85D1280D-070E-4C09-9A40-AC4E5E43F469}</Project>
-      <Name>Storage</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Clock\Clock.csproj">
       <Project>{E1DA16D5-BDC3-49EC-833A-5EC0E9BF0D0E}</Project>
       <Name>Clock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Persistence\Persistence.csproj">
+      <Project>{100A058C-3229-428A-9514-E131B4BC6D5F}</Project>
+      <Name>Persistence</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

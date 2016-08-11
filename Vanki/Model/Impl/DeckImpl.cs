@@ -1,25 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
-using Storage;
+using Persistence;
 
 namespace Vanki.Model.Impl
 {
 	public class DeckImpl : Deck
 	{
-		const string DataBaseFileName = "db.xml";
-
 		public override IEnumerable<Card> Cards
 		{
 			get
 			{
-                var xml = Repository.GetStoredString();
-                if (string.IsNullOrEmpty(xml))
-				{
-					return new List<Card>();
-				}
-
-                return XElement.Parse(xml).Elements("Card").Select(e => new CardImpl(e));
+                return PersistentDeck.Cards.Select(e => new CardImpl(e));
 			}
 		}
 
