@@ -1,6 +1,4 @@
 ﻿using System;
-using Vanki.Model;
-using Vanki.Model.Impl;
 using System.Linq;
 
 
@@ -11,7 +9,6 @@ namespace Vanki
 		const string thereIsNoNextQuestion = "There is no next question";
 		const string cannotAnswer = "You cannot answer because there is no question pending";
 		const string emptyDeckMessage = "There is no questions, the deck is empty";
-		static readonly Deck deck = new DeckImpl();
 
 		public static void Main (string[] args)
 		{
@@ -48,14 +45,14 @@ namespace Vanki
 
         static string AddQuestion(string question, string answer)
 		{
-			deck.CreateCard(question, answer);
+            Deck.AddQuestion(question, answer);
             return string.Empty;
 		}
 			
 
 		static Card GetNextCard()
 		{ 
-            return deck.Cards.Where(c => c.DueTime <= Clock.CurrentLocalTime).OrderBy(c => c.DueTime).FirstOrDefault();
+            return Deck.Cards.Where(c => c.DueTime <= Clock.CurrentLocalTime).OrderBy(c => c.DueTime).FirstOrDefault();
 		}
 
         static string GetHint(string answer, int size)
@@ -85,7 +82,7 @@ namespace Vanki
 
 		static string PrintNextQuestion ()
 		{
-			if (!deck.Cards.Any())
+			if (!Deck.Cards.Any())
 				return emptyDeckMessage;
 			var card = GetNextCard();
             if (card != null)
@@ -96,7 +93,7 @@ namespace Vanki
                     return card.Question + "\nclue: " + GetHint(card.Answer, card.Clue);
             }
 				
-			var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
+			var nextCardTime = Deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
             return thereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime, nextCardTime - Clock.CurrentLocalTime);
 		}
 
