@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Persistence;
 
 public class CardImpl : Card
@@ -17,13 +18,14 @@ public class CardImpl : Card
         model_.RegisterProperty("time", typeof(DateTime));
         model_.RegisterProperty("lapse", typeof(int));
         model_.RegisterProperty("question", typeof(string));
-        model_.RegisterProperty("answer", typeof(string));
+        model_.RegisterProperty("answer", typeof(IList<string>));
+        model_.RegisterLegacyProperty("answer", typeof(string), 4);
         model_.RegisterProperty("clue", typeof(int));
     }
 
     public override int Clue => (int)model_.GetValue("clue");
 
-    public override string Answer => (string)model_.GetValue("answer");
+    public override IList<string> Answers => (IList<string>)model_.GetValue("answer");
 
     public override string Question => (string)model_.GetValue("question");
 
@@ -38,7 +40,7 @@ public class CardImpl : Card
         {
             var val = model_.GetValue("time");
             var time = (DateTime)val;
-            if (model_.GetVersion() == "1")
+            if (model_.GetVersion() == 1)
                 return time;
             return Clock.ToLocalTime(time);
         }

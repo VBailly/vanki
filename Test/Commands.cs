@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Vanki;
 
 namespace Test
@@ -19,6 +21,11 @@ namespace Test
 		{
 			return MainClass.TestableMain(new[] { "-q", question, "-a", answer });
 		}
+
+        public static string RegisterQuestion(string question, IEnumerable<string> answers)
+        {
+            return MainClass.TestableMain(new[] { "-q", question, "-a", string.Join(" ", answers.Select(a => "\"" + a + "\"")) });
+        }
 
         internal static object AskForAClue()
         {

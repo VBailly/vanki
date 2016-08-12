@@ -5,19 +5,20 @@ using Persistence;
 
 public static class Deck
 {
-    public static void AddQuestion(string question, string answer)
+    public static void AddQuestion(string question, IList<string> answers)
     {
         var model = new PersistentCard();
         model.RegisterProperty("time", typeof(DateTime));
         model.RegisterProperty("lapse", typeof(int));
         model.RegisterProperty("question", typeof(string));
-        model.RegisterProperty("answer", typeof(string));
+        model.RegisterProperty("answer", typeof(IList<string>));
+        model.RegisterLegacyProperty("answer", typeof(string), 4);
         model.RegisterProperty("clue", typeof(int));
 
         model.SetValue("time", Clock.CurrentGlobalTime);
         model.SetValue("lapse", 0);
         model.SetValue("question", question);
-        model.SetValue("answer", answer);
+        model.SetValue("answer", answers);
         model.SetValue("clue", 0);
     }
 

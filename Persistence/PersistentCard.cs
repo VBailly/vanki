@@ -8,13 +8,15 @@ namespace Persistence
 {
     public class PersistentCard
     {
-        Dictionary<string, Type> properties_;
+        IDictionary<string, Type> properties_;
+        IDictionary<string, Tuple<Type, int>> legacyProperties_;
 
         public PersistentCard(string question)
         {
             Question = question;
 
             properties_ = new Dictionary<string, Type>();
+            legacyProperties_ = new Dictionary<string, Tuple<Type, int>>();
 
         }
 
@@ -22,9 +24,10 @@ namespace Persistence
         {
             Question = Guid.NewGuid().ToString();
             properties_ = new Dictionary<string, Type>();
+            legacyProperties_ = new Dictionary<string, Tuple<Type, int>>();
 
             var xCard = new XElement("Card");
-            xCard.Add(new XAttribute("version", "3"));
+            xCard.Add(new XAttribute("version", "4"));
             xCard.Add(new XElement("question", Question));
 
 
@@ -39,16 +42,35 @@ namespace Persistence
             properties_.Add(propertyName, propertyType);
         }
 
+        public void RegisterLegacyProperty(string propertyName, Type propertyType, int untilVersion)
+        {
+            legacyProperties_.Add(propertyName, new Tuple<Type, int>(propertyType, untilVersion));
+        }
+
         public void SetValue(string propertyName, object value)
         {
             var deck = GetDeck();
             var element = GetCard(deck).Element(propertyName);
-            if (element == null)
+            if (properties_[propertyName] == typeof(IList<string>))
             {
-                element = new XElement(propertyName);
-                GetCard(deck).Add(element);
+                if (element == null)
+                {
+                    element = new XElement(propertyName);
+                    GetCard(deck).Add(element);
+                }
+                else
+                    element.RemoveAll();
+                foreach (var str in value as IList<string>)
+                    element.Add(new XElement("alternative", str));
             }
-            element.Value = value.ToString();
+            else {
+                if (element == null)
+                {
+                    element = new XElement(propertyName);
+                    GetCard(deck).Add(element);
+                }
+                element.Value = value.ToString();
+            }
             Repository.StoreString(deck.ToString());
 
             if (propertyName == "question")
@@ -60,36 +82,40 @@ namespace Persistence
         public object GetValue(string propertyName)
         {
             var deck = GetDeck();
-            var result = GetCard(deck).Element(propertyName)?.Value;
-            switch (properties_[propertyName].ToString())
+            var result = GetCard(deck).Element(propertyName);
+
+
+            if (legacyProperties_.ContainsKey(propertyName) && legacyProperties_[propertyName].Item2 > GetVersion())
             {
-                case "System.Int32":
-                    try
-                    {
-                        return int.Parse(result);
-                    }
-                    catch (Exception)
-                    {
-                        return 0;
-                    }
-
-                case "System.DateTime":
-                    return DateTime.Parse(result);
-                default:
-                    return result;
+                if (legacyProperties_[propertyName].Item1 == typeof(string) && properties_[propertyName] == typeof(IList<string>))
+                    return new List<string> { result?.Value };
             }
+
+
+            if (properties_[propertyName] == typeof(int))
+            {
+                try { return int.Parse(result?.Value); }
+                catch (Exception) { return 0; }
+            }
+            if (properties_[propertyName] == typeof(DateTime))
+                return DateTime.Parse(result?.Value);
+            if (properties_[propertyName] == typeof(IList<string>))
+            {
+                return result.Elements("alternative").Select(e => e.Value).ToList();
+            }
+            return result?.Value;
         }
 
-        public string GetVersion()
+        public int GetVersion()
         {
             var deck = GetDeck();
-            return GetCard(deck).Attribute("version").Value;
+            return int.Parse(GetCard(deck).Attribute("version").Value);
         }
 
-        public void SetVersion(string version)
+        public void SetVersion(int version)
         {
             var deck = GetDeck();
-            GetCard(deck).Attribute("version").Value = version;
+            GetCard(deck).Attribute("version").Value = version.ToString();
             Repository.StoreString(deck.ToString());
         }
 

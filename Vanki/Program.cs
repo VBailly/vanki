@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 
@@ -23,10 +24,10 @@ namespace Vanki
 
             if (options.ShowNext)
                 return PrintNextQuestion();
-            if (!string.IsNullOrEmpty(options.Question) && !string.IsNullOrEmpty(options.Answer))
-                return AddQuestion(options.Question, options.Answer);
-            if (!string.IsNullOrEmpty(options.Answer))
-                return ProcessAnswer(options.Answer);
+            if (!string.IsNullOrEmpty(options.Question) && ! (options.Answers == null || options.Answers.Count() == 0))
+                return AddQuestion(options.Question, options.Answers);
+            if (!(options.Answers == null || options.Answers.Count() == 0))
+                return ProcessAnswer(options.Answers[0]);
             if (options.Clue)
                 return GetAClue();
             
@@ -40,12 +41,12 @@ namespace Vanki
                 return string.Empty;
             card.ResetLapse();
             card.IncreaseClue();
-            return GetHint(card.Answer, card.Clue);
+            return GetHint(card.Answers[0], card.Clue);
         }
 
-        static string AddQuestion(string question, string answer)
+        static string AddQuestion(string question, IList<string> answers)
 		{
-            Deck.AddQuestion(question, answer);
+            Deck.AddQuestion(question, answers);
             return string.Empty;
 		}
 			
@@ -67,12 +68,12 @@ namespace Vanki
 			if (card == null)
 				return cannotAnswer;
 
-			var correctAnswer = card.Answer;
+            var correctAnswer = card.Answers.FirstOrDefault(a => a.ToLower() == answer.ToLower());
 
-            if (answer.ToLower() != correctAnswer.ToLower())
+            if (correctAnswer == null)
 			{
 				card.Reset();
-				return correctAnswer;
+                return card.Answers.First();
 			}
 
 			card.Promote();
@@ -90,7 +91,7 @@ namespace Vanki
                 if (card.Clue == 0)
                     return card.Question;
                 else
-                    return card.Question + "\nclue: " + GetHint(card.Answer, card.Clue);
+                    return card.Question + "\nclue: " + GetHint(card.Answers[0], card.Clue);
             }
 				
 			var nextCardTime = Deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
