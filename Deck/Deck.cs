@@ -14,6 +14,7 @@ public static class Deck
         model.RegisterProperty("answer", typeof(IList<string>));
         model.RegisterLegacyProperty("answer", typeof(string), 4);
         model.RegisterProperty("clue", typeof(int));
+        model.RegisterIdFieldName("question");
 
         model.SetValue("time", Clock.CurrentGlobalTime);
         model.SetValue("lapse", 0);

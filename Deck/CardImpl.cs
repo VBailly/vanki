@@ -21,6 +21,7 @@ public class CardImpl : Card
         model_.RegisterProperty("answer", typeof(IList<string>));
         model_.RegisterLegacyProperty("answer", typeof(string), 4);
         model_.RegisterProperty("clue", typeof(int));
+        model_.RegisterIdFieldName("question");
     }
 
     public override int Clue => (int)model_.GetValue("clue");

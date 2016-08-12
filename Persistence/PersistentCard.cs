@@ -11,9 +11,12 @@ namespace Persistence
         IDictionary<string, Type> properties_;
         IDictionary<string, Tuple<Type, int>> legacyProperties_;
 
-        public PersistentCard(string question)
+        string idFieldName_;
+
+
+        public PersistentCard(string id)
         {
-            Question = question;
+            Id = id;
 
             properties_ = new Dictionary<string, Type>();
             legacyProperties_ = new Dictionary<string, Tuple<Type, int>>();
@@ -22,13 +25,13 @@ namespace Persistence
 
         public PersistentCard()
         {
-            Question = Guid.NewGuid().ToString();
+            Id = Guid.NewGuid().ToString();
             properties_ = new Dictionary<string, Type>();
             legacyProperties_ = new Dictionary<string, Tuple<Type, int>>();
 
             var xCard = new XElement("Card");
             xCard.Add(new XAttribute("version", "4"));
-            xCard.Add(new XElement("question", Question));
+            xCard.Add(new XElement("id", Id));
 
 
             var deck = GetDeck();
@@ -36,6 +39,10 @@ namespace Persistence
             Repository.StoreString(deck.ToString());
         }
 
+        public void RegisterIdFieldName(string idFieldName)
+        {
+            idFieldName_ = idFieldName;
+        }
 
         public void RegisterProperty(string propertyName, Type propertyType)
         {
@@ -71,13 +78,19 @@ namespace Persistence
                 }
                 element.Value = value.ToString();
             }
-            Repository.StoreString(deck.ToString());
 
-            if (propertyName == "question")
-                Question = (string)value;
+            if (propertyName == idFieldName_)
+            {
+                Id = (string)value;
+                GetCard(deck).Element("id").Remove();
+            }
+                
+
+
+            Repository.StoreString(deck.ToString());
         }
 
-        internal string Question { get; set; }
+        internal string Id { get; set; }
 
         public object GetValue(string propertyName)
         {
@@ -121,7 +134,7 @@ namespace Persistence
 
         XElement GetCard(XElement deck)
         {
-            return deck.Elements("Card").Single(c => c.Element("question").Value == Question);
+            return deck.Elements("Card").Single(c => (c.Element(idFieldName_) ?? c.Element("id")).Value == Id);
         }
 
         static XElement GetDeck()

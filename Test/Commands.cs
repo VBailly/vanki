@@ -24,7 +24,7 @@ namespace Test
 
         public static string RegisterQuestion(string question, IEnumerable<string> answers)
         {
-            return MainClass.TestableMain(new[] { "-q", question, "-a", string.Join(" ", answers.Select(a => "\"" + a + "\"")) });
+            return MainClass.TestableMain(new[] { "-q", question, "-a", string.Join("|", answers) });
         }
 
         internal static object AskForAClue()
