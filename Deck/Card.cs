@@ -5,6 +5,7 @@ public abstract class Card
 {
     public abstract string Question { get; }
     public abstract IList<string> Answers { get; }
+    public abstract bool CaseSensitiveAnswers { get; }
     public abstract int Clue { get; }
 
     public abstract DateTime DueTime { get; }

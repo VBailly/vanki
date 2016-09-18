@@ -109,6 +109,26 @@ namespace Test
             Assert.AreEqual(string.Empty, response);
         }
 
+        [Test]
+        public void Answer_can_be_case_sensitive_and_fail()
+        {
+            RegisterCaseSensitiveQuestion();
+
+            var response = Commands.Answer("A cOloR");
+
+            Assert.AreEqual("A color", response);
+        }
+
+        [Test]
+        public void Answer_can_be_case_sensitive_and_succeed()
+        {
+            RegisterCaseSensitiveQuestion();
+
+            var response = Commands.Answer("A color");
+
+            Assert.AreEqual(string.Empty, response);
+        }
+
 		[Test]
 		public void There_is_no_question_just_after_having_answered_it()
 		{
@@ -275,6 +295,11 @@ namespace Test
 		{
 			return Commands.RegisterQuestion("What is red?", "a color");
 		}
+
+        static string RegisterCaseSensitiveQuestion()
+        {
+            return Commands.RegisterQuestionCaseSensitive("What is red?", "A color");
+        }
 
 	}
 }

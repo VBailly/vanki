@@ -23,6 +23,26 @@ public static class Deck
         model.SetValue("clue", 0);
     }
 
+    public static void AddQuestionCaseSensitive(string question, IList<string> answers)
+    {
+        var model = new PersistentCard();
+        model.RegisterProperty("time", typeof(DateTime));
+        model.RegisterProperty("lapse", typeof(int));
+        model.RegisterProperty("question", typeof(string));
+        model.RegisterProperty("answer", typeof(IList<string>));
+        model.RegisterProperty("caseSensitive", typeof(bool));
+        model.RegisterLegacyProperty("answer", typeof(string), 4);
+        model.RegisterProperty("clue", typeof(int));
+        model.RegisterIdFieldName("question");
+
+        model.SetValue("time", Clock.CurrentGlobalTime);
+        model.SetValue("lapse", 0);
+        model.SetValue("question", question);
+        model.SetValue("answer", answers);
+        model.SetValue("caseSensitive", true);
+        model.SetValue("clue", 0);
+    }
+
     public static IEnumerable<Card> Cards
     {
         get

@@ -110,6 +110,11 @@ namespace Persistence
                 try { return int.Parse(result?.Value); }
                 catch (Exception) { return 0; }
             }
+            if (properties_[propertyName] == typeof(bool))
+            {
+                try { return bool.Parse(result?.Value); }
+                catch (Exception) { return false; }
+            }
             if (properties_[propertyName] == typeof(DateTime))
                 return DateTime.Parse(result?.Value);
             if (properties_[propertyName] == typeof(IList<string>))

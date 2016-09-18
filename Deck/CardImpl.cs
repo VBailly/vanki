@@ -21,6 +21,7 @@ public class CardImpl : Card
         model_.RegisterProperty("answer", typeof(IList<string>));
         model_.RegisterLegacyProperty("answer", typeof(string), 4);
         model_.RegisterProperty("clue", typeof(int));
+        model_.RegisterProperty("caseSensitive", typeof(bool));
         model_.RegisterIdFieldName("question");
     }
 
@@ -55,6 +56,14 @@ public class CardImpl : Card
     {
         get { return (int)model_.GetValue("lapse"); }
         set { model_.SetValue("lapse", value); }
+    }
+
+    public override bool CaseSensitiveAnswers
+    {
+        get
+        {
+            return (bool)model_.GetValue("caseSensitive");
+        }
     }
 
     public override void Promote()

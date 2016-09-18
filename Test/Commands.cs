@@ -22,6 +22,11 @@ namespace Test
 			return MainClass.TestableMain(new[] { "-q", question, "-a", answer });
 		}
 
+        public static string RegisterQuestionCaseSensitive(string question, string answer)
+        {
+            return MainClass.TestableMain(new[] { "-q", question, "-a", answer, "-i" });
+        }
+
         public static string RegisterQuestion(string question, IEnumerable<string> answers)
         {
             return MainClass.TestableMain(new[] { "-q", question, "-a", string.Join("|", answers) });

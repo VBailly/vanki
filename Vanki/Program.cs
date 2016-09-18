@@ -24,8 +24,12 @@ namespace Vanki
 
             if (options.ShowNext)
                 return PrintNextQuestion();
-            if (!string.IsNullOrEmpty(options.Question) && ! (options.Answers == null || options.Answers.Count() == 0))
+            if (!string.IsNullOrEmpty(options.Question) && !(options.Answers == null || options.Answers.Count() == 0))
+            {
+                if (options.CaseSensitive)
+                    return AddQuestionCaseSensitive(options.Question, options.Answers);
                 return AddQuestion(options.Question, options.Answers);
+            }
             if (!(options.Answers == null || options.Answers.Count() == 0))
                 return ProcessAnswer(options.Answers[0]);
             if (options.Clue)
@@ -42,6 +46,12 @@ namespace Vanki
             card.ResetLapse();
             card.IncreaseClue();
             return GetHint(card.Answers[0], card.Clue);
+        }
+
+        static string AddQuestionCaseSensitive(string question, IList<string> answers)
+        {
+            Deck.AddQuestionCaseSensitive(question, answers);
+            return string.Empty;
         }
 
         static string AddQuestion(string question, IList<string> answers)
@@ -68,7 +78,12 @@ namespace Vanki
 			if (card == null)
 				return cannotAnswer;
 
-            var correctAnswer = card.Answers.FirstOrDefault(a => a.ToLower() == answer.ToLower());
+            string correctAnswer;
+
+            if (card.CaseSensitiveAnswers)
+                correctAnswer = card.Answers.FirstOrDefault(a => a == answer);
+            else
+                correctAnswer = card.Answers.FirstOrDefault(a => a.ToLower() == answer.ToLower());
 
             if (correctAnswer == null)
 			{
