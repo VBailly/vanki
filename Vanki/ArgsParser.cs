@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NDesk.Options;
 
 namespace Vanki
@@ -26,7 +27,7 @@ namespace Vanki
 				{ "n|next", "Display the {NEXT} question", v => opt.ShowNext = true },
 				{ "a|answer=",
                   "The {ANSWER} to the next question or to the new question",
-                    v => opt.Answers = v.Split('|').Where(s => !string.IsNullOrWhiteSpace(s)).ToList()},
+                    v => opt.Answers = Regex.Split(v, "~|~").Where(s => !string.IsNullOrWhiteSpace(s)).ToList()},
                 { "c|clue", "Ask for a {CLUE} for the next question", v => opt.Clue = true},
                 { "i", "The new question is case sensitive", v => opt.CaseSensitive = true}
 			};
