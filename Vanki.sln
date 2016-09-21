@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deck", "Deck\Deck.csproj", "{238B947B-C132-4BE9-8D5B-72CEBCE996DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserInterface", "UserInterface\UserInterface.csproj", "{4E93AFA4-5971-453B-A759-27FC2E549518}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -43,5 +45,9 @@ Global
 		{238B947B-C132-4BE9-8D5B-72CEBCE996DE}.Debug|x86.Build.0 = Debug|Any CPU
 		{238B947B-C132-4BE9-8D5B-72CEBCE996DE}.Release|x86.ActiveCfg = Release|Any CPU
 		{238B947B-C132-4BE9-8D5B-72CEBCE996DE}.Release|x86.Build.0 = Release|Any CPU
+		{4E93AFA4-5971-453B-A759-27FC2E549518}.Debug|x86.ActiveCfg = Debug|x86
+		{4E93AFA4-5971-453B-A759-27FC2E549518}.Debug|x86.Build.0 = Debug|x86
+		{4E93AFA4-5971-453B-A759-27FC2E549518}.Release|x86.ActiveCfg = Release|x86
+		{4E93AFA4-5971-453B-A759-27FC2E549518}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 EndGlobal
