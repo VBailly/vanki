@@ -35,10 +35,6 @@
     <Compile Include="CardImpl.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Clock\Clock.csproj">
-      <Project>{E1DA16D5-BDC3-49EC-833A-5EC0E9BF0D0E}</Project>
-      <Name>Clock</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Persistence\Persistence.csproj">
       <Project>{100A058C-3229-428A-9514-E131B4BC6D5F}</Project>
       <Name>Persistence</Name>

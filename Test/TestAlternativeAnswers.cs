@@ -11,7 +11,6 @@ namespace Test
         public void SetUp()
         {
             Repository.StoreString(string.Empty);
-            Clock.LocalTimeGetter = null;
         }
 
         [TearDown]
@@ -22,8 +21,8 @@ namespace Test
         [Test]
         public void We_can_register_two_different_answers_for_a_question_and_answer_by_the_first_one()
         {
-            Commands.RegisterQuestion("What is red?", new[] { "a color", "a colour" });
-            var result = Commands.Answer("a color");
+            Commands.RegisterQuestion(DateTime.UtcNow, "What is red?", new[] { "a color", "a colour" });
+            var result = Commands.Answer(DateTime.UtcNow, "a color");
 
             Assert.AreEqual(string.Empty, result);
         }
@@ -31,8 +30,8 @@ namespace Test
         [Test]
         public void We_can_register_two_different_answers_for_a_question_and_answer_by_the_second_one()
         {
-            Commands.RegisterQuestion("What is red?", new[] { "a color", "a colour" });
-            var result = Commands.Answer("a colour");
+            Commands.RegisterQuestion(DateTime.UtcNow, "What is red?", new[] { "a color", "a colour" });
+            var result = Commands.Answer(DateTime.UtcNow, "a colour");
 
             Assert.AreEqual(string.Empty, result);
         }

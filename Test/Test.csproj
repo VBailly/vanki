@@ -41,7 +41,6 @@
     <Compile Include="TestWithADifferentSingleQuestion.cs" />
     <Compile Include="TestWithTwoQuestions.cs" />
     <Compile Include="TestWithClues.cs" />
-    <Compile Include="TestTimeInDifferentTimeZones.cs" />
     <Compile Include="TestVersionsUpgrades.cs" />
     <Compile Include="TestAlternativeAnswers.cs" />
   </ItemGroup>
@@ -57,10 +56,6 @@
     <ProjectReference Include="..\Storage\Storage.csproj">
       <Project>{85D1280D-070E-4C09-9A40-AC4E5E43F469}</Project>
       <Name>Storage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Clock\Clock.csproj">
-      <Project>{E1DA16D5-BDC3-49EC-833A-5EC0E9BF0D0E}</Project>
-      <Name>Clock</Name>
     </ProjectReference>
     <ProjectReference Include="..\Deck\Deck.csproj">
       <Project>{238B947B-C132-4BE9-8D5B-72CEBCE996DE}</Project>

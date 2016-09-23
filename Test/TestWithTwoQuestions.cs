@@ -18,18 +18,17 @@ namespace Test
         public void SetUp()
         {
             Repository.StoreString(string.Empty);
-            Clock.LocalTimeGetter = null;
         }
 
         [Test]
         public void Oldest_command_of_newly_created_questions_is_the_next_one()
         {
-            var time = DateTime.Now;
-            Commands.RegisterQuestion(Question1, "red");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
-            Commands.RegisterQuestion(Question2, "blue");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
-            var response = Commands.AskForNextQuestion();
+            var time = DateTime.UtcNow;
+            Commands.RegisterQuestion(time, Question1, "red");
+            time += TimeSpan.FromSeconds(2);
+            Commands.RegisterQuestion(time, Question2, "blue");
+            time += TimeSpan.FromSeconds(4);
+            var response = Commands.AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestion1Message, response);
         }
@@ -37,12 +36,12 @@ namespace Test
         [Test]
         public void We_can_answer_the_first_question()
         {
-            var time = DateTime.Now;
-            Commands.RegisterQuestion(Question1, "red");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
-            Commands.RegisterQuestion(Question2, "blue");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
-            var response = Commands.Answer("red");
+            var time = DateTime.UtcNow;
+            Commands.RegisterQuestion(time, Question1, "red");
+            time += TimeSpan.FromSeconds(2);
+            Commands.RegisterQuestion(time, Question2, "blue");
+            time += TimeSpan.FromSeconds(4);
+            var response = Commands.Answer(time, "red");
 
             Assert.AreEqual(string.Empty, response);
         }
@@ -50,15 +49,15 @@ namespace Test
         [Test]
         public void The_second_question_is_presented_after_we_answer_the_first_one()
         {
-            var time = DateTime.Now;
-            Commands.RegisterQuestion(Question1, "red");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
-            Commands.RegisterQuestion(Question2, "blue");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
-            Commands.Answer("red");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(6);
+            var time = DateTime.UtcNow;
+            Commands.RegisterQuestion(time, Question1, "red");
+            time += TimeSpan.FromSeconds(2);
+            Commands.RegisterQuestion(time, Question2, "blue");
+            time += TimeSpan.FromSeconds(4);
+            Commands.Answer(time, "red");
+            time += TimeSpan.FromSeconds(6);
 
-            var response = Commands.AskForNextQuestion();
+            var response = Commands.AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestion2Message, response);
         }
@@ -66,14 +65,14 @@ namespace Test
         [Test]
         public void The_second_question_can_be_properly_answered()
         {
-            var time = DateTime.Now;
-            Commands.RegisterQuestion(Question1, "red");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
-            Commands.RegisterQuestion(Question2, "blue");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
-            Commands.Answer("red");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(6);
-            var response = Commands.Answer("blue");
+            var time = DateTime.UtcNow;
+            Commands.RegisterQuestion(time, Question1, "red");
+            time += TimeSpan.FromSeconds(2);
+            Commands.RegisterQuestion(time, Question2, "blue");
+            time += TimeSpan.FromSeconds(4);
+            Commands.Answer(time, "red");
+            time += TimeSpan.FromSeconds(6);
+            var response = Commands.Answer(time, "blue");
 
             Assert.AreEqual(string.Empty, response);
         }
@@ -81,16 +80,16 @@ namespace Test
         [Test]
         public void No_questions_available_after_the_two_answers()
         {
-            var time = DateTime.Now;
-            Commands.RegisterQuestion(Question1, "red");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
-            Commands.RegisterQuestion(Question2, "blue");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
-            Commands.Answer("red");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(6);
-            Commands.Answer("blue");
+            var time = DateTime.UtcNow;
+            Commands.RegisterQuestion(time, Question1, "red");
+            time += TimeSpan.FromSeconds(2);
+            Commands.RegisterQuestion(time, Question2, "blue");
+            time += TimeSpan.FromSeconds(4);
+            Commands.Answer(time, "red");
+            time += TimeSpan.FromSeconds(6);
+            Commands.Answer(time, "blue");
 
-            var response = Commands.AskForNextQuestion();
+            var response = Commands.AskForNextQuestion(time);
 
             Assert.IsTrue(response.Contains(ConsoleOutputs.NoNextQuestionMessage));
         }
@@ -98,17 +97,17 @@ namespace Test
         [Test]
         public void Question_available_again_after_the_two_answers_and_3_min()
         {
-            var time = DateTime.Now;
-            Commands.RegisterQuestion(Question1, "red");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(2);
-            Commands.RegisterQuestion(Question2, "blue");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(4);
-            Commands.Answer("red");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromSeconds(6);
-            Commands.Answer("blue");
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(9);
+            var time = DateTime.UtcNow;
+            Commands.RegisterQuestion(time, Question1, "red");
+            time += TimeSpan.FromSeconds(2);
+            Commands.RegisterQuestion(time, Question2, "blue");
+            time += TimeSpan.FromSeconds(4);
+            Commands.Answer(time, "red");
+            time += TimeSpan.FromSeconds(6);
+            Commands.Answer(time, "blue");
+            time += TimeSpan.FromMinutes(9);
 
-            var response = Commands.AskForNextQuestion();
+            var response = Commands.AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestion1Message, response);
         }

@@ -1,41 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Vanki;
 
 namespace Test
 {
     public static class Commands
     {
-        public static string Answer(string answer)
+        public static string Answer(DateTime time, string answer)
         {
-            return MainClass.TestableMain(new[] { "--answer", answer });
+            return MainClass.TestableMain(new[] { "--answer", answer }, time);
         }
 
-        public static string AskForNextQuestion()
+        public static string AskForNextQuestion(DateTime time)
         {
-            return MainClass.TestableMain(new[] { "--next" });
+            return MainClass.TestableMain(new[] { "--next" }, time);
         }
 
-        public static string RegisterQuestion(string question, string answer)
+        public static string RegisterQuestion(DateTime time, string question, string answer)
         {
-            return MainClass.TestableMain(new[] { "-q", question, "-a", answer });
+            return MainClass.TestableMain(new[] { "-q", question, "-a", answer }, time);
         }
 
-        public static string RegisterQuestionCaseSensitive(string question, string answer)
+        public static string RegisterQuestionCaseSensitive(DateTime time, string question, string answer)
         {
-            return MainClass.TestableMain(new[] { "-q", question, "-a", answer, "-i" });
+            return MainClass.TestableMain(new[] { "-q", question, "-a", answer, "-i" }, time);
         }
 
-        public static string RegisterQuestion(string question, IEnumerable<string> answers)
+        public static string RegisterQuestion(DateTime time, string question, IEnumerable<string> answers)
         {
-            return MainClass.TestableMain(new[] { "-q", question, "-a", string.Join("~|~", answers) });
+            return MainClass.TestableMain(new[] { "-q", question, "-a", string.Join("~|~", answers) }, time);
         }
 
-        internal static object AskForAClue()
+        internal static object AskForAClue(DateTime time)
         {
-            return MainClass.TestableMain(new[] { "--clue"});
+            return MainClass.TestableMain(new[] { "--clue"}, time);
         }
-    }
+   }
 }
 

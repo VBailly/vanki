@@ -11,15 +11,11 @@ namespace Test
         public void SetUp()
         {
             Repository.StoreString(string.Empty);
-            Clock.LocalTimeGetter = null;
-            Clock.HoursDifferenceFromGlobal = null;
         }
 
         [TearDown]
         public void TearDown()
         {
-            Clock.LocalTimeGetter = null;
-            Clock.HoursDifferenceFromGlobal = null;
         }
 
         [Test]
@@ -27,9 +23,6 @@ namespace Test
         {
             var time = DateTime.Parse("8/2/2016 2:25:13 PM");
             time += TimeSpan.FromMinutes(3);
-
-            Clock.LocalTimeGetter = () => time;
-            Clock.HoursDifferenceFromGlobal = () => 0;
 
             string content = @"<Deck version=""1\"">
                 <Card version=""2"">
@@ -41,7 +34,7 @@ namespace Test
                 </Deck>";
             Repository.StoreString(content);
 
-            var response = Commands.AskForNextQuestion();
+            var response = Commands.AskForNextQuestion(time);
 
             Assert.AreEqual("What is red?", response);
         }
@@ -52,9 +45,6 @@ namespace Test
             var time = DateTime.Parse("8/2/2016 2:25:13 PM");
             time += TimeSpan.FromMinutes(3);
 
-            Clock.LocalTimeGetter = () => time;
-            Clock.HoursDifferenceFromGlobal = () => 0;
-
             string content = @"<Deck version=""1\"">
                 <Card version=""3"">
                 <time>8/2/2016 2:25:13 PM</time>
@@ -65,8 +55,8 @@ namespace Test
                 </Card>
                 </Deck>";
             Repository.StoreString(content);
-            Commands.AskForNextQuestion();
-            var response = Commands.Answer("a color");
+            Commands.AskForNextQuestion(time);
+            var response = Commands.Answer(time, "a color");
 
             Assert.IsEmpty(response);
         }
@@ -77,9 +67,6 @@ namespace Test
             var time = DateTime.Parse("8/2/2016 2:25:13 PM");
             time += TimeSpan.FromMinutes(3);
 
-            Clock.LocalTimeGetter = () => time;
-            Clock.HoursDifferenceFromGlobal = () => 0;
-
             string content = @"<Deck version=""1\"">
                 <Card version=""3"">
                 <time>8/2/2016 2:25:13 PM</time>
@@ -90,13 +77,12 @@ namespace Test
                 </Card>
                 </Deck>";
             Repository.StoreString(content);
-            Commands.AskForNextQuestion();
-            Commands.Answer("a color");
+            Commands.AskForNextQuestion(time);
+            Commands.Answer(time, "a color");
 
             time += TimeSpan.FromMinutes(13);
 
-            Clock.LocalTimeGetter = () => time;
-            var response = Commands.Answer("a color");
+            var response = Commands.Answer(time, "a color");
 
             Assert.IsEmpty(response);
         }

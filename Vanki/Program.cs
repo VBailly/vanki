@@ -12,35 +12,13 @@ namespace Vanki
 
         public static void Main (string[] args)
         {
-            var result = MainMain (args, DateTime.UtcNow);
+            var result = TestableMain (args, DateTime.UtcNow);
             if (!string.IsNullOrEmpty(result))
                 Console.Write (result + "\n");
         }
 
-        public static string MainMain(string[] args, DateTime now)
+        public static string TestableMain(string[] args, DateTime now)
         {
-            var options = ArgsParser.Parse (args);
-
-            if (options.ShowNext)
-                return PrintNextQuestion(now);
-            if (!string.IsNullOrEmpty(options.Question) && !(options.Answers == null || options.Answers.Count() == 0))
-            {
-                if (options.CaseSensitive)
-                    return AddQuestionCaseSensitive(options.Question, options.Answers, now);
-                return AddQuestion(options.Question, options.Answers, now);
-            }
-            if (!(options.Answers == null || options.Answers.Count() == 0))
-                return ProcessAnswer(now, options.Answers[0]);
-            if (options.Clue)
-                return GetAClue(now);
-
-            return "wrong command line arguments";
-        }
-
-        public static string TestableMain(string[] args)
-        {
-            var now = Clock.CurrentGlobalTime;
-
             var options = ArgsParser.Parse (args);
 
             if (options.ShowNext)

@@ -17,7 +17,6 @@ namespace Test
         public void SetUp()
         {
             Repository.StoreString(string.Empty);
-            Clock.LocalTimeGetter = null;
         }
 
         [TearDown]
@@ -28,10 +27,12 @@ namespace Test
         [Test]
         public void We_can_ask_twice_for_a_question()
         {
-            RegisterQuestion();
-            AskForNextQuestion();
+            DateTime time = DateTime.UtcNow;
 
-            var response = AskForNextQuestion();
+            RegisterQuestion(time);
+            AskForNextQuestion(time);
+
+            var response = AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestionMessage, response);
 
@@ -40,11 +41,13 @@ namespace Test
         [Test]
         public void We_cannot_answer_when_there_is_no_question()
         {
-            RegisterQuestion();
-            AnswerCorrectly();
-            AskForNextQuestion();
+            DateTime time = DateTime.UtcNow;
 
-            var response = AnswerCorrectly();
+            RegisterQuestion(time);
+            AnswerCorrectly(time);
+            AskForNextQuestion(time);
+
+            var response = AnswerCorrectly(time);
 
             Assert.AreEqual(CannotAnswerMessage, response);
 
@@ -53,9 +56,11 @@ namespace Test
         [Test]
         public void Wrong_answers_dont_pass()
         {
-            RegisterQuestion();
+            DateTime time = DateTime.UtcNow;
 
-            var response = AnswerWrongly();
+            RegisterQuestion(time);
+
+            var response = AnswerWrongly(time);
 
             Assert.AreEqual(WrongAnswerMessage, response);
         }
@@ -63,10 +68,12 @@ namespace Test
         [Test]
         public void A_wrong_answer_is_not_treated_if_no_question_is_pending()
         {
-            RegisterQuestion();
-            AnswerCorrectly();
+            DateTime time = DateTime.UtcNow;
 
-            var response = AnswerWrongly();
+            RegisterQuestion(time);
+            AnswerCorrectly(time);
+
+            var response = AnswerWrongly(time);
 
             Assert.AreEqual(CannotAnswerMessage, response);
         }
@@ -74,7 +81,9 @@ namespace Test
         [Test]
         public void Register_a_new_entry()
         {
-            var response = RegisterQuestion();
+            DateTime time = DateTime.UtcNow;
+
+            var response = RegisterQuestion(time);
 
             Assert.AreEqual(string.Empty, response);
         }
@@ -82,9 +91,11 @@ namespace Test
         [Test]
         public void A_question_is_available_straight_after_being_registered()
         {
-            RegisterQuestion();
+            DateTime time = DateTime.UtcNow;
 
-            var response = AskForNextQuestion();
+            RegisterQuestion(time);
+
+            var response = AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestionMessage, response);
         }
@@ -92,9 +103,11 @@ namespace Test
         [Test]
         public void Giving_a_correct_answer_for_the_first_time()
         {
-            RegisterQuestion();
+            DateTime time = DateTime.UtcNow;
 
-            var response = AnswerCorrectly();
+            RegisterQuestion(time);
+
+            var response = AnswerCorrectly(time);
 
             Assert.AreEqual(string.Empty, response);
         }
@@ -102,9 +115,11 @@ namespace Test
         [Test]
         public void Answer_is_case_insensitive()
         {
-            RegisterQuestion();
+            DateTime time = DateTime.UtcNow;
 
-            var response = Commands.Answer("A cOloR");
+            RegisterQuestion(time);
+
+            var response = Commands.Answer(time, "A cOloR");
 
             Assert.AreEqual(string.Empty, response);
         }
@@ -112,9 +127,11 @@ namespace Test
         [Test]
         public void Answer_can_be_case_sensitive_and_fail()
         {
-            RegisterCaseSensitiveQuestion();
+            DateTime time = DateTime.UtcNow;
 
-            var response = Commands.Answer("A cOloR");
+            RegisterCaseSensitiveQuestion(time);
+
+            var response = Commands.Answer(time, "A cOloR");
 
             Assert.AreEqual("A color", response);
         }
@@ -122,9 +139,11 @@ namespace Test
         [Test]
         public void Answer_can_be_case_sensitive_and_succeed()
         {
-            RegisterCaseSensitiveQuestion();
+            DateTime time = DateTime.UtcNow;
 
-            var response = Commands.Answer("A color");
+            RegisterCaseSensitiveQuestion(time);
+
+            var response = Commands.Answer(time, "A color");
 
             Assert.AreEqual(string.Empty, response);
         }
@@ -132,10 +151,12 @@ namespace Test
         [Test]
         public void There_is_no_question_just_after_having_answered_it()
         {
-            RegisterQuestion();
-            AnswerCorrectly();
+            DateTime time = DateTime.UtcNow;
 
-            var response = AskForNextQuestion();
+            RegisterQuestion(time);
+            AnswerCorrectly(time);
+
+            var response = AskForNextQuestion(time);
 
             Assert.IsTrue(response.Contains(NoNextQuestionMessage));
         }
@@ -143,12 +164,13 @@ namespace Test
         [Test]
         public void There_is_still_no_question_1min_after_having_answered_it()
         {
+            DateTime time = DateTime.UtcNow;
 
-            RegisterQuestion();
-            AnswerCorrectly();
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(1);
+            RegisterQuestion(time);
+            AnswerCorrectly(time);
+            time += TimeSpan.FromMinutes(1);
 
-            var response = AskForNextQuestion();
+            var response = AskForNextQuestion(time);
 
             Assert.IsTrue(response.Contains(NoNextQuestionMessage));
         }
@@ -156,12 +178,12 @@ namespace Test
         [Test]
         public void There_is_a_question_3min_after_having_answered_it()
         {
-            var time = DateTime.Now;
-            RegisterQuestion();
-            AnswerCorrectly();
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(3);
+            var time = DateTime.UtcNow;
+            RegisterQuestion(time);
+            AnswerCorrectly(time);
+            time += TimeSpan.FromMinutes(3);
 
-            var response = AskForNextQuestion();
+            var response = AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestionMessage, response);
         }
@@ -169,11 +191,13 @@ namespace Test
         [Test]
         public void We_can_answer_again_after_3min_from_first_answer()
         {
-            RegisterQuestion();
-            AnswerCorrectly();
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(3);
+            DateTime time = DateTime.UtcNow;
 
-            var response = AnswerCorrectly();
+            RegisterQuestion(time);
+            AnswerCorrectly(time);
+            time += TimeSpan.FromMinutes(3);
+
+            var response = AnswerCorrectly(time);
 
             Assert.AreEqual(string.Empty, response);
         }
@@ -181,12 +205,14 @@ namespace Test
         [Test]
         public void There_is_no_next_question_directly_after_the_second_answer()
         {
-            RegisterQuestion();
-            AnswerCorrectly();
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(3);
-            AnswerCorrectly();
+            DateTime time = DateTime.UtcNow;
 
-            var response = AskForNextQuestion();
+            RegisterQuestion(time);
+            AnswerCorrectly(time);
+            time += TimeSpan.FromMinutes(3);
+            AnswerCorrectly(time);
+
+            var response = AskForNextQuestion(time);
 
             Assert.IsTrue(response.Contains(NoNextQuestionMessage));
         }
@@ -194,14 +220,16 @@ namespace Test
         [Test]
         public void There_is_no_next_question_3_min_after_the_second_answer ()
         {
-            RegisterQuestion();
-            AnswerCorrectly();
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(3);
-            AnswerCorrectly();
-            AskForNextQuestion();
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(6);
+            DateTime time = DateTime.UtcNow;
 
-            var response = AskForNextQuestion();
+            RegisterQuestion(time);
+            AnswerCorrectly(time);
+            time += TimeSpan.FromMinutes(3);
+            AnswerCorrectly(time);
+            AskForNextQuestion(time);
+            time += TimeSpan.FromMinutes(3);
+
+            var response = AskForNextQuestion(time);
 
             Assert.IsTrue(response.Contains(NoNextQuestionMessage));
         }
@@ -209,10 +237,12 @@ namespace Test
         [Test]
         public void The_question_stays_next_if_we_answer_wrongly()
         {
-            RegisterQuestion();
-            AnswerWrongly();
+            DateTime time = DateTime.UtcNow;
 
-            var response = AskForNextQuestion();
+            RegisterQuestion(time);
+            AnswerWrongly(time);
+
+            var response = AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestionMessage, response);
         }
@@ -220,15 +250,15 @@ namespace Test
         [Test]
         public void A_wrong_answer_resets_the_lapse()
         {
-            var time = DateTime.Now;
-            RegisterQuestion();
-            AnswerCorrectly();
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(3);
-            AnswerWrongly(); // reset
-            AnswerCorrectly();
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromMinutes(6);
+            var time = DateTime.UtcNow;
+            RegisterQuestion(time);
+            AnswerCorrectly(time);
+            time += TimeSpan.FromMinutes(3);
+            AnswerWrongly(time); // reset
+            AnswerCorrectly(time);
+            time += TimeSpan.FromMinutes(3);
 
-            var response = AskForNextQuestion();
+            var response = AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestionMessage, response);
         }
@@ -236,13 +266,15 @@ namespace Test
         [Test]
         public void Lapse_work_with_more_than_one_hour()
         {
-            RegisterQuestion();
-            AnswerCorrectly();
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromHours(2);
-            AnswerCorrectly();
-            Clock.LocalTimeGetter = () => DateTime.Now + TimeSpan.FromHours(5);
+            DateTime time = DateTime.UtcNow;
 
-            var response = AskForNextQuestion();
+            RegisterQuestion(time);
+            AnswerCorrectly(time);
+            time += TimeSpan.FromHours(2);
+            AnswerCorrectly(time);
+            time += TimeSpan.FromHours(3);
+
+            var response = AskForNextQuestion(time);
 
             Assert.IsTrue(response.Contains(NoNextQuestionMessage));
         }
@@ -250,56 +282,55 @@ namespace Test
         [Test]
         public void The_waiting_time_is_displayed()
         {
-            var time = DateTime.Parse("2016-07-24T16:49:13");
-            Clock.LocalTimeGetter = () => time;
-            RegisterQuestion();
-            Clock.LocalTimeGetter = () => time + TimeSpan.FromSeconds(3);
-            AnswerCorrectly();
-            Clock.LocalTimeGetter = () => time + TimeSpan.FromSeconds(6);
-            var response = AskForNextQuestion();
+            var time = DateTime.Parse("2016-07-24T16:49:13Z").ToUniversalTime();
+            RegisterQuestion(time);
+            time += TimeSpan.FromSeconds(3);
+            AnswerCorrectly(time);
+            time += TimeSpan.FromSeconds(3);
+            var response = AskForNextQuestion(time);
 
-            var timeUntilNextQuestion = DateTime.Parse("2016-07-24T16:51:16");
-            Assert.AreEqual($"There is no next question\nCome back at this time: {timeUntilNextQuestion.ToString()} (in 00:01:57)\n", response);
+            var timeUntilNextQuestion = DateTime.Parse("2016-07-24T16:51:16Z").ToUniversalTime();
+            Assert.AreEqual($"There is no next question\nCome back at this time: {timeUntilNextQuestion.ToLocalTime()} (in 00:01:57)\n", response);
         }
-
 
         [Test]
         public void The_time_between_registration_and_first_answer_is_ignored()
         {
-            RegisterQuestion();
-            var time = Clock.CurrentLocalTime;
-            Clock.LocalTimeGetter = () => time + TimeSpan.FromHours(6);
-            AnswerCorrectly();
-            time = Clock.CurrentLocalTime;
-            Clock.LocalTimeGetter = () => time + TimeSpan.FromMinutes(6);
-            var response = AskForNextQuestion();
+            DateTime time = DateTime.UtcNow;
+            RegisterQuestion(time);
+
+            time += TimeSpan.FromHours(6);
+            AnswerCorrectly(time);
+
+            time += TimeSpan.FromMinutes(6);
+            var response = AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestionMessage, response);
         }
 
-        static string AnswerWrongly()
+        static string AnswerWrongly(DateTime time)
         {
-            return Commands.Answer("an animal");
+            return Commands.Answer(time, "an animal");
         }
 
-        static string AnswerCorrectly()
+        static string AnswerCorrectly(DateTime time)
         {
-            return Commands.Answer("a color");
+            return Commands.Answer(time, "a color");
         }
 
-        static string AskForNextQuestion()
+        static string AskForNextQuestion(DateTime time)
         {
-            return Commands.AskForNextQuestion();
+            return Commands.AskForNextQuestion(time);
         }
 
-        static string RegisterQuestion()
+        static string RegisterQuestion(DateTime time)
         {
-            return Commands.RegisterQuestion("What is red?", "a color");
+            return Commands.RegisterQuestion(time, "What is red?", "a color");
         }
 
-        static string RegisterCaseSensitiveQuestion()
+        static string RegisterCaseSensitiveQuestion(DateTime time)
         {
-            return Commands.RegisterQuestionCaseSensitive("What is red?", "A color");
+            return Commands.RegisterQuestionCaseSensitive(time, "What is red?", "A color");
         }
 
     }

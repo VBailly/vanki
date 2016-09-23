@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using NUnit.Framework;
 using Storage;
 
@@ -16,7 +16,9 @@ namespace Test
         [Test]
         public void There_is_no_next_question_if_we_dont_register_one()
         {
-            var response = Commands.AskForNextQuestion();
+            var time = DateTime.UtcNow;
+
+            var response = Commands.AskForNextQuestion(time);
 
             Assert.AreEqual(ConsoleOutputs.EmptyDeckMessage, response);
         }
@@ -24,13 +26,12 @@ namespace Test
         [Test]
         public void We_cannot_anwer_next_question_if_we_dont_register_one()
         {
-            var response = Commands.Answer("a fish");
+            var time = DateTime.UtcNow;
+
+            var response = Commands.Answer(time, "a fish");
 
             Assert.AreEqual(ConsoleOutputs.CannotAnswerMessage, response);
         }
-
-
-
     }
 }
 

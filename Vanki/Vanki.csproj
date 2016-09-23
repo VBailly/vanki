@@ -56,9 +56,5 @@
       <Project>{238B947B-C132-4BE9-8D5B-72CEBCE996DE}</Project>
       <Name>Deck</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Clock\Clock.csproj">
-      <Project>{E1DA16D5-BDC3-49EC-833A-5EC0E9BF0D0E}</Project>
-      <Name>Clock</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>

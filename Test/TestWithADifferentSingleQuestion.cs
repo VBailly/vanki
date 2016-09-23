@@ -23,7 +23,9 @@ namespace Test
         [Test]
         public void Register_a_new_entry()
         {
-            var response = RegisterQuestion();
+            var time = DateTime.UtcNow;
+
+            var response = RegisterQuestion(time);
 
             Assert.AreEqual(string.Empty, response);
         }
@@ -31,24 +33,28 @@ namespace Test
         [Test]
         public void A_question_is_available_straight_after_being_registered()
         {
-            RegisterQuestion();
+            var time = DateTime.UtcNow;
 
-            var response = Commands.AskForNextQuestion();
+            RegisterQuestion(time);
+
+            var response = Commands.AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestionMessage, response);
         }
 
-        static string RegisterQuestion()
+        static string RegisterQuestion(DateTime time)
         {
-            return Commands.RegisterQuestion(Question, Answer);
+            return Commands.RegisterQuestion(time, Question, Answer);
         }
 
         [Test]
         public void Giving_a_correct_answer_for_the_first_time()
         {
-            RegisterQuestion();
+            var time = DateTime.UtcNow;
 
-            var response = Commands.Answer(Answer);
+            RegisterQuestion(time);
+
+            var response = Commands.Answer(time, Answer);
 
             Assert.AreEqual(string.Empty, response);
         }
@@ -56,10 +62,11 @@ namespace Test
         [Test]
         public void Wrong_answers_dont_pass()
         {
-            var time = DateTime.Now;
-            RegisterQuestion();
+            var time = DateTime.UtcNow;
 
-            var response = Commands.Answer(WrongAnswer);
+            RegisterQuestion(time);
+
+            var response = Commands.Answer(time, WrongAnswer);
 
             Assert.AreEqual(WrongAnswerMessage, response);
         }
