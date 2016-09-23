@@ -250,7 +250,7 @@ namespace Test
         [Test]
         public void The_waiting_time_is_displayed()
         {
-            var time = DateTime.Parse("7/24/2016 4:49:13 PM");
+            var time = DateTime.Parse("2016-07-24T16:49:13");
             Clock.LocalTimeGetter = () => time;
             RegisterQuestion();
             Clock.LocalTimeGetter = () => time + TimeSpan.FromSeconds(3);
@@ -258,7 +258,7 @@ namespace Test
             Clock.LocalTimeGetter = () => time + TimeSpan.FromSeconds(6);
             var response = AskForNextQuestion();
 
-            var timeUntilNextQuestion = DateTime.Parse("7/24/2016 4:51:16 PM");
+            var timeUntilNextQuestion = DateTime.Parse("2016-07-24T16:51:16");
             Assert.AreEqual($"There is no next question\nCome back at this time: {timeUntilNextQuestion.ToString()} (in 00:01:57)\n", response);
         }
 

@@ -10,8 +10,8 @@ public abstract class Card
 
     public abstract DateTime DueTime { get; }
 
-    public abstract void Promote();
-    public abstract void Reset();
+    public abstract void Promote(DateTime answerTime);
+    public abstract void Reset(DateTime answerTime);
     public abstract void ResetLapse();
     public abstract void IncreaseClue();
 }

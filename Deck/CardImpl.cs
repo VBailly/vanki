@@ -44,11 +44,11 @@ public class CardImpl : Card
             var time = (DateTime)val;
             if (model_.GetVersion() == 1)
                 return time;
-            return Clock.ToLocalTime(time);
+            return time;
         }
         set
         {
-            model_.SetValue("time", value.ToUniversalTime());
+            model_.SetValue("time", value);
         }
     }
 
@@ -66,21 +66,20 @@ public class CardImpl : Card
         }
     }
 
-    public override void Promote()
+    public override void Promote(DateTime answerTime)
     {
-        var time = Clock.CurrentLocalTime;
         if (CurrentInterval == 0)
             CurrentInterval = 2;
         else
-            CurrentInterval = Math.Max(2, (int)(1.6 * (time - LastAnswerTime).TotalMinutes));
-        LastAnswerTime = time;
+            CurrentInterval = Math.Max(2, (int)(1.6 * (answerTime - LastAnswerTime).TotalMinutes));
+        LastAnswerTime = answerTime;
         DecreaseClue();
     }
 
-    public override void Reset()
+    public override void Reset(DateTime answerTime)
     {
         CurrentInterval = 0;
-        LastAnswerTime = Clock.CurrentLocalTime;
+        LastAnswerTime = answerTime;
     }
 
 

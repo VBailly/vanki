@@ -24,11 +24,4 @@ public static class Clock
             return CurrentLocalTime.ToUniversalTime();
         }
     }
-
-    public static DateTime ToLocalTime(DateTime globalDateTime)
-    {
-        if (HoursDifferenceFromGlobal != null)
-            return globalDateTime + TimeSpan.FromHours(HoursDifferenceFromGlobal.Invoke());
-        return globalDateTime.ToLocalTime();
-    }
 }

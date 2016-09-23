@@ -5,7 +5,7 @@ using Persistence;
 
 public static class Deck
 {
-    public static void AddQuestion(string question, IList<string> answers)
+    public static void AddQuestion(string question, IList<string> answers, DateTime time)
     {
         var model = new PersistentCard();
         model.RegisterProperty("time", typeof(DateTime));
@@ -16,14 +16,14 @@ public static class Deck
         model.RegisterProperty("clue", typeof(int));
         model.RegisterIdFieldName("question");
 
-        model.SetValue("time", Clock.CurrentGlobalTime);
+        model.SetValue("time", time);
         model.SetValue("lapse", 0);
         model.SetValue("question", question);
         model.SetValue("answer", answers);
         model.SetValue("clue", 0);
     }
 
-    public static void AddQuestionCaseSensitive(string question, IList<string> answers)
+    public static void AddQuestionCaseSensitive(string question, IList<string> answers, DateTime time)
     {
         var model = new PersistentCard();
         model.RegisterProperty("time", typeof(DateTime));
@@ -35,7 +35,7 @@ public static class Deck
         model.RegisterProperty("clue", typeof(int));
         model.RegisterIdFieldName("question");
 
-        model.SetValue("time", Clock.CurrentGlobalTime);
+        model.SetValue("time", time);
         model.SetValue("lapse", 0);
         model.SetValue("question", question);
         model.SetValue("answer", answers);

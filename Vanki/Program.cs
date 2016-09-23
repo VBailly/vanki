@@ -12,34 +12,56 @@ namespace Vanki
 
         public static void Main (string[] args)
         {
-            var result = TestableMain (args);
+            var result = MainMain (args, DateTime.UtcNow);
             if (!string.IsNullOrEmpty(result))
                 Console.Write (result + "\n");
         }
 
-        public static string TestableMain(string[] args)
+        public static string MainMain(string[] args, DateTime now)
         {
             var options = ArgsParser.Parse (args);
 
             if (options.ShowNext)
-                return PrintNextQuestion();
+                return PrintNextQuestion(now);
             if (!string.IsNullOrEmpty(options.Question) && !(options.Answers == null || options.Answers.Count() == 0))
             {
                 if (options.CaseSensitive)
-                    return AddQuestionCaseSensitive(options.Question, options.Answers);
-                return AddQuestion(options.Question, options.Answers);
+                    return AddQuestionCaseSensitive(options.Question, options.Answers, now);
+                return AddQuestion(options.Question, options.Answers, now);
             }
             if (!(options.Answers == null || options.Answers.Count() == 0))
-                return ProcessAnswer(options.Answers[0]);
+                return ProcessAnswer(now, options.Answers[0]);
             if (options.Clue)
-                return GetAClue();
+                return GetAClue(now);
 
             return "wrong command line arguments";
         }
 
-        static string GetAClue()
+        public static string TestableMain(string[] args)
         {
-            var card = GetNextCard();
+            var now = Clock.CurrentGlobalTime;
+
+            var options = ArgsParser.Parse (args);
+
+            if (options.ShowNext)
+                return PrintNextQuestion(now);
+            if (!string.IsNullOrEmpty(options.Question) && !(options.Answers == null || options.Answers.Count() == 0))
+            {
+                if (options.CaseSensitive)
+                    return AddQuestionCaseSensitive(options.Question, options.Answers, now);
+                return AddQuestion(options.Question, options.Answers, now);
+            }
+            if (!(options.Answers == null || options.Answers.Count() == 0))
+                return ProcessAnswer(now, options.Answers[0]);
+            if (options.Clue)
+                return GetAClue(now);
+
+            return "wrong command line arguments";
+        }
+
+        static string GetAClue(DateTime time)
+        {
+            var card = GetNextCard(time);
             if (card == null)
                 return string.Empty;
             card.ResetLapse();
@@ -47,22 +69,22 @@ namespace Vanki
             return GetHint(card.Answers[0], card.Clue);
         }
 
-        static string AddQuestionCaseSensitive(string question, IList<string> answers)
+        static string AddQuestionCaseSensitive(string question, IList<string> answers, DateTime time)
         {
-            Deck.AddQuestionCaseSensitive(question, answers);
+            Deck.AddQuestionCaseSensitive(question, answers, time);
             return string.Empty;
         }
 
-        static string AddQuestion(string question, IList<string> answers)
+        static string AddQuestion(string question, IList<string> answers, DateTime time)
         {
-            Deck.AddQuestion(question, answers);
+            Deck.AddQuestion(question, answers, time);
             return string.Empty;
         }
 
 
-        static Card GetNextCard()
+        static Card GetNextCard(DateTime time)
         {
-            return Deck.Cards.Where(c => c.DueTime <= Clock.CurrentLocalTime).OrderBy(c => c.DueTime).FirstOrDefault();
+            return Deck.Cards.Where(c => c.DueTime <= time).OrderBy(c => c.DueTime).FirstOrDefault();
         }
 
         static string GetHint(string answer, int size)
@@ -71,9 +93,9 @@ namespace Vanki
             return string.Join(", ", answers.Select(w => string.Join(".", w.Split(' ').Select(s => new string(s.Take(size).ToArray())))));
         }
 
-        static string ProcessAnswer (string answer)
+        static string ProcessAnswer (DateTime answerTime, string answer)
         {
-            var card = GetNextCard();
+            var card = GetNextCard(answerTime);
             if (card == null)
                 return cannotAnswer;
 
@@ -86,20 +108,20 @@ namespace Vanki
 
             if (correctAnswer == null)
             {
-                card.Reset();
+                card.Reset(answerTime);
                 return card.Answers.First();
             }
 
-            card.Promote();
+            card.Promote(answerTime);
 
             return string.Empty;
         }
 
-        static string PrintNextQuestion ()
+        static string PrintNextQuestion (DateTime answerTime)
         {
             if (!Deck.Cards.Any())
                 return emptyDeckMessage;
-            var card = GetNextCard();
+            var card = GetNextCard(answerTime);
             if (card != null)
             {
                 if (card.Clue == 0)
@@ -109,7 +131,7 @@ namespace Vanki
             }
 
             var nextCardTime = Deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
-            return thereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime, nextCardTime - Clock.CurrentLocalTime);
+            return thereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime.ToLocalTime(), (nextCardTime - answerTime));
         }
     }
 }
