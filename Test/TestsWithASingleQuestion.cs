@@ -258,7 +258,8 @@ namespace Test
 			Clock.LocalTimeGetter = () => time + TimeSpan.FromSeconds(6); 
 			var response = AskForNextQuestion();
 
-			Assert.AreEqual("There is no next question\nCome back at this time: 7/24/2016 4:51:16 PM (in 00:01:57)\n", response);
+            var timeUntilNextQuestion = DateTime.Parse("7/24/2016 4:51:16 PM");
+            Assert.AreEqual($"There is no next question\nCome back at this time: {timeUntilNextQuestion.ToString()} (in 00:01:57)\n", response);
 		}
 
 
