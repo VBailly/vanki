@@ -5,22 +5,22 @@ using Vanki;
 
 namespace Test
 {
-	public static class Commands
-	{
-		public static string Answer(string answer)
-		{
+    public static class Commands
+    {
+        public static string Answer(string answer)
+        {
             return MainClass.TestableMain(new[] { "--answer", answer });
-		}
+        }
 
-		public static string AskForNextQuestion()
-		{
-			return MainClass.TestableMain(new[] { "--next" });
-		}
+        public static string AskForNextQuestion()
+        {
+            return MainClass.TestableMain(new[] { "--next" });
+        }
 
-		public static string RegisterQuestion(string question, string answer)
-		{
-			return MainClass.TestableMain(new[] { "-q", question, "-a", answer });
-		}
+        public static string RegisterQuestion(string question, string answer)
+        {
+            return MainClass.TestableMain(new[] { "-q", question, "-a", answer });
+        }
 
         public static string RegisterQuestionCaseSensitive(string question, string answer)
         {
@@ -36,6 +36,6 @@ namespace Test
         {
             return MainClass.TestableMain(new[] { "--clue"});
         }
-   }
+    }
 }
 

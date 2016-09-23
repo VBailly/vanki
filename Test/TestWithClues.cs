@@ -112,7 +112,7 @@ namespace Test
         public void Asking_for_a_clue_does_not_update_the_date()
         {
             Commands.RegisterQuestion("What is red?", "a color");
-            IncreaseTime(0,5);
+                IncreaseTime(0,5);
 
             Commands.RegisterQuestion("What is blue?", "a color");
 
@@ -124,31 +124,31 @@ namespace Test
 
             Assert.AreEqual("What is red?\nclue: a.c", result);
         }
+        
 
+            [Test]
+            public void Wrong_answers_do_not_change_the_clue_level()
+            {
+                Commands.RegisterQuestion("What is red?", "a color");
+                IncreaseTime(0, 5);
+                Commands.AskForAClue();
+                Commands.AskForAClue();
 
-        [Test]
-        public void Wrong_answers_do_not_change_the_clue_level()
-        {
-            Commands.RegisterQuestion("What is red?", "a color");
-            IncreaseTime(0, 5);
-            Commands.AskForAClue();
-            Commands.AskForAClue();
+                // 2 clues
 
-            // 2 clues
+                Commands.Answer("a color");
 
-            Commands.Answer("a color");
+                // 1 clue
 
-            // 1 clue
+                IncreaseTime(1, 0);
 
-            IncreaseTime(1, 0);
+                Commands.Answer("an idiot");
 
-            Commands.Answer("an idiot");
+                IncreaseTime(0, 1);
 
-            IncreaseTime(0, 1);
-
-            var result = Commands.AskForNextQuestion();
-            Assert.AreEqual("What is red?\nclue: a.c", result);
-        }
+                var result = Commands.AskForNextQuestion();
+                Assert.AreEqual("What is red?\nclue: a.c", result);
+            }
 
         static void IncreaseTime(int hours, int minutes)
         {

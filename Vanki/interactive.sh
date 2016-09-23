@@ -11,7 +11,7 @@ function play {
 		next=$(mono Vanki.exe -n)
 		echo $next
 		read answer
-		while [[ $next == *"Come back at"* ]] 
+		while [[ $next == *"Come back at"* ]]
 		do
 			next=$(mono Vanki.exe -n)
 			clear

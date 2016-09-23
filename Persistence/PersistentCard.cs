@@ -84,7 +84,7 @@ namespace Persistence
                 Id = (string)value;
                 GetCard(deck).Element("id").Remove();
             }
-                
+
 
 
             Repository.StoreString(deck.ToString());

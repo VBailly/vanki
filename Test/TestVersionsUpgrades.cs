@@ -32,13 +32,13 @@ namespace Test
             Clock.HoursDifferenceFromGlobal = () => -5;
 
             string content = @"<Deck version=""1\"">
-    <Card version=""1"">
-        <time>8/2/2016 2:25:13 PM</time>
-            <lapse>2</lapse>
-            <question>What is red?</question>
-            <answer>a color</answer>
-    </Card>
-</Deck>";
+                <Card version=""1"">
+                <time>8/2/2016 2:25:13 PM</time>
+                <lapse>2</lapse>
+                <question>What is red?</question>
+                <answer>a color</answer>
+                </Card>
+                </Deck>";
             Repository.StoreString(content);
 
             var response = Commands.AskForNextQuestion();
@@ -56,13 +56,13 @@ namespace Test
             Clock.HoursDifferenceFromGlobal = () => 0;
 
             string content = @"<Deck version=""1\"">
-    <Card version=""2"">
-        <time>8/2/2016 2:25:13 PM</time>
-            <lapse>2</lapse>
-            <question>What is red?</question>
-            <answer>a color</answer>
-    </Card>
-</Deck>";
+                <Card version=""2"">
+                <time>8/2/2016 2:25:13 PM</time>
+                <lapse>2</lapse>
+                <question>What is red?</question>
+                <answer>a color</answer>
+                </Card>
+                </Deck>";
             Repository.StoreString(content);
 
             var response = Commands.AskForNextQuestion();
@@ -80,14 +80,14 @@ namespace Test
             Clock.HoursDifferenceFromGlobal = () => 0;
 
             string content = @"<Deck version=""1\"">
-    <Card version=""3"">
-        <time>8/2/2016 2:25:13 PM</time>
-            <lapse>2</lapse>
-            <question>What is red?</question>
-            <answer>a color</answer>
-            <clue>0</clue>
-    </Card>
-</Deck>";
+                <Card version=""3"">
+                <time>8/2/2016 2:25:13 PM</time>
+                <lapse>2</lapse>
+                <question>What is red?</question>
+                <answer>a color</answer>
+                <clue>0</clue>
+                </Card>
+                </Deck>";
             Repository.StoreString(content);
             Commands.AskForNextQuestion();
             var response = Commands.Answer("a color");
@@ -105,14 +105,14 @@ namespace Test
             Clock.HoursDifferenceFromGlobal = () => 0;
 
             string content = @"<Deck version=""1\"">
-    <Card version=""3"">
-        <time>8/2/2016 2:25:13 PM</time>
-            <lapse>2</lapse>
-            <question>What is red?</question>
-            <answer>a color</answer>
-            <clue>0</clue>
-    </Card>
-</Deck>";
+                <Card version=""3"">
+                <time>8/2/2016 2:25:13 PM</time>
+                <lapse>2</lapse>
+                <question>What is red?</question>
+                <answer>a color</answer>
+                <clue>0</clue>
+                </Card>
+                </Deck>";
             Repository.StoreString(content);
             Commands.AskForNextQuestion();
             Commands.Answer("a color");
