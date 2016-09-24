@@ -40,11 +40,7 @@ public class CardImpl : Card
     {
         get
         {
-            var val = model_.GetValue("time");
-            var time = (DateTime)val;
-            if (model_.GetVersion() == 1)
-                return time;
-            return time;
+            return (DateTime)model_.GetValue("time");
         }
         set
         {
