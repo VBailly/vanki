@@ -98,6 +98,57 @@ namespace Test
             Assert.AreEqual("What is red?\nclue: a.c", result);
         }
 
+        [Test]
+        public void Interval_does_not_increase_if_clue_is_not_zero()
+        {
+            var time = DateTime.UtcNow;
+
+            Commands.RegisterQuestion(time, "What is red?", "a color");
+            time += TimeSpan.FromSeconds(5);
+
+            Commands.Answer(time, "wrong");
+            Commands.Answer(time, "wrong");
+            Commands.Answer(time, "wrong");
+
+            // clue = 3, lapse = 0
+
+            var result = Commands.AskForNextQuestion(time);
+            Assert.IsTrue(result.Contains("What is red?"));
+
+            Commands.Answer(time, "a color");
+
+            // clue = 2, lapse = 2
+
+            time += TimeSpan.FromMinutes(3);
+
+            result = Commands.AskForNextQuestion(time);
+            Assert.IsTrue(result.Contains("What is red?"));
+
+            Commands.Answer(time, "a color");
+
+            // clue = 1, lapse = 2
+
+            time += TimeSpan.FromMinutes(3);
+
+            result = Commands.AskForNextQuestion(time);
+            Assert.IsTrue(result.Contains("What is red?"));
+
+            Commands.Answer(time, "a color");
+
+            // clue = 0, lapse = 2
+
+            time += TimeSpan.FromMinutes(3);
+
+            result = Commands.AskForNextQuestion(time);
+            Assert.IsTrue(result.Contains("What is red?"));
+
+            Commands.Answer(time, "a color");
+            time += TimeSpan.FromMinutes(3);
+
+            result = Commands.AskForNextQuestion(time);
+            Assert.IsFalse(result.Contains("What is red?"));
+        }
+
         static DateTime IncreaseTime(DateTime time, int hours, int minutes)
         {
             return time + TimeSpan.FromMinutes(minutes) + TimeSpan.FromHours(hours);

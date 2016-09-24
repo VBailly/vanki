@@ -9,7 +9,6 @@ namespace Test
     public class TestWithADifferentSingleQuestion
     {
         static readonly string Question = "What color is the sky?";
-        static readonly string QuestionWith1Clue = "What color is the sky? (b)";
         static readonly string Answer = "blue";
         static readonly string WrongAnswer = "a fish";
 

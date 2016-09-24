@@ -18,7 +18,7 @@ public class Card
 
     public void Promote(DateTime answerTime)
     {
-        if (CurrentInterval == 0)
+        if (CurrentInterval == 0 || Clue != 0)
             CurrentInterval = 2;
         else
             CurrentInterval = Math.Max(2, (int)(1.6 * (answerTime - LastAnswerTime).TotalMinutes));
