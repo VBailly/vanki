@@ -78,7 +78,7 @@ namespace Vanki
             if (correctAnswer == null)
             {
                 card.Reset();
-                return card.Answers.First();
+                return string.Empty;
             }
 
             card.Promote(answerTime);

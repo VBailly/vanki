@@ -51,6 +51,19 @@ namespace Test
         }
 
         [Test]
+        public void Wrong_answers_dont_print_anything()
+        {
+            DateTime time = DateTime.UtcNow;
+
+            RegisterQuestion(time);
+
+            var response = AnswerWrongly(time);
+
+
+            Assert.AreEqual(string.Empty, response);
+        }
+
+        [Test]
         public void A_wrong_answer_is_not_treated_if_no_question_is_pending()
         {
             DateTime time = DateTime.UtcNow;
@@ -119,9 +132,11 @@ namespace Test
 
             RegisterCaseSensitiveQuestion(time);
 
-            var response = Commands.Answer(time, "A cOloR");
+            Commands.Answer(time, "A cOloR");
 
-            Assert.AreEqual("A color", response);
+            var response = AskForNextQuestion(time);
+
+            Assert.That(response.Contains(NextQuestionMessage));
         }
 
         [Test]
