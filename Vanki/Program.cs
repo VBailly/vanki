@@ -26,7 +26,7 @@ namespace Vanki
 
             if (options.ShowNext)
                 ret = PrintNextQuestion(deck, now);
-            else if (!string.IsNullOrEmpty(options.Question) && !(options.Answers == null || options.Answers.Count() == 0))
+            else if (!string.IsNullOrEmpty(options.Question) && !(options.Answers == null || !options.Answers.Any()))
             {
                 deck.Cards.Add(new Card() {
                     Id = Guid.NewGuid(),
@@ -38,7 +38,7 @@ namespace Vanki
                     CurrentInterval = 0
                 });
             }
-            else if (!(options.Answers == null || options.Answers.Count() == 0))
+            else if (!(options.Answers == null || !options.Answers.Any()))
                 ret = ProcessAnswer(deck, now, options.Answers[0]);
             else
                 ret = "wrong command line arguments";
