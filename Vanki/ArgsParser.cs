@@ -26,7 +26,7 @@ namespace Vanki
                     { "n|next", "Display the {NEXT} question", v => opt.ShowNext = true },
                     { "a|answer=",
                         "The {ANSWER} to the next question or to the new question",
-                        v => opt.Answers = Regex.Split(v, "~|~").Where(s => !string.IsNullOrWhiteSpace(s)).ToList()},
+                        v => opt.Answers = Regex.Split(v, "~\\|~").Where(s => !string.IsNullOrWhiteSpace(s)).ToList()},
                     { "i", "The new question is case sensitive", v => opt.CaseSensitive = true}
             };
             p.Parse (args);

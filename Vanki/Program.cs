@@ -10,11 +10,15 @@ namespace Vanki
         const string cannotAnswer = "You cannot answer because there is no question pending";
         const string emptyDeckMessage = "There is no questions, the deck is empty";
 
-        public static void Main (string[] args)
+        public static int Main (string[] args)
         {
             var result = TestableMain (args, DateTime.UtcNow);
-            if (!string.IsNullOrEmpty(result))
+            if (!string.IsNullOrEmpty(result)) {
+                var ret = result.StartsWith(thereIsNoNextQuestion) ? 7 : 0;
                 Console.Write (result + "\n");
+                return ret;
+            }
+            return 0;
         }
 
         public static string TestableMain(string[] args, DateTime now)
