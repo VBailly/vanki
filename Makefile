@@ -1,6 +1,9 @@
 all: build
 
-build:
+nuget:
+	nuget restore
+
+build: nuget
 	xbuild /nologo /verbosity:quiet
 
 test:
