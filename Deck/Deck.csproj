@@ -27,18 +27,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Deck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Card.cs" />
-    <Compile Include="CardImpl.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Persistence\Persistence.csproj">
-      <Project>{100A058C-3229-428A-9514-E131B4BC6D5F}</Project>
-      <Name>Persistence</Name>
-    </ProjectReference>
+    <Compile Include="Persistence.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

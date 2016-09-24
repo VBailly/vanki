@@ -20,37 +20,37 @@ namespace Vanki
         public static string TestableMain(string[] args, DateTime now)
         {
             var options = ArgsParser.Parse (args);
+            var deck = Persistence.Load("db.xml");
+
+            string ret = string.Empty;
 
             if (options.ShowNext)
-                return PrintNextQuestion(now);
-            if (!string.IsNullOrEmpty(options.Question) && !(options.Answers == null || options.Answers.Count() == 0))
+                ret = PrintNextQuestion(deck, now);
+            else if (!string.IsNullOrEmpty(options.Question) && !(options.Answers == null || options.Answers.Count() == 0))
             {
-                if (options.CaseSensitive)
-                    return AddQuestionCaseSensitive(options.Question, options.Answers, now);
-                return AddQuestion(options.Question, options.Answers, now);
+                deck.Cards.Add(new Card() {
+                    Id = Guid.NewGuid(),
+                    Question = options.Question,
+                    Answers = options.Answers,
+                    CaseSensitiveAnswers = options.CaseSensitive,
+                    Clue = 0,
+                    LastAnswerTime = now,
+                    CurrentInterval = 0
+                });
             }
-            if (!(options.Answers == null || options.Answers.Count() == 0))
-                return ProcessAnswer(now, options.Answers[0]);
+            else if (!(options.Answers == null || options.Answers.Count() == 0))
+                ret = ProcessAnswer(deck, now, options.Answers[0]);
+            else
+                ret = "wrong command line arguments";
 
-            return "wrong command line arguments";
+            Persistence.Save(deck, "db.xml");
+
+            return ret;
         }
 
-        static string AddQuestionCaseSensitive(string question, IList<string> answers, DateTime time)
+        static Card GetNextCard(Deck deck, DateTime time)
         {
-            Deck.AddQuestionCaseSensitive(question, answers, time);
-            return string.Empty;
-        }
-
-        static string AddQuestion(string question, IList<string> answers, DateTime time)
-        {
-            Deck.AddQuestion(question, answers, time);
-            return string.Empty;
-        }
-
-
-        static Card GetNextCard(DateTime time)
-        {
-            return Deck.Cards.Where(c => c.DueTime <= time).OrderBy(c => c.DueTime).FirstOrDefault();
+            return deck.Cards.Where(c => c.DueTime <= time).OrderBy(c => c.DueTime).FirstOrDefault();
         }
 
         static string GetHint(string answer, int size)
@@ -59,9 +59,9 @@ namespace Vanki
             return string.Join(", ", answers.Select(w => string.Join(".", w.Split(' ').Select(s => new string(s.Take(size).ToArray())))));
         }
 
-        static string ProcessAnswer (DateTime answerTime, string answer)
+        static string ProcessAnswer (Deck deck, DateTime answerTime, string answer)
         {
-            var card = GetNextCard(answerTime);
+            var card = GetNextCard(deck, answerTime);
             if (card == null)
                 return cannotAnswer;
 
@@ -83,11 +83,11 @@ namespace Vanki
             return string.Empty;
         }
 
-        static string PrintNextQuestion (DateTime answerTime)
+        static string PrintNextQuestion (Deck deck, DateTime answerTime)
         {
-            if (!Deck.Cards.Any())
+            if (!deck.Cards.Any())
                 return emptyDeckMessage;
-            var card = GetNextCard(answerTime);
+            var card = GetNextCard(deck, answerTime);
             if (card != null)
             {
                 if (card.Clue == 0)
@@ -96,7 +96,7 @@ namespace Vanki
                     return card.Question + "\nclue: " + GetHint(card.Answers[0], card.Clue);
             }
 
-            var nextCardTime = Deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
+            var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
             return thereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime.ToLocalTime(), (nextCardTime - answerTime));
         }
     }
