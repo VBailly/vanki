@@ -10,7 +10,6 @@ namespace Test
     {
         const string NoNextQuestionMessage = ConsoleOutputs.NoNextQuestionMessage;
         static readonly string NextQuestionMessage = "What is red?";
-        static readonly string WrongAnswerMessage = "a color";
         const string CannotAnswerMessage = ConsoleOutputs.CannotAnswerMessage;
 
         [SetUp]
@@ -39,30 +38,17 @@ namespace Test
         }
 
         [Test]
-        public void We_cannot_answer_when_there_is_no_question()
-        {
-            DateTime time = DateTime.UtcNow;
-
-            RegisterQuestion(time);
-            AnswerCorrectly(time);
-            AskForNextQuestion(time);
-
-            var response = AnswerCorrectly(time);
-
-            Assert.AreEqual(CannotAnswerMessage, response);
-
-        }
-
-        [Test]
         public void Wrong_answers_dont_pass()
         {
             DateTime time = DateTime.UtcNow;
 
             RegisterQuestion(time);
 
-            var response = AnswerWrongly(time);
+            AnswerWrongly(time);
 
-            Assert.AreEqual(WrongAnswerMessage, response);
+            var response = AskForNextQuestion(time);
+
+            Assert.That(response.Contains(NextQuestionMessage));
         }
 
         [Test]
@@ -73,9 +59,13 @@ namespace Test
             RegisterQuestion(time);
             AnswerCorrectly(time);
 
-            var response = AnswerWrongly(time);
+            AnswerWrongly(time);
 
-            Assert.AreEqual(CannotAnswerMessage, response);
+            time += TimeSpan.FromHours(1);
+
+            var response = AskForNextQuestion(time);
+
+            Assert.AreEqual(NextQuestionMessage, response);
         }
 
         [Test]
@@ -91,12 +81,12 @@ namespace Test
         [Test]
         public void A_question_is_available_straight_after_being_registered()
         {
+            
             DateTime time = DateTime.UtcNow;
 
             RegisterQuestion(time);
 
             var response = AskForNextQuestion(time);
-
             Assert.AreEqual(NextQuestionMessage, response);
         }
 
@@ -104,12 +94,10 @@ namespace Test
         public void Giving_a_correct_answer_for_the_first_time()
         {
             DateTime time = DateTime.UtcNow;
-
             RegisterQuestion(time);
+            AnswerCorrectly(time);
 
-            var response = AnswerCorrectly(time);
-
-            Assert.AreEqual(string.Empty, response);
+            AssertNoQuestionPending(time);
         }
 
         [Test]
@@ -119,11 +107,12 @@ namespace Test
 
             RegisterQuestion(time);
 
-            var response = Commands.Answer(time, "A cOloR");
+            Commands.Answer(time, "A cOloR");
 
-            Assert.AreEqual(string.Empty, response);
+            AssertNoQuestionPending(time);
         }
 
+       
         [Test]
         public void Answer_can_be_case_sensitive_and_fail()
         {
@@ -143,22 +132,9 @@ namespace Test
 
             RegisterCaseSensitiveQuestion(time);
 
-            var response = Commands.Answer(time, "A color");
+            Commands.Answer(time, "A color");
 
-            Assert.AreEqual(string.Empty, response);
-        }
-
-        [Test]
-        public void There_is_no_question_just_after_having_answered_it()
-        {
-            DateTime time = DateTime.UtcNow;
-
-            RegisterQuestion(time);
-            AnswerCorrectly(time);
-
-            var response = AskForNextQuestion(time);
-
-            Assert.IsTrue(response.Contains(NoNextQuestionMessage));
+            AssertNoQuestionPending(time);
         }
 
         [Test]
@@ -170,9 +146,7 @@ namespace Test
             AnswerCorrectly(time);
             time += TimeSpan.FromMinutes(1);
 
-            var response = AskForNextQuestion(time);
-
-            Assert.IsTrue(response.Contains(NoNextQuestionMessage));
+            AssertNoQuestionPending(time);
         }
 
         [Test]
@@ -188,7 +162,7 @@ namespace Test
             Assert.AreEqual(NextQuestionMessage, response);
         }
 
-        [Test]
+       [Test]
         public void We_can_answer_again_after_3min_from_first_answer()
         {
             DateTime time = DateTime.UtcNow;
@@ -197,9 +171,7 @@ namespace Test
             AnswerCorrectly(time);
             time += TimeSpan.FromMinutes(3);
 
-            var response = AnswerCorrectly(time);
-
-            Assert.AreEqual(string.Empty, response);
+            AnswerCorrectly(time);
         }
 
         [Test]
@@ -212,12 +184,10 @@ namespace Test
             time += TimeSpan.FromMinutes(3);
             AnswerCorrectly(time);
 
-            var response = AskForNextQuestion(time);
-
-            Assert.IsTrue(response.Contains(NoNextQuestionMessage));
+            AssertNoQuestionPending(time);
         }
 
-        [Test]
+       [Test]
         public void There_is_no_next_question_3_min_after_the_second_answer ()
         {
             DateTime time = DateTime.UtcNow;
@@ -229,12 +199,10 @@ namespace Test
             AskForNextQuestion(time);
             time += TimeSpan.FromMinutes(3);
 
-            var response = AskForNextQuestion(time);
-
-            Assert.IsTrue(response.Contains(NoNextQuestionMessage));
+            AssertNoQuestionPending(time);
         }
 
-        [Test]
+       [Test]
         public void The_question_stays_next_if_we_answer_wrongly()
         {
             DateTime time = DateTime.UtcNow;
@@ -244,7 +212,7 @@ namespace Test
 
             var response = AskForNextQuestion(time);
 
-            Assert.AreEqual(NextQuestionMessage, response);
+            Assert.That(response.Contains(NextQuestionMessage));
         }
 
         [Test]
@@ -274,9 +242,7 @@ namespace Test
             AnswerCorrectly(time);
             time += TimeSpan.FromHours(3);
 
-            var response = AskForNextQuestion(time);
-
-            Assert.IsTrue(response.Contains(NoNextQuestionMessage));
+            AssertNoQuestionPending(time);
         }
 
         [Test]
@@ -306,6 +272,12 @@ namespace Test
             var response = AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestionMessage, response);
+        }
+
+        static void AssertNoQuestionPending(DateTime time)
+        {
+            var response = AskForNextQuestion(time);
+            Assert.That(response.Contains(ConsoleOutputs.NoNextQuestionMessage));
         }
 
         static string AnswerWrongly(DateTime time)

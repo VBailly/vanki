@@ -75,7 +75,7 @@ public class CardImpl : Card
     public override void Reset(DateTime answerTime)
     {
         CurrentInterval = 0;
-        LastAnswerTime = answerTime;
+        IncreaseClue();
     }
 
 

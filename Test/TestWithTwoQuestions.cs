@@ -6,7 +6,7 @@ using Storage;
 namespace Test
 {
     [TestFixture]
-    public class TestWithTwoQuestion
+    public class TestWithTwoQuestions
     {
         static readonly string Question1 = "What is the color of a red fish?";
         static readonly string Question2 = "What is the color of a blue fish?";
@@ -21,7 +21,7 @@ namespace Test
         }
 
         [Test]
-        public void Oldest_command_of_newly_created_questions_is_the_next_one()
+        public void Oldest_question_of_newly_created_questions_is_the_next_one()
         {
             var time = DateTime.UtcNow;
             Commands.RegisterQuestion(time, Question1, "red");
@@ -72,8 +72,8 @@ namespace Test
             time += TimeSpan.FromSeconds(4);
             Commands.Answer(time, "red");
             time += TimeSpan.FromSeconds(6);
-            var response = Commands.Answer(time, "blue");
 
+            var response = Commands.Answer(time, "blue");
             Assert.AreEqual(string.Empty, response);
         }
 
@@ -90,7 +90,6 @@ namespace Test
             Commands.Answer(time, "blue");
 
             var response = Commands.AskForNextQuestion(time);
-
             Assert.IsTrue(response.Contains(ConsoleOutputs.NoNextQuestionMessage));
         }
 
@@ -110,6 +109,22 @@ namespace Test
             var response = Commands.AskForNextQuestion(time);
 
             Assert.AreEqual(NextQuestion1Message, response);
+        }
+
+        [Test]
+        public void We_do_not_pass_to_the_next_question_after_a_wrong_answer()
+        {
+            var time = DateTime.UtcNow;
+            Commands.RegisterQuestion(time, Question1, "red");
+            time += TimeSpan.FromSeconds(2);
+            Commands.RegisterQuestion(time, Question2, "blue");
+            time += TimeSpan.FromSeconds(4);
+            Commands.Answer(time, "wrong");
+            time += TimeSpan.FromSeconds(6);
+
+            var response = Commands.AskForNextQuestion(time);
+
+            Assert.That(response.Contains(NextQuestion1Message));
         }
     }
 }

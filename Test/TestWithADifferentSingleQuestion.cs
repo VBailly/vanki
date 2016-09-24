@@ -9,10 +9,9 @@ namespace Test
     public class TestWithADifferentSingleQuestion
     {
         static readonly string Question = "What color is the sky?";
+        static readonly string QuestionWith1Clue = "What color is the sky? (b)";
         static readonly string Answer = "blue";
         static readonly string WrongAnswer = "a fish";
-        static readonly string NextQuestionMessage = Question;
-        static readonly string WrongAnswerMessage = Answer;
 
         [SetUp]
         public void SetUp()
@@ -39,7 +38,7 @@ namespace Test
 
             var response = Commands.AskForNextQuestion(time);
 
-            Assert.AreEqual(NextQuestionMessage, response);
+            Assert.AreEqual(Question, response);
         }
 
         static string RegisterQuestion(DateTime time)
@@ -66,9 +65,11 @@ namespace Test
 
             RegisterQuestion(time);
 
-            var response = Commands.Answer(time, WrongAnswer);
+            Commands.Answer(time, WrongAnswer);
 
-            Assert.AreEqual(WrongAnswerMessage, response);
+            var response = Commands.AskForNextQuestion(time);
+
+            Assert.That(response.Contains(Question));
         }
     }
 }
