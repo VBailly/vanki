@@ -6,7 +6,7 @@ nuget:
 build: nuget
 	xbuild /nologo /verbosity:quiet
 
-test:
+test: build
 	nunit-console Test/bin/Debug/Test.dll
 
 clean:
