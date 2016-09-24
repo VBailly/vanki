@@ -9,7 +9,7 @@ public static class Persistence {
 
     public static void Save(Deck deck, string path) {
         var deckXml = new XElement("Deck");
-        deckXml.Add(new XAttribute("version", "1"));
+        deckXml.Add(new XAttribute("version", "2"));
 
         foreach (Card card in deck.Cards)
         {
@@ -31,6 +31,13 @@ public static class Persistence {
             deckXml.Add(cardXml);
         }
 
+        deckXml.Add(new XElement("lastWrongAnswer", new [] {
+            new XElement("version", 1),
+            new XElement("questionId", deck.LastWrongAnswer.QuestionId),
+            new XElement("answer", deck.LastWrongAnswer.Answer),
+            new XElement("previousLapse", deck.LastWrongAnswer.PreviousLapse)
+        }));
+
         File.WriteAllText(path, deckXml.ToString(), Encoding.UTF8);
     }
 
@@ -44,6 +51,15 @@ public static class Persistence {
             CurrentInterval = int.Parse(xml.Element("lapse").Value),
             CaseSensitiveAnswers = bool.Parse(xml.Element("caseSensitive").Value),
             Clue = int.Parse(xml.Element("clue").Value)
+        };
+    }
+
+    private static WrongAnswer LoadWrongAnswerV1(XElement xml)
+    {
+        return new WrongAnswer {
+            QuestionId = Guid.Parse(xml.Element("questionId").Value),
+            Answer = xml.Element("answer").Value,
+            PreviousLapse = int.Parse(xml.Element("previousLapse").Value)
         };
     }
 
@@ -68,6 +84,29 @@ public static class Persistence {
         return deck;
     }
 
+    private static Deck LoadDeckV2(XElement xml)
+    {
+        var deck = new Deck();
+
+        foreach (var cardXml in xml.Elements("Card")) {
+            Card card;
+
+            switch (cardXml.Attribute("version").Value) {
+                case "6":
+                    card = LoadCardV6(cardXml);
+                    break;
+                default:
+                    throw new ArgumentException("Unknown card version");
+            }
+
+            deck.Cards.Add(card);
+        }
+
+        deck.LastWrongAnswer = LoadWrongAnswerV1(xml.Element("lastWrongAnswer"));
+
+        return deck;
+    }
+
     public static Deck Load(string path) {
         if (!File.Exists(path))
             return new Deck();
@@ -82,6 +121,8 @@ public static class Persistence {
         switch (xml.Attribute("version").Value) {
             case "1":
                 return LoadDeckV1(xml);
+            case "2":
+                return LoadDeckV2(xml);
             default:
                 throw new ArgumentException($"Unknown deck version {xml.Attribute("version").Value}");
         }

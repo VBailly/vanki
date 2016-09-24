@@ -294,6 +294,54 @@ namespace Test
             Assert.That(response.Contains(ConsoleOutputs.NoNextQuestionMessage));
         }
 
+        [Test]
+        public void Nothing_to_revert()
+        {
+            DateTime time = DateTime.UtcNow;
+
+            var response = Revert(time);
+
+            Assert.AreEqual(response, ConsoleOutputs.NothingToRevert);
+        }
+
+        [Test]
+        public void Revert_last()
+        {
+            DateTime time = DateTime.UtcNow;
+
+            RegisterQuestion(time);
+
+            AnswerWrongly(time);
+
+            var response = Revert(time);
+
+            Assert.AreEqual(response, ConsoleOutputs.RevertLast);
+
+            response = AskForNextQuestion(time);
+
+            Assert.AreEqual(response, NextQuestionMessage);
+        }
+
+        [Test]
+        public void Revert_add_last()
+        {
+            DateTime time = DateTime.UtcNow;
+
+            RegisterQuestion(time);
+
+            AnswerWrongly(time);
+
+            var response = Revert(time, true);
+
+            Assert.AreEqual(response, ConsoleOutputs.RevertAddLast);
+
+            AnswerWrongly(time);
+
+            response = AskForNextQuestion(time);
+
+            Assert.AreNotEqual(response, NextQuestionMessage);
+        }
+
         static string AnswerWrongly(DateTime time)
         {
             return Commands.Answer(time, "an animal");
@@ -302,6 +350,13 @@ namespace Test
         static string AnswerCorrectly(DateTime time)
         {
             return Commands.Answer(time, "a color");
+        }
+
+        static string Revert(DateTime time, bool add = false)
+        {
+            if (add)
+                return Commands.RevertAddLastWrongAnswer(time);
+            return Commands.RevertLastWrongAnswer(time);
         }
 
         static string AskForNextQuestion(DateTime time)

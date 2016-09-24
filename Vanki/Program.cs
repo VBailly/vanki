@@ -43,6 +43,8 @@ namespace Vanki
             }
             else if (!(options.Answers == null || !options.Answers.Any()))
                 ret = ProcessAnswer(deck, now, options.Answers[0]);
+            else if (options.RevertLastWrongAnswer)
+                ret = RevertLastWrongAnswer(deck, options.RevertLastWrongAnswerAdd);
             else
                 ret = "wrong command line arguments";
 
@@ -77,9 +79,16 @@ namespace Vanki
 
             if (correctAnswer == null)
             {
+                deck.LastWrongAnswer = new WrongAnswer {
+                    QuestionId = card.Id,
+                    Answer = answer,
+                    PreviousLapse = card.CurrentInterval
+                };
                 card.Reset();
                 return string.Empty;
             }
+
+            deck.LastWrongAnswer = new WrongAnswer();
 
             card.Promote(answerTime);
 
@@ -101,6 +110,29 @@ namespace Vanki
 
             var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
             return thereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime.ToLocalTime(), (nextCardTime - answerTime));
+        }
+
+        static string RevertLastWrongAnswer(Deck deck, bool add)
+        {
+            if (deck.LastWrongAnswer.QuestionId == Guid.Empty)
+                return "No last wrong answer to revert";
+
+            var lastWrongAnswer = deck.LastWrongAnswer;
+            var card = deck.Cards.First(e => e.Id == lastWrongAnswer.QuestionId);
+
+            card.CurrentInterval = lastWrongAnswer.PreviousLapse;
+            card.DecreaseClue();
+
+            var ret = "Last wrong answer has been reverted";
+
+            if (add) {
+                card.Answers.Add(lastWrongAnswer.Answer);
+                ret += " and added as a right answer";
+            }
+
+            deck.LastWrongAnswer = new WrongAnswer();
+
+            return ret;
         }
     }
 }

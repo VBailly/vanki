@@ -39,7 +39,7 @@ public class Card
         Clue += 1;
     }
 
-    private void DecreaseClue()
+    public void DecreaseClue()
     {
         if (Clue > 0)
             Clue -= 1;

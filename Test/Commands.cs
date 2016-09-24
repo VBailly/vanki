@@ -16,6 +16,16 @@ namespace Test
             return MainClass.TestableMain(new[] { "--next" }, time);
         }
 
+        public static string RevertLastWrongAnswer(DateTime time)
+        {
+            return MainClass.TestableMain(new[] { "--revert", "discard" }, time);
+        }
+
+        public static string RevertAddLastWrongAnswer(DateTime time)
+        {
+            return MainClass.TestableMain(new[] { "--revert", "add" }, time);
+        }
+
         public static string RegisterQuestion(DateTime time, string question, string answer)
         {
             return MainClass.TestableMain(new[] { "-q", question, "-a", answer }, time);
