@@ -43,6 +43,7 @@
     <Compile Include="TestWithClues.cs" />
     <Compile Include="TestVersionsUpgrades.cs" />
     <Compile Include="TestAlternativeAnswers.cs" />
+    <Compile Include="TestMultipleQuestions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

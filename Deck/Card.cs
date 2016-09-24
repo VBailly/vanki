@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Card
 {
     public Guid Id { get; set; }
-    public string Question { get; set; }
+    public IList<string> Questions { get; set; }
     public IList<string> Answers { get; set; } = new List<string>();
     public bool CaseSensitiveAnswers { get; set; }
     public int Clue { get; set; }
@@ -16,6 +16,7 @@ public class Card
         get { return LastAnswerTime + TimeSpan.FromMinutes(CurrentInterval); }
     }
 
+
     public void Promote(DateTime answerTime)
     {
         if (CurrentInterval == 0 || Clue != 0)
@@ -26,7 +27,7 @@ public class Card
         DecreaseClue();
     }
 
-    public void Reset(DateTime answerTime)
+    public void Reset()
     {
         CurrentInterval = 0;
         IncreaseClue();

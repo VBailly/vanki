@@ -8,8 +8,8 @@ namespace Vanki
 {
     public class Options
     {
-        public string Question { get ; set; }
-        public IList<string> Answers { get ; set; }
+        public IList<string> Questions { get; set; } = new List<string>();
+        public IList<string> Answers { get; set; } = new List<string>();
         public bool ShowNext { get ; set; }
         public bool CaseSensitive { get; set; }
     }
@@ -18,11 +18,12 @@ namespace Vanki
     {
         public static Options Parse(string[] args)
         {
-            var opt = new Options ();
+            var opt = new Options();
 
             var p = new OptionSet()
             {
-                { "q|question=", "The {QUESTION} to add or to answer", v => opt.Question = v},
+                { "q|question=", "The {QUESTION} to add or to answer",
+                    v => opt.Questions  = Regex.Split(v, "~\\|~").ToList()},
                     { "n|next", "Display the {NEXT} question", v => opt.ShowNext = true },
                     { "a|answer=",
                         "The {ANSWER} to the next question or to the new question",

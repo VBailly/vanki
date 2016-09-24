@@ -11,13 +11,17 @@ public static class Persistence {
         var deckXml = new XElement("Deck");
         deckXml.Add(new XAttribute("version", "1"));
 
-        foreach (Card card in deck.Cards) {
+        foreach (Card card in deck.Cards)
+        {
             var cardXml = new XElement("Card");
 
-            cardXml.Add(new XAttribute("version", 5));
+            cardXml.Add(new XAttribute("version", 6));
             cardXml.Add(new XElement("id", card.Id));
             cardXml.Add(new XElement("time", card.LastAnswerTime.ToString("o")));
-            cardXml.Add(new XElement("question", card.Question));
+            cardXml.Add(new XElement("questions", card.Questions.Select(question =>
+            {
+                return new XElement("alternative", question);
+            })));
             cardXml.Add(new XElement("answer", card.Answers.Select(answer => {
                 return new XElement("alternative", answer);
             })));
@@ -35,7 +39,7 @@ public static class Persistence {
         return new Card {
             Id = Guid.NewGuid(),
             LastAnswerTime = DateTime.Parse(xml.Element("time").Value).ToUniversalTime(),
-            Question = xml.Element("question").Value,
+            Questions = new List<string> { xml.Element("question").Value },
             Answers = new List<string> { xml.Element("answer").Value },
             CurrentInterval = int.Parse(xml.Element("lapse").Value)
         };
@@ -46,7 +50,7 @@ public static class Persistence {
         return new Card {
             Id = Guid.NewGuid(),
             LastAnswerTime = DateTime.Parse(xml.Element("time").Value).ToUniversalTime(),
-            Question = xml.Element("question").Value,
+            Questions = new List<string> { xml.Element("question").Value },
             Answers = xml.Element("answer").Elements("alternative").Select(e => e.Value).ToList(),
             CurrentInterval = int.Parse(xml.Element("lapse").Value),
             CaseSensitiveAnswers = bool.Parse(xml.Element("caseSensitive")?.Value ?? "false"),
@@ -59,7 +63,20 @@ public static class Persistence {
         return new Card {
             Id = Guid.Parse(xml.Element("id").Value),
             LastAnswerTime = DateTime.Parse(xml.Element("time").Value).ToUniversalTime(),
-            Question = xml.Element("question").Value,
+            Questions = new List<string> { xml.Element("question").Value },
+            Answers = xml.Element("answer").Elements("alternative").Select(e => e.Value).ToList(),
+            CurrentInterval = int.Parse(xml.Element("lapse").Value),
+            CaseSensitiveAnswers = bool.Parse(xml.Element("caseSensitive").Value),
+            Clue = int.Parse(xml.Element("clue").Value)
+        };
+    }
+
+    private static Card LoadCardV6(XElement xml)
+    {
+        return new Card {
+            Id = Guid.Parse(xml.Element("id").Value),
+            LastAnswerTime = DateTime.Parse(xml.Element("time").Value).ToUniversalTime(),
+            Questions = xml.Element("questions").Elements("alternative").Select(e => e.Value).ToList(),
             Answers = xml.Element("answer").Elements("alternative").Select(e => e.Value).ToList(),
             CurrentInterval = int.Parse(xml.Element("lapse").Value),
             CaseSensitiveAnswers = bool.Parse(xml.Element("caseSensitive").Value),
@@ -83,6 +100,9 @@ public static class Persistence {
                     break;
                 case "5":
                     card = LoadCardV5(cardXml);
+                    break;
+                case "6":
+                    card = LoadCardV6(cardXml);
                     break;
                 default:
                     throw new ArgumentException("Unknown card version");

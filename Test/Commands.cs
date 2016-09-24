@@ -30,6 +30,11 @@ namespace Test
         {
             return MainClass.TestableMain(new[] { "-q", question, "-a", string.Join("~|~", answers) }, time);
         }
+
+        public static string RegisterQuestion(DateTime time, IEnumerable<string> questions, IEnumerable<string> answers)
+        {
+            return MainClass.TestableMain(new[] { "-q", string.Join("~|~", questions), "-a", string.Join("~|~", answers) }, time);
+        }
    }
 }
 

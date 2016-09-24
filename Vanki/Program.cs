@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Vanki
@@ -30,11 +29,11 @@ namespace Vanki
 
             if (options.ShowNext)
                 ret = PrintNextQuestion(deck, now);
-            else if (!string.IsNullOrEmpty(options.Question) && !(options.Answers == null || !options.Answers.Any()))
+            else if (options.Questions.Any() && options.Answers.Any())
             {
                 deck.Cards.Add(new Card() {
                     Id = Guid.NewGuid(),
-                    Question = options.Question,
+                    Questions = options.Questions,
                     Answers = options.Answers,
                     CaseSensitiveAnswers = options.CaseSensitive,
                     Clue = 0,
@@ -78,7 +77,7 @@ namespace Vanki
 
             if (correctAnswer == null)
             {
-                card.Reset(answerTime);
+                card.Reset();
                 return card.Answers.First();
             }
 
@@ -95,9 +94,9 @@ namespace Vanki
             if (card != null)
             {
                 if (card.Clue == 0)
-                    return card.Question;
+                    return card.Questions.OrderBy(x => Guid.NewGuid()).First();
                 else
-                    return card.Question + "\nclue: " + GetHint(card.Answers[0], card.Clue);
+                    return card.Questions.OrderBy(x => Guid.NewGuid()).First() + "\nclue: " + GetHint(card.Answers[0], card.Clue);
             }
 
             var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
