@@ -10,7 +10,6 @@ namespace Test
     {
         const string NoNextQuestionMessage = ConsoleOutputs.NoNextQuestionMessage;
         static readonly string NextQuestionMessage = "What is red?";
-        const string CannotAnswerMessage = ConsoleOutputs.CannotAnswerMessage;
 
         [SetUp]
         public void SetUp()

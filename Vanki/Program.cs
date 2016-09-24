@@ -31,20 +31,8 @@ namespace Vanki
             }
             if (!(options.Answers == null || options.Answers.Count() == 0))
                 return ProcessAnswer(now, options.Answers[0]);
-            if (options.Clue)
-                return GetAClue(now);
 
             return "wrong command line arguments";
-        }
-
-        static string GetAClue(DateTime time)
-        {
-            var card = GetNextCard(time);
-            if (card == null)
-                return string.Empty;
-            card.ResetLapse();
-            card.IncreaseClue();
-            return GetHint(card.Answers[0], card.Clue);
         }
 
         static string AddQuestionCaseSensitive(string question, IList<string> answers, DateTime time)

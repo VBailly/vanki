@@ -11,7 +11,6 @@ namespace Vanki
         public string Question { get ; set; }
         public IList<string> Answers { get ; set; }
         public bool ShowNext { get ; set; }
-        public bool Clue { get; set;}
         public bool CaseSensitive { get; set; }
     }
 
@@ -28,7 +27,6 @@ namespace Vanki
                     { "a|answer=",
                         "The {ANSWER} to the next question or to the new question",
                         v => opt.Answers = Regex.Split(v, "~|~").Where(s => !string.IsNullOrWhiteSpace(s)).ToList()},
-                    { "c|clue", "Ask for a {CLUE} for the next question", v => opt.Clue = true},
                     { "i", "The new question is case sensitive", v => opt.CaseSensitive = true}
             };
             p.Parse (args);

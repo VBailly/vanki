@@ -30,11 +30,6 @@ namespace Test
         {
             return MainClass.TestableMain(new[] { "-q", question, "-a", string.Join("~|~", answers) }, time);
         }
-
-        internal static object AskForAClue(DateTime time)
-        {
-            return MainClass.TestableMain(new[] { "--clue"}, time);
-        }
    }
 }
 
