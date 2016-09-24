@@ -41,7 +41,6 @@
     <Compile Include="TestWithADifferentSingleQuestion.cs" />
     <Compile Include="TestWithTwoQuestions.cs" />
     <Compile Include="TestWithClues.cs" />
-    <Compile Include="TestVersionsUpgrades.cs" />
     <Compile Include="TestAlternativeAnswers.cs" />
     <Compile Include="TestMultipleQuestions.cs" />
   </ItemGroup>

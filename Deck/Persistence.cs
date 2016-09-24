@@ -34,43 +34,6 @@ public static class Persistence {
         File.WriteAllText(path, deckXml.ToString(), Encoding.UTF8);
     }
 
-    private static Card LoadCardV3(XElement xml)
-    {
-        return new Card {
-            Id = Guid.NewGuid(),
-            LastAnswerTime = DateTime.Parse(xml.Element("time").Value).ToUniversalTime(),
-            Questions = new List<string> { xml.Element("question").Value },
-            Answers = new List<string> { xml.Element("answer").Value },
-            CurrentInterval = int.Parse(xml.Element("lapse").Value)
-        };
-    }
-
-    private static Card LoadCardV4(XElement xml)
-    {
-        return new Card {
-            Id = Guid.NewGuid(),
-            LastAnswerTime = DateTime.Parse(xml.Element("time").Value).ToUniversalTime(),
-            Questions = new List<string> { xml.Element("question").Value },
-            Answers = xml.Element("answer").Elements("alternative").Select(e => e.Value).ToList(),
-            CurrentInterval = int.Parse(xml.Element("lapse").Value),
-            CaseSensitiveAnswers = bool.Parse(xml.Element("caseSensitive")?.Value ?? "false"),
-            Clue = int.Parse(xml.Element("clue")?.Value ?? "0")
-        };
-    }
-
-    private static Card LoadCardV5(XElement xml)
-    {
-        return new Card {
-            Id = Guid.Parse(xml.Element("id").Value),
-            LastAnswerTime = DateTime.Parse(xml.Element("time").Value).ToUniversalTime(),
-            Questions = new List<string> { xml.Element("question").Value },
-            Answers = xml.Element("answer").Elements("alternative").Select(e => e.Value).ToList(),
-            CurrentInterval = int.Parse(xml.Element("lapse").Value),
-            CaseSensitiveAnswers = bool.Parse(xml.Element("caseSensitive").Value),
-            Clue = int.Parse(xml.Element("clue").Value)
-        };
-    }
-
     private static Card LoadCardV6(XElement xml)
     {
         return new Card {
@@ -92,15 +55,6 @@ public static class Persistence {
             Card card;
 
             switch (cardXml.Attribute("version").Value) {
-                case "3":
-                    card = LoadCardV3(cardXml);
-                    break;
-                case "4":
-                    card = LoadCardV4(cardXml);
-                    break;
-                case "5":
-                    card = LoadCardV5(cardXml);
-                    break;
                 case "6":
                     card = LoadCardV6(cardXml);
                     break;
