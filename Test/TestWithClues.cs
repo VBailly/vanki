@@ -22,7 +22,7 @@ namespace Test
             Commands.Answer(time, "wrong");
 
             var result = Commands.AskForNextQuestion(time);
-            Assert.That(result.Contains("a.c"));
+            Assert.That(result.Contains("a c"));
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace Test
             Commands.Answer(time, "wrong");
 
             var result = Commands.AskForNextQuestion(time);
-            Assert.That(result.Contains("a.co"));
+            Assert.That(result.Contains("a co"));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace Test
             Commands.Answer(time, "wrong");
 
             var result = Commands.AskForNextQuestion(time);
-            Assert.That(result.Contains("a.k, o.d"));
+            Assert.That(result.Contains("a k, o d"));
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace Test
 
             var result = Commands.AskForNextQuestion(time);
 
-            Assert.AreEqual("What is red?\nclue: a.c", result);
+            Assert.AreEqual("What is red?\nclue: a c", result);
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace Test
 
             var result = Commands.AskForNextQuestion(time);
 
-            Assert.AreEqual("What is red?\nclue: a.c", result);
+            Assert.AreEqual("What is red?\nclue: a c", result);
         }
 
         [Test]

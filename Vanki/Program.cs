@@ -56,7 +56,7 @@ namespace Vanki
         static string GetHint(string answer, int size)
         {
             var answers = answer.Split(',').Select(s => s.Trim());
-            return string.Join(", ", answers.Select(w => string.Join(".", w.Split(' ').Select(s => new string(s.Take(size).ToArray())))));
+            return string.Join(", ", answers.Select(w => string.Join(" ", w.Split(' ').Select(s => new string(s.Take(size).ToArray())))));
         }
 
         static string ProcessAnswer (Deck deck, DateTime answerTime, string answer)
