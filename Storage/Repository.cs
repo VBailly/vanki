@@ -9,6 +9,11 @@
         {
             (Implementation ?? DefaultImpl).StoreString(data);
         }
+
+        public static string LoadString()
+        {
+            return (Implementation ?? DefaultImpl).LoadString();
+        }
     }
 }
 

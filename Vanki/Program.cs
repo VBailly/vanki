@@ -5,7 +5,6 @@ namespace Vanki
 {
     public class MainClass
     {
-
         static IVerbalMessages verbalMessages = new EnglishMessages();
 
         public static int Main (string[] args)
@@ -22,7 +21,7 @@ namespace Vanki
         public static string TestableMain(string[] args, DateTime now)
         {
             var options = ArgsParser.Parse (args);
-            var deck = Persistence.Load("db.xml");
+            var deck = Persistence.Load();
 
             string ret = string.Empty;
 
@@ -47,7 +46,7 @@ namespace Vanki
             else
                 ret = verbalMessages.WrongCmdArgs;
 
-            Persistence.Save(deck, "db.xml");
+            Persistence.Save(deck);
 
             return ret;
         }
@@ -108,7 +107,7 @@ namespace Vanki
             }
 
             var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
-            return verbalMessages.ThereIsNoNextQuestion + "\n" + verbalMessages.ComeBackAtThisTime + string.Format(": {0} ("+verbalMessages.In+" {1})", nextCardTime.ToLocalTime(), (nextCardTime - answerTime)) + "\n";
+            return verbalMessages.ThereIsNoNextQuestion + "\n" + verbalMessages.ComeBackAtThisTime + ": " + nextCardTime.ToLocalTime() + " (" + verbalMessages.In + " " + (nextCardTime - answerTime) + ")" + "\n";
         }
 
         static string RevertLastWrongAnswer(Deck deck, bool add)

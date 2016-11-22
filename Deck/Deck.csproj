@@ -38,5 +38,11 @@
     <Compile Include="Persistence.cs" />
     <Compile Include="WrongAnswer.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Storage\Storage.csproj">
+      <Project>{85D1280D-070E-4C09-9A40-AC4E5E43F469}</Project>
+      <Name>Storage</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

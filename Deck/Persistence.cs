@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 public static class Persistence {
 
-    public static void Save(Deck deck, string path) {
+    public static void Save(Deck deck) {
         var deckXml = new XElement("Deck");
         deckXml.Add(new XAttribute("version", "2"));
 
@@ -38,7 +35,7 @@ public static class Persistence {
             new XElement("previousLapse", deck.LastWrongAnswer.PreviousLapse)
         }));
 
-        File.WriteAllText(path, deckXml.ToString(), Encoding.UTF8);
+        Storage.Repository.StoreString(deckXml.ToString());
     }
 
     private static Card LoadCardV6(XElement xml)
@@ -107,11 +104,10 @@ public static class Persistence {
         return deck;
     }
 
-    public static Deck Load(string path) {
-        if (!File.Exists(path))
+    public static Deck Load() {
+        var content = Storage.Repository.LoadString();
+        if (string.IsNullOrEmpty(content))
             return new Deck();
-
-        var content = File.ReadAllText(path, Encoding.UTF8);
 
         if (string.IsNullOrWhiteSpace(content))
             return new Deck();
