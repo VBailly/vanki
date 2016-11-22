@@ -1,5 +1,4 @@
-﻿using System;
-namespace Test
+﻿namespace Test
 {
     public static class ConsoleOutputs
     {
@@ -7,8 +6,8 @@ namespace Test
         public const string NextQuestionMessage = "The next question is:\n\"{0}\"";
         public const string EmptyDeckMessage = "There is no questions, the deck is empty";
         public const string NothingToRevert = "No last wrong answer to revert";
-        public const string RevertLast = "Last wrong answer has been reverted";
-        public const string RevertAddLast = "Last wrong answer has been reverted and added as a right answer";
+        public const string RevertLast = "Your last answer has been considered correct for this time";
+        public const string RevertAddLast = "Your last answer has been approved as being correct";
     }
 }
 

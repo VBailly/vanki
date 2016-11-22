@@ -38,6 +38,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ArgsParser.cs" />
+    <Compile Include="EnglishMessages.cs" />
+    <Compile Include="IVerbalMessages.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

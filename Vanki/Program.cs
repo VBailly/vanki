@@ -3,22 +3,9 @@ using System.Linq;
 
 namespace Vanki
 {
-
-    public interface IVerbalMessages
-    {
-        string ThereIsNoNextQuestion { get; }
-        string NothingToAnswer { get; }
-        string TheDeckIsEmpty { get; }
-    }
-
-    public class EnglishMessages : IVerbalMessages
-    {
-        public string ThereIsNoNextQuestion => "There is no next question";
-        public string NothingToAnswer => "You cannot answer because there is no question pending";
-        public string TheDeckIsEmpty => "There is no questions, the deck is empty";
-    }
     public class MainClass
     {
+
         static IVerbalMessages verbalMessages = new EnglishMessages();
 
         public static int Main (string[] args)
@@ -58,7 +45,7 @@ namespace Vanki
             else if (options.RevertLastWrongAnswer)
                 ret = RevertLastWrongAnswer(deck, options.RevertLastWrongAnswerAdd);
             else
-                ret = "wrong command line arguments";
+                ret = verbalMessages.WrongCmdArgs;
 
             Persistence.Save(deck, "db.xml");
 
@@ -117,17 +104,17 @@ namespace Vanki
                 if (card.Clue == 0)
                     return card.Questions.OrderBy(x => Guid.NewGuid()).First();
                 else
-                    return card.Questions.OrderBy(x => Guid.NewGuid()).First() + "\nclue: " + GetHint(card.Answers[0], card.Clue);
+                    return card.Questions.OrderBy(x => Guid.NewGuid()).First() + "\n" + verbalMessages.Clue + ": " + GetHint(card.Answers[0], card.Clue);
             }
 
             var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
-            return verbalMessages.ThereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime.ToLocalTime(), (nextCardTime - answerTime));
+            return verbalMessages.ThereIsNoNextQuestion + "\n" + verbalMessages.ComeBackAtThisTime + string.Format(": {0} ("+verbalMessages.In+" {1})", nextCardTime.ToLocalTime(), (nextCardTime - answerTime)) + "\n";
         }
 
         static string RevertLastWrongAnswer(Deck deck, bool add)
         {
             if (deck.LastWrongAnswer.QuestionId == Guid.Empty)
-                return "No last wrong answer to revert";
+                return verbalMessages.NothingToRevert;
 
             var lastWrongAnswer = deck.LastWrongAnswer;
             var card = deck.Cards.First(e => e.Id == lastWrongAnswer.QuestionId);
@@ -135,11 +122,11 @@ namespace Vanki
             card.CurrentInterval = lastWrongAnswer.PreviousLapse;
             card.DecreaseClue();
 
-            var ret = "Last wrong answer has been reverted";
+            var ret = verbalMessages.RevertLast;
 
             if (add) {
                 card.Answers.Add(lastWrongAnswer.Answer);
-                ret += " and added as a right answer";
+                ret = verbalMessages.RevertAddLast;
             }
 
             deck.LastWrongAnswer = new WrongAnswer();
