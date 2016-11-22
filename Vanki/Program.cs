@@ -3,17 +3,29 @@ using System.Linq;
 
 namespace Vanki
 {
+
+    public interface IVerbalMessages
+    {
+        string ThereIsNoNextQuestion { get; }
+        string NothingToAnswer { get; }
+        string TheDeckIsEmpty { get; }
+    }
+
+    public class EnglishMessages : IVerbalMessages
+    {
+        public string ThereIsNoNextQuestion => "There is no next question";
+        public string NothingToAnswer => "You cannot answer because there is no question pending";
+        public string TheDeckIsEmpty => "There is no questions, the deck is empty";
+    }
     public class MainClass
     {
-        const string thereIsNoNextQuestion = "There is no next question";
-        const string cannotAnswer = "You cannot answer because there is no question pending";
-        const string emptyDeckMessage = "There is no questions, the deck is empty";
+        static IVerbalMessages verbalMessages = new EnglishMessages();
 
         public static int Main (string[] args)
         {
             var result = TestableMain (args, DateTime.UtcNow);
             if (!string.IsNullOrEmpty(result)) {
-                var ret = result.StartsWith(thereIsNoNextQuestion) ? 7 : 0;
+                var ret = result.StartsWith(verbalMessages.ThereIsNoNextQuestion, StringComparison.CurrentCulture) ? 7 : 0;
                 Console.Write (result + "\n");
                 return ret;
             }
@@ -68,7 +80,7 @@ namespace Vanki
         {
             var card = GetNextCard(deck, answerTime);
             if (card == null)
-                return cannotAnswer;
+                return verbalMessages.NothingToAnswer;
 
             string correctAnswer;
 
@@ -98,7 +110,7 @@ namespace Vanki
         static string PrintNextQuestion (Deck deck, DateTime answerTime)
         {
             if (!deck.Cards.Any())
-                return emptyDeckMessage;
+                return verbalMessages.TheDeckIsEmpty;
             var card = GetNextCard(deck, answerTime);
             if (card != null)
             {
@@ -109,7 +121,7 @@ namespace Vanki
             }
 
             var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
-            return thereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime.ToLocalTime(), (nextCardTime - answerTime));
+            return verbalMessages.ThereIsNoNextQuestion + string.Format("\nCome back at this time: {0} (in {1})\n", nextCardTime.ToLocalTime(), (nextCardTime - answerTime));
         }
 
         static string RevertLastWrongAnswer(Deck deck, bool add)
