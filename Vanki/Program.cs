@@ -10,8 +10,6 @@ namespace Vanki
         public static int Main (string[] args)
         {
             var result = TestableMain (args, DateTime.UtcNow);
-            if (string.IsNullOrEmpty(result))
-                return 0;
             
             var ret = result.StartsWith(verbalMessages.ThereIsNoNextQuestion, StringComparison.CurrentCulture) ? 7 : 0;
             Console.Write (result + "\n");
