@@ -47,55 +47,22 @@ namespace Vanki
             return string.Empty;
         }
 
-
-
-        static string GetHint(string answer, int size)
-        {
-            var answers = answer.Split(',').Select(s => s.Trim());
-            return string.Join(", ", answers.Select(w => string.Join(" ", w.Split(' ').Select(s => new string(s.Take(size).ToArray())))));
-        }
-
         static string ProcessAnswer (Deck deck, DateTime answerTime, string answer)
         {
-            var card = deck.GetNextCardAfter(answerTime);
+            var card = deck.GetNextCardBefore(answerTime);
             if (card == null)
                 return verbalMessages.NothingToAnswer;
 
-            if (!IsAnswerCorrect(answer, card))
-                SetAnswerWrong(deck, answer, card);
+            if (!card.IsAnswerCorrect(answer))
+                SetAnswerWrong(deck, answer, card, answerTime);
             else
-                TreatCorrectAnswer(deck, answerTime, card);
+                deck.TreatCorrectAnswer(answerTime);
             return string.Empty;
         }
 
-        static void TreatCorrectAnswer(Deck deck, DateTime answerTime, ICard card)
+        static void SetAnswerWrong(Deck deck, string answer, ICard card, DateTime now)
         {
-            deck.LastAnswer = LastAnswer.NullAnswer;
-            card.Promote(answerTime);
-        }
-
-        static bool IsAnswerCorrect(string answer, ICard card)
-        {
-            Func<string, bool> check = GetCheckingFunction(answer, card);
-
-            return card.Answers.Any(check);
-        }
-
-        static Func<string, bool> GetCheckingFunction(string answer, ICard card)
-        {
-            if (card.CaseSensitiveAnswers)
-                return a => a == answer;
-            
-            return a => a.ToLower() == answer.ToLower();
-        }
-
-        static void SetAnswerWrong(Deck deck, string answer, ICard card)
-        {
-            deck.LastAnswer = new LastAnswer
-            {
-                Answer = answer,
-                PreviousLapse = card.CurrentInterval
-            };
+            deck.SaveLastAnswer(answer, now);
             card.Reset();
         }
 
@@ -103,27 +70,29 @@ namespace Vanki
         {
             if (!deck.Cards.Any())
                 return verbalMessages.TheDeckIsEmpty;
-            var card = deck.GetNextCardAfter(answerTime);
-            if (card != null)
-                return GetQuestionPresentation(card);
 
-            var nextCardTime = GetNextCard(deck).DueTime;
+            if (!deck.IsAnswerExpected(answerTime))
+                return WaitABitPresentation(deck, answerTime);
+
+            var card = deck.GetNextCardBefore(answerTime);
+            return GetQuestionPresentation(card);
+        }
+
+        static string WaitABitPresentation(Deck deck, DateTime answerTime)
+        {
+            var nextCardTime = deck.GetNextCard().DueTime;
             return verbalMessages.ThereIsNoNextQuestion + "\n" + verbalMessages.ComeBackAtThisTime + ": " + nextCardTime.ToLocalTime() + " (" + verbalMessages.In + " " + (nextCardTime - answerTime) + ")" + "\n";
         }
 
-        static ICard GetNextCard(Deck deck)
-        {
-            return deck.Cards.OrderBy(c => c.DueTime).First();
-        }
 
         static string GetQuestionPresentation(ICard card)
         {
             var question = card.Questions.OrderBy(x => Guid.NewGuid()).First();
 
-            if (card.Clue == 0)
+            if (!card.NeedsAClue())
                 return question;
             
-            return question + "\n" + verbalMessages.Clue + ": " + GetHint(card.GetFirstAnswer(), card.Clue);
+            return question + "\n" + verbalMessages.Clue + ": " + card.GetHint();
         }
 
         static string RevertLastWrongAnswer(Deck deck, bool add)
@@ -137,9 +106,9 @@ namespace Vanki
         static string RevertLastAnswer(Deck deck, bool add)
         {
             var lastAnswer = deck.LastAnswer;
-            deck.LastAnswer = LastAnswer.NullAnswer;
+            deck.ResetLastAnswer();
 
-            var card = GetNextCard(deck);
+            var card = deck.GetNextCard();
 
             return UpdateCardFromAnswer(card, add, lastAnswer);
         }

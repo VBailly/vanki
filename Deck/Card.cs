@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public interface ICard
 {
     IEnumerable<string> Questions { get; }
-    IEnumerable<string> Answers { get; } 
-    bool CaseSensitiveAnswers { get; }
-    int Clue { get; }
-    DateTime LastAnswerTime { get; }
-    int CurrentInterval { get; }
+    IEnumerable<string> Answers { get; }
+
     DateTime DueTime { get; }
 
-    void Promote(DateTime answerTime);
     void Reset();
     void IncreaseClue();
     void DecreaseClue();
     void ResetLapse();
     void PromoteFrom(int previousLapse);
-    string GetFirstAnswer();
     void AddAnswer(string answer);
+    string GetHint();
+    bool IsAnswerCorrect(string answer);
+    bool NeedsAClue();
 }
+
 
 internal class Card : ICard
 {
@@ -45,11 +45,36 @@ internal class Card : ICard
     public DateTime LastAnswerTime { get; internal set; }
     public int CurrentInterval { get; internal set; }
 
+    public bool IsAnswerCorrect(string answer)
+    {
+        Func<string, bool> check = GetCheckingFunction(answer);
+
+        return Answers.Any(check);
+    }
+
+    public bool NeedsAClue()
+    {
+        return Clue != 0;
+    }
+
+    public Func<string, bool> GetCheckingFunction(string answer)
+    {
+        if (CaseSensitiveAnswers)
+            return a => a == answer;
+
+        return a => a.ToLower() == answer.ToLower();
+    }
+
     public DateTime DueTime
     {
         get { return LastAnswerTime + TimeSpan.FromMinutes(CurrentInterval); }
     }
 
+    public string GetHint()
+    {
+        var answers = GetFirstAnswer().Split(',').Select(s => s.Trim());
+        return string.Join(", ", answers.Select(w => string.Join(" ", w.Split(' ').Select(s => new string(s.Take(Clue).ToArray())))));
+    }
 
     public void Promote(DateTime answerTime)
     {
