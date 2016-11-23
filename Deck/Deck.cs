@@ -3,5 +3,5 @@
 public class Deck
 {
     public IList<Card> Cards { get; set; } = new List<Card>();
-    public WrongAnswer LastWrongAnswer { get; set; } = new WrongAnswer();
+    public LastAnswer LastAnswer { get; set; } = LastAnswer.NullAnswer;
 }

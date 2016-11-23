@@ -18,28 +18,31 @@ namespace Vanki
 
         public static string TestableMain(string[] args, DateTime now)
         {
-            var options = ArgsParser.Parse (args);
+            var options = ArgsParser.Parse(args);
             var deck = Persistence.Load();
 
             string ret = string.Empty;
-
-            if (options.ShowNext)
-                ret = PrintNextQuestion(deck, now);
-            else if (options.Questions.Any() && options.Answers.Any())
-                AddNewCard(now, options, deck);
-            else if (!(options.Answers == null || !options.Answers.Any()))
-                ret = ProcessAnswer(deck, now, options.Answers[0]);
-            else if (options.RevertLastWrongAnswer)
-                ret = RevertLastWrongAnswer(deck, options.RevertLastWrongAnswerAdd);
-            else
-                ret = verbalMessages.WrongCmdArgs;
+            ret = ExecuteAction(now, options, deck, ret);
 
             Persistence.Save(deck);
 
             return ret;
         }
 
-        static void AddNewCard(DateTime now, Options options, Deck deck)
+        static string ExecuteAction(DateTime now, Options options, Deck deck, string ret)
+        {
+            if (options.ShowNext)
+                return PrintNextQuestion(deck, now);
+            if (options.Questions.Any() && options.Answers.Any())
+                return AddNewCard(now, options, deck);
+            if (!(options.Answers == null || !options.Answers.Any()))
+                return ProcessAnswer(deck, now, options.Answers[0]);
+            if (options.RevertLastWrongAnswer)
+                return RevertLastWrongAnswer(deck, options.RevertLastWrongAnswerAdd);
+            return verbalMessages.WrongCmdArgs;
+        }
+
+        static string AddNewCard(DateTime now, Options options, Deck deck)
         {
             deck.Cards.Add(new Card
             {
@@ -47,10 +50,9 @@ namespace Vanki
                 Questions = options.Questions,
                 Answers = options.Answers,
                 CaseSensitiveAnswers = options.CaseSensitive,
-                Clue = 0,
                 LastAnswerTime = now,
-                CurrentInterval = 0
             });
+            return string.Empty;
         }
 
         static Card GetNextCard(Deck deck, DateTime time)
@@ -79,7 +81,7 @@ namespace Vanki
 
         static void TreatCorrectAnswer(Deck deck, DateTime answerTime, Card card)
         {
-            deck.LastWrongAnswer = WrongAnswer.NoWrongAnswer;
+            deck.LastAnswer = LastAnswer.NullAnswer;
             card.Promote(answerTime);
         }
 
@@ -100,9 +102,8 @@ namespace Vanki
 
         static void SetAnswerWrong(Deck deck, string answer, Card card)
         {
-            deck.LastWrongAnswer = new WrongAnswer
+            deck.LastAnswer = new LastAnswer
             {
-                QuestionId = card.Id,
                 Answer = answer,
                 PreviousLapse = card.CurrentInterval
             };
@@ -117,8 +118,13 @@ namespace Vanki
             if (card != null)
                 return GetQuestionPresentation(card);
 
-            var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
+            var nextCardTime = GetNextCard(deck).DueTime;
             return verbalMessages.ThereIsNoNextQuestion + "\n" + verbalMessages.ComeBackAtThisTime + ": " + nextCardTime.ToLocalTime() + " (" + verbalMessages.In + " " + (nextCardTime - answerTime) + ")" + "\n";
+        }
+
+        static Card GetNextCard(Deck deck)
+        {
+            return deck.Cards.OrderBy(c => c.DueTime).First();
         }
 
         static string GetQuestionPresentation(Card card)
@@ -133,31 +139,43 @@ namespace Vanki
 
         static string RevertLastWrongAnswer(Deck deck, bool add)
         {
-            if (deck.LastWrongAnswer.QuestionId == Guid.Empty)
+            if (deck.LastAnswer == LastAnswer.NullAnswer)
                 return verbalMessages.NothingToRevert;
-
-            var lastWrongAnswer = deck.LastWrongAnswer;
-            var card = deck.Cards.First(e => e.Id == lastWrongAnswer.QuestionId);
-
-            card.CurrentInterval = lastWrongAnswer.PreviousLapse;
-            card.DecreaseClue();
-
-            var ret = verbalMessages.RevertLast;
-
-            if (add)
-                ret = AddAnswer(lastWrongAnswer, card);
-
-            deck.LastWrongAnswer = WrongAnswer.NoWrongAnswer;
-
-            return ret;
+            
+            return RevertLastAnswer(deck, add);
         }
 
-        static string AddAnswer(WrongAnswer lastWrongAnswer, Card card)
+        static string RevertLastAnswer(Deck deck, bool add)
         {
-            string ret;
+            var lastAnswer = deck.LastAnswer;
+            deck.LastAnswer = LastAnswer.NullAnswer;
+
+            var card = GetNextCard(deck);
+
+            return UpdateCardFromAnswer(card, add, lastAnswer);
+        }
+
+        static string UpdateCardFromAnswer(Card card, bool add, LastAnswer lastAnswer)
+        {
+            PromoteCardFrom(card, lastAnswer);
+
+            if (add)
+                return AddAnswer(lastAnswer, card);
+
+            return verbalMessages.RevertLast;
+        }
+
+        static void PromoteCardFrom(Card card, LastAnswer lastAnswer)
+        {
+            card.CurrentInterval = lastAnswer.PreviousLapse;
+            card.DecreaseClue();
+
+        }
+
+        static string AddAnswer(LastAnswer lastWrongAnswer, Card card)
+        {
             card.Answers.Add(lastWrongAnswer.Answer);
-            ret = verbalMessages.RevertAddLast;
-            return ret;
+            return verbalMessages.RevertAddLast;
         }
    }
 }

@@ -28,14 +28,13 @@ public static class Persistence {
             deckXml.Add(cardXml);
         }
 
-        if (deck.LastWrongAnswer != WrongAnswer.NoWrongAnswer)
+        if (deck.LastAnswer != LastAnswer.NullAnswer)
         {
 
             deckXml.Add(new XElement("lastWrongAnswer", new[] {
             new XElement("version", 1),
-            new XElement("questionId", deck.LastWrongAnswer.QuestionId),
-            new XElement("answer", deck.LastWrongAnswer.Answer),
-            new XElement("previousLapse", deck.LastWrongAnswer.PreviousLapse)
+            new XElement("answer", deck.LastAnswer.Answer),
+            new XElement("previousLapse", deck.LastAnswer.PreviousLapse)
             }));
         }
 
@@ -55,13 +54,12 @@ public static class Persistence {
         };
     }
 
-    private static WrongAnswer LoadWrongAnswerV1(XElement xml)
+    private static LastAnswer LoadWrongAnswerV1(XElement xml)
     {
         if (xml == null)
-            return WrongAnswer.NoWrongAnswer;
+            return LastAnswer.NullAnswer;
         
-        return new WrongAnswer {
-            QuestionId = Guid.Parse(xml.Element("questionId").Value),
+        return new LastAnswer {
             Answer = xml.Element("answer").Value,
             PreviousLapse = int.Parse(xml.Element("previousLapse").Value)
         };
@@ -106,7 +104,7 @@ public static class Persistence {
             deck.Cards.Add(card);
         }
 
-        deck.LastWrongAnswer = LoadWrongAnswerV1(xml.Element("lastWrongAnswer"));
+        deck.LastAnswer = LoadWrongAnswerV1(xml.Element("lastWrongAnswer"));
 
         return deck;
     }
