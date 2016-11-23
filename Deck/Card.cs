@@ -1,15 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class Card
+public interface ICard
 {
-    public Guid Id { get; set; }
-    public IList<string> Questions { get; set; }
-    public IList<string> Answers { get; set; } = new List<string>();
-    public bool CaseSensitiveAnswers { get; set; }
-    public int Clue { get; set; }
-    public DateTime LastAnswerTime { get; set; }
-    public int CurrentInterval { get; set; }
+    IEnumerable<string> Questions { get; }
+    IEnumerable<string> Answers { get; } 
+    bool CaseSensitiveAnswers { get; }
+    int Clue { get; }
+    DateTime LastAnswerTime { get; }
+    int CurrentInterval { get; }
+    DateTime DueTime { get; }
+
+    void Promote(DateTime answerTime);
+    void Reset();
+    void IncreaseClue();
+    void DecreaseClue();
+    void ResetLapse();
+    void PromoteFrom(int previousLapse);
+    string GetFirstAnswer();
+    void AddAnswer(string answer);
+}
+
+internal class Card : ICard
+{
+    internal Card() { }
+
+    public Card(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now)
+    {
+        Id = Guid.NewGuid();
+        Questions = new List<string>(questions);
+        Answers = new List<string>(answers);
+        CaseSensitiveAnswers = caseSensitive;
+        LastAnswerTime = now;
+
+    }
+
+    internal Guid Id { get; set; }
+
+    public IEnumerable<string> Questions { get; internal set; }
+    public IEnumerable<string> Answers { get; internal set; } = new List<string>();
+
+    public bool CaseSensitiveAnswers { get; internal set; }
+    public int Clue { get; internal set; }
+    public DateTime LastAnswerTime { get; internal set; }
+    public int CurrentInterval { get; internal set; }
 
     public DateTime DueTime
     {
@@ -48,6 +82,22 @@ public class Card
     public void ResetLapse()
     {
         CurrentInterval = 0;
+    }
+
+    public void PromoteFrom(int previousLapse)
+    {
+        CurrentInterval = previousLapse;
+        DecreaseClue();
+    }
+
+    public string GetFirstAnswer()
+    {
+        return ((IList<string>)Answers)[0];
+    }
+
+    public void AddAnswer(string answer)
+    {
+        ((IList<string>)Answers).Add(answer);
     }
 }
 
