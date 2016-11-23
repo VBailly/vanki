@@ -26,17 +26,7 @@ namespace Vanki
             if (options.ShowNext)
                 ret = PrintNextQuestion(deck, now);
             else if (options.Questions.Any() && options.Answers.Any())
-            {
-                deck.Cards.Add(new Card() {
-                    Id = Guid.NewGuid(),
-                    Questions = options.Questions,
-                    Answers = options.Answers,
-                    CaseSensitiveAnswers = options.CaseSensitive,
-                    Clue = 0,
-                    LastAnswerTime = now,
-                    CurrentInterval = 0
-                });
-            }
+                AddNewCard(now, options, deck);
             else if (!(options.Answers == null || !options.Answers.Any()))
                 ret = ProcessAnswer(deck, now, options.Answers[0]);
             else if (options.RevertLastWrongAnswer)
@@ -47,6 +37,20 @@ namespace Vanki
             Persistence.Save(deck);
 
             return ret;
+        }
+
+        static void AddNewCard(DateTime now, Options options, Deck deck)
+        {
+            deck.Cards.Add(new Card()
+            {
+                Id = Guid.NewGuid(),
+                Questions = options.Questions,
+                Answers = options.Answers,
+                CaseSensitiveAnswers = options.CaseSensitive,
+                Clue = 0,
+                LastAnswerTime = now,
+                CurrentInterval = 0
+            });
         }
 
         static Card GetNextCard(Deck deck, DateTime time)
@@ -66,29 +70,42 @@ namespace Vanki
             if (card == null)
                 return verbalMessages.NothingToAnswer;
 
-            string correctAnswer;
+            bool correct = IsAnswerCorrect(answer, card);
 
-            if (card.CaseSensitiveAnswers)
-                correctAnswer = card.Answers.FirstOrDefault(a => a == answer);
+            if (!correct)
+                SetAnswerWrong(deck, answer, card);
             else
-                correctAnswer = card.Answers.FirstOrDefault(a => a.ToLower() == answer.ToLower());
-
-            if (correctAnswer == null)
             {
-                deck.LastWrongAnswer = new WrongAnswer {
-                    QuestionId = card.Id,
-                    Answer = answer,
-                    PreviousLapse = card.CurrentInterval
-                };
-                card.Reset();
-                return string.Empty;
+                deck.LastWrongAnswer = new WrongAnswer();
+                card.Promote(answerTime);
             }
-
-            deck.LastWrongAnswer = new WrongAnswer();
-
-            card.Promote(answerTime);
-
             return string.Empty;
+        }
+
+        static bool IsAnswerCorrect(string answer, Card card)
+        {
+            Func<string, bool> check = GetCheckingFunction(answer, card);
+
+            return card.Answers.Any(check);
+        }
+
+        static Func<string, bool> GetCheckingFunction(string answer, Card card)
+        {
+            if (card.CaseSensitiveAnswers)
+                return a => a == answer;
+            
+            return a => a.ToLower() == answer.ToLower();
+        }
+
+        static void SetAnswerWrong(Deck deck, string answer, Card card)
+        {
+            deck.LastWrongAnswer = new WrongAnswer
+            {
+                QuestionId = card.Id,
+                Answer = answer,
+                PreviousLapse = card.CurrentInterval
+            };
+            card.Reset();
         }
 
         static string PrintNextQuestion (Deck deck, DateTime answerTime)
