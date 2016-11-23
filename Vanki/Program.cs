@@ -123,10 +123,12 @@ namespace Vanki
 
         static string GetQuestionPresentation(Card card)
         {
+            var question = card.Questions.OrderBy(x => Guid.NewGuid()).First();
+
             if (card.Clue == 0)
-                return card.Questions.OrderBy(x => Guid.NewGuid()).First();
-            else
-                return card.Questions.OrderBy(x => Guid.NewGuid()).First() + "\n" + verbalMessages.Clue + ": " + GetHint(card.Answers[0], card.Clue);
+                return question;
+            
+            return question + "\n" + verbalMessages.Clue + ": " + GetHint(card.Answers[0], card.Clue);
         }
 
         static string RevertLastWrongAnswer(Deck deck, bool add)
