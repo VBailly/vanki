@@ -10,12 +10,12 @@ namespace Vanki
         public static int Main (string[] args)
         {
             var result = TestableMain (args, DateTime.UtcNow);
-            if (!string.IsNullOrEmpty(result)) {
-                var ret = result.StartsWith(verbalMessages.ThereIsNoNextQuestion, StringComparison.CurrentCulture) ? 7 : 0;
-                Console.Write (result + "\n");
-                return ret;
-            }
-            return 0;
+            if (string.IsNullOrEmpty(result))
+                return 0;
+            
+            var ret = result.StartsWith(verbalMessages.ThereIsNoNextQuestion, StringComparison.CurrentCulture) ? 7 : 0;
+            Console.Write (result + "\n");
+            return ret;
         }
 
         public static string TestableMain(string[] args, DateTime now)
