@@ -73,11 +73,14 @@ namespace Vanki
             if (!IsAnswerCorrect(answer, card))
                 SetAnswerWrong(deck, answer, card);
             else
-            {
-                deck.LastWrongAnswer = WrongAnswer.NoWrongAnswer;//new WrongAnswer();
-                card.Promote(answerTime);
-            }
+                TreatCorrectAnswer(deck, answerTime, card);
             return string.Empty;
+        }
+
+        static void TreatCorrectAnswer(Deck deck, DateTime answerTime, Card card)
+        {
+            deck.LastWrongAnswer = WrongAnswer.NoWrongAnswer;
+            card.Promote(answerTime);
         }
 
         static bool IsAnswerCorrect(string answer, Card card)
@@ -112,15 +115,18 @@ namespace Vanki
                 return verbalMessages.TheDeckIsEmpty;
             var card = GetNextCard(deck, answerTime);
             if (card != null)
-            {
-                if (card.Clue == 0)
-                    return card.Questions.OrderBy(x => Guid.NewGuid()).First();
-                else
-                    return card.Questions.OrderBy(x => Guid.NewGuid()).First() + "\n" + verbalMessages.Clue + ": " + GetHint(card.Answers[0], card.Clue);
-            }
+                return GetQuestionPresentation(card);
 
             var nextCardTime = deck.Cards.OrderBy(c => c.DueTime).FirstOrDefault().DueTime;
             return verbalMessages.ThereIsNoNextQuestion + "\n" + verbalMessages.ComeBackAtThisTime + ": " + nextCardTime.ToLocalTime() + " (" + verbalMessages.In + " " + (nextCardTime - answerTime) + ")" + "\n";
+        }
+
+        static string GetQuestionPresentation(Card card)
+        {
+            if (card.Clue == 0)
+                return card.Questions.OrderBy(x => Guid.NewGuid()).First();
+            else
+                return card.Questions.OrderBy(x => Guid.NewGuid()).First() + "\n" + verbalMessages.Clue + ": " + GetHint(card.Answers[0], card.Clue);
         }
 
         static string RevertLastWrongAnswer(Deck deck, bool add)
@@ -136,14 +142,20 @@ namespace Vanki
 
             var ret = verbalMessages.RevertLast;
 
-            if (add) {
-                card.Answers.Add(lastWrongAnswer.Answer);
-                ret = verbalMessages.RevertAddLast;
-            }
+            if (add)
+                ret = AddAnswer(lastWrongAnswer, card);
 
-            deck.LastWrongAnswer = new WrongAnswer();
+            deck.LastWrongAnswer = WrongAnswer.NoWrongAnswer;
 
             return ret;
         }
-    }
+
+        static string AddAnswer(WrongAnswer lastWrongAnswer, Card card)
+        {
+            string ret;
+            card.Answers.Add(lastWrongAnswer.Answer);
+            ret = verbalMessages.RevertAddLast;
+            return ret;
+        }
+   }
 }
