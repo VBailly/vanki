@@ -28,12 +28,16 @@ public static class Persistence {
             deckXml.Add(cardXml);
         }
 
-        deckXml.Add(new XElement("lastWrongAnswer", new [] {
+        if (deck.LastWrongAnswer != WrongAnswer.NoWrongAnswer)
+        {
+
+            deckXml.Add(new XElement("lastWrongAnswer", new[] {
             new XElement("version", 1),
             new XElement("questionId", deck.LastWrongAnswer.QuestionId),
             new XElement("answer", deck.LastWrongAnswer.Answer),
             new XElement("previousLapse", deck.LastWrongAnswer.PreviousLapse)
-        }));
+            }));
+        }
 
         Storage.Repository.StoreString(deckXml.ToString());
     }
@@ -53,6 +57,9 @@ public static class Persistence {
 
     private static WrongAnswer LoadWrongAnswerV1(XElement xml)
     {
+        if (xml == null)
+            return WrongAnswer.NoWrongAnswer;
+        
         return new WrongAnswer {
             QuestionId = Guid.Parse(xml.Element("questionId").Value),
             Answer = xml.Element("answer").Value,

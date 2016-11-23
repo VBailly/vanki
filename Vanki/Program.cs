@@ -41,7 +41,7 @@ namespace Vanki
 
         static void AddNewCard(DateTime now, Options options, Deck deck)
         {
-            deck.Cards.Add(new Card()
+            deck.Cards.Add(new Card
             {
                 Id = Guid.NewGuid(),
                 Questions = options.Questions,
@@ -70,13 +70,11 @@ namespace Vanki
             if (card == null)
                 return verbalMessages.NothingToAnswer;
 
-            bool correct = IsAnswerCorrect(answer, card);
-
-            if (!correct)
+            if (!IsAnswerCorrect(answer, card))
                 SetAnswerWrong(deck, answer, card);
             else
             {
-                deck.LastWrongAnswer = new WrongAnswer();
+                deck.LastWrongAnswer = WrongAnswer.NoWrongAnswer;//new WrongAnswer();
                 card.Promote(answerTime);
             }
             return string.Empty;
