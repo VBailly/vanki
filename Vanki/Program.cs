@@ -35,7 +35,7 @@ namespace Vanki
 
         static string ExecuteAction(DateTime now, IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, bool addWithRevert, IDeck deck, Action action)
         {
-            var state = new MyOnlyState(deck, now, verbalMessages);
+            var state = StateFactory.CreateState(deck, now, verbalMessages);
 
             switch (action)
             {
