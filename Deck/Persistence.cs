@@ -4,7 +4,8 @@ using System.Xml.Linq;
 
 public static class Persistence {
 
-    public static void Save(Deck deck) {
+    public static void Save(IDeck theDeck) {
+        var deck = (Deck)theDeck;
         var deckXml = new XElement("Deck");
         deckXml.Add(new XAttribute("version", "2"));
 
@@ -65,7 +66,7 @@ public static class Persistence {
         };
     }
 
-    private static Deck LoadDeckV1(XElement xml)
+    private static IDeck LoadDeckV1(XElement xml)
     {
         var deck = new Deck();
 
@@ -86,7 +87,7 @@ public static class Persistence {
         return deck;
     }
 
-    private static Deck LoadDeckV2(XElement xml)
+    private static IDeck LoadDeckV2(XElement xml)
     {
         var deck = new Deck();
 
@@ -109,7 +110,7 @@ public static class Persistence {
         return deck;
     }
 
-    public static Deck Load() {
+    public static IDeck Load() {
         var content = Storage.Repository.LoadString();
         if (string.IsNullOrEmpty(content))
             return new Deck();

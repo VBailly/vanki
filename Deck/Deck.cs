@@ -2,7 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class Deck
+public interface IDeck
+{
+    void AddNewCard(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now);
+    bool HasPendingQuestion(DateTime answerTime);
+    bool IsAnswerCorrect(string answer);
+    void SetAnswerWrong(string answer, DateTime now);
+    void TreatCorrectAnswer(DateTime now);
+    bool IsEmpty();
+    bool IsAnswerExpected(DateTime now);
+    DateTime GetNextCardDueTime();
+    string GetNextQuestion();
+    bool NextCardNeedsAClue();
+    string GetHint();
+    bool LastAnswerWasWrong();
+    void TreatLastAnswerAsCorrect();
+    void AddLastAnswerAsCorrect();
+}
+
+public class Deck : IDeck
 {
     internal IList<Card> Cards { get; set; } = new List<Card>();
     internal LastAnswer LastAnswer { get; set; } = LastAnswer.NullAnswer;

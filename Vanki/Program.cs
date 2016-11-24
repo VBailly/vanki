@@ -28,7 +28,7 @@ namespace Vanki
             return ret;
         }
 
-        static string ExecuteAction(DateTime now, Options options, Deck deck)
+        static string ExecuteAction(DateTime now, Options options, IDeck deck)
         {
             if (options.ShowNext)
                 return PrintNextQuestion(deck, now);
@@ -41,13 +41,13 @@ namespace Vanki
             return verbalMessages.WrongCmdArgs;
         }
 
-        static string AddNewCard(DateTime now, Options options, Deck deck)
+        static string AddNewCard(DateTime now, Options options, IDeck deck)
         {
             deck.AddNewCard(options.Questions, options.Answers, options.CaseSensitive, now);
             return string.Empty;
         }
 
-        static string ProcessAnswer (Deck deck, DateTime answerTime, string answer)
+        static string ProcessAnswer (IDeck deck, DateTime answerTime, string answer)
         {
 
             if (!deck.HasPendingQuestion(answerTime))
@@ -60,9 +60,7 @@ namespace Vanki
             return string.Empty;
         }
 
-       
-
-        static string PrintNextQuestion (Deck deck, DateTime answerTime)
+        static string PrintNextQuestion (IDeck deck, DateTime answerTime)
         {
             if (deck.IsEmpty())
                 return verbalMessages.TheDeckIsEmpty;
@@ -73,14 +71,13 @@ namespace Vanki
             return GetQuestionPresentation(deck);
         }
 
-        static string WaitABitPresentation(Deck deck, DateTime answerTime)
+        static string WaitABitPresentation(IDeck deck, DateTime answerTime)
         {
             var nextCardTime = deck.GetNextCardDueTime();
             return verbalMessages.ThereIsNoNextQuestion + "\n" + verbalMessages.ComeBackAtThisTime + ": " + nextCardTime.ToLocalTime() + " (" + verbalMessages.In + " " + (nextCardTime - answerTime) + ")" + "\n";
         }
 
-
-        static string GetQuestionPresentation(Deck deck)
+        static string GetQuestionPresentation(IDeck deck)
         {
             var question = deck.GetNextQuestion();
 
@@ -90,7 +87,7 @@ namespace Vanki
             return question + "\n" + verbalMessages.Clue + ": " + deck.GetHint();
         }
 
-        static string RevertLastWrongAnswer(Deck deck, bool add)
+        static string RevertLastWrongAnswer(IDeck deck, bool add)
         {
             if (!deck.LastAnswerWasWrong())
                 return verbalMessages.NothingToRevert;
@@ -98,7 +95,7 @@ namespace Vanki
             return RevertLastAnswer(deck, add);
         }
 
-        static string RevertLastAnswer(Deck deck, bool add)
+        static string RevertLastAnswer(IDeck deck, bool add)
         {
             var ret = verbalMessages.RevertLast;
 
@@ -110,7 +107,7 @@ namespace Vanki
             return ret;
         }
 
-        static string AddLastAnwerAsCorrect(Deck deck)
+        static string AddLastAnwerAsCorrect(IDeck deck)
         {
             deck.AddLastAnswerAsCorrect();
             return verbalMessages.RevertAddLast;
