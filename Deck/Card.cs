@@ -4,12 +4,11 @@ using System.Linq;
 
 public interface ICard
 {
-    IEnumerable<string> Questions { get; }
+    // IEnumerable<string> Questions { get; }
     IEnumerable<string> Answers { get; }
 
     DateTime DueTime { get; }
 
-    //void Reset();
     void IncreaseClue();
     void DecreaseClue();
     void ResetLapse();

@@ -41,6 +41,12 @@ public class Deck
         ((Card)GetNextCardBefore(now)).Promote(now);
     }
 
+    public string GetNextQuestion()
+    {
+        return ((Card)GetNextCard()).Questions.OrderBy(x => Guid.NewGuid()).First();
+
+    }
+
     public void SetAnswerWrong(string answer, DateTime now)
     {
         SaveLastAnswer(answer, now);
@@ -58,6 +64,7 @@ public class Deck
         LastAnswer = LastAnswer.NullAnswer;
     }
 }
+
 
 
 

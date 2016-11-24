@@ -71,7 +71,7 @@ namespace Vanki
                 return WaitABitPresentation(deck, answerTime);
 
             var card = deck.GetNextCardBefore(answerTime);
-            return GetQuestionPresentation(card);
+            return GetQuestionPresentation(card, deck);
         }
 
         static string WaitABitPresentation(Deck deck, DateTime answerTime)
@@ -81,9 +81,9 @@ namespace Vanki
         }
 
 
-        static string GetQuestionPresentation(ICard card)
+        static string GetQuestionPresentation(ICard card, Deck deck)
         {
-            var question = card.Questions.OrderBy(x => Guid.NewGuid()).First();
+            var question = deck.GetNextQuestion();
 
             if (!card.NeedsAClue())
                 return question;
