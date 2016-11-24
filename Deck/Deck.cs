@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 
+public enum DeckState
+{
+    Empty,
+    PendingCard,
+    NoPendingCard
+}
+
 public interface IDeck
 {
     void AddNewCard(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now);
-    bool HasPendingQuestion(DateTime answerTime);
     bool IsAnswerCorrect(string answer);
     void SetAnswerWrong(string answer, DateTime now);
     void TreatCorrectAnswer(DateTime now);
-    bool IsEmpty();
-    bool IsAnswerExpected(DateTime now);
     DateTime GetNextCardDueTime();
     string GetNextQuestion();
     bool NextCardNeedsAClue();
@@ -18,10 +22,22 @@ public interface IDeck
     bool LastAnswerWasWrong();
     void TreatLastAnswerAsCorrect();
     void AddLastAnswerAsCorrect();
+    DeckState GetState(DateTime now);
 }
 
 public class Deck : IDeck
 {
+
+    public DeckState GetState(DateTime now)
+    {
+        if (IsEmpty())
+            return DeckState.Empty;
+        if (IsAnswerExpected(now))
+            return DeckState.PendingCard;
+
+        return DeckState.NoPendingCard;
+    }
+
     internal IList<Card> Cards { get; set; } = new List<Card>();
     internal LastAnswer LastAnswer { get; set; } = LastAnswer.NullAnswer;
 
@@ -35,7 +51,7 @@ public class Deck : IDeck
         return Cards.OrderBy(c => c.DueTime).FirstOrDefault();
     }
 
-    public bool IsEmpty()
+    private bool IsEmpty()
     {
         return !Cards.Any();
     }
@@ -45,7 +61,7 @@ public class Deck : IDeck
         Cards.Add(new Card(questions, answers, caseSensitive, now));
     }
 
-    public bool IsAnswerExpected(DateTime now)
+    private bool IsAnswerExpected(DateTime now)
     {
         return GetNextCardBefore(now) != null;
     }

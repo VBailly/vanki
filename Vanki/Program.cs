@@ -78,7 +78,7 @@ namespace Vanki
         static string ProcessAnswer (IDeck deck, DateTime answerTime, string answer)
         {
 
-            if (!deck.HasPendingQuestion(answerTime))
+            if (deck.GetState(answerTime) != DeckState.PendingCard)
                 return verbalMessages.NothingToAnswer;
 
             if (!deck.IsAnswerCorrect(answer))
@@ -90,10 +90,12 @@ namespace Vanki
 
         static string PrintNextQuestion (IDeck deck, DateTime answerTime)
         {
-            if (deck.IsEmpty())
+            var state = deck.GetState(answerTime);
+
+            if (state == DeckState.Empty)
                 return verbalMessages.TheDeckIsEmpty;
 
-            if (!deck.IsAnswerExpected(answerTime))
+            if (state == DeckState.NoPendingCard)
                 return WaitABitPresentation(deck, answerTime);
 
             return GetQuestionPresentation(deck);
