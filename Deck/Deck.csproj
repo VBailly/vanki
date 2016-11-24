@@ -37,6 +37,7 @@
     <Compile Include="Card.cs" />
     <Compile Include="Persistence.cs" />
     <Compile Include="LastAnswer.cs" />
+    <Compile Include="OnDiskDeck.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Storage\Storage.csproj">

@@ -46,7 +46,6 @@
     <Compile Include="States\State.cs" />
     <Compile Include="States\StateFactory.cs" />
     <Compile Include="States\EmptyState.cs" />
-    <Compile Include="OnDiskDeck.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

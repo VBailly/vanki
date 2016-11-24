@@ -2,8 +2,6 @@ using System;
 
 namespace Vanki
 {
-    
-
     public class WithoutPendingCardState : State
     {
 
