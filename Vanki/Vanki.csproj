@@ -40,10 +40,11 @@
     <Compile Include="ArgsParser.cs" />
     <Compile Include="EnglishMessages.cs" />
     <Compile Include="IVerbalMessages.cs" />
-    <Compile Include="MyOnlyState.cs" />
+    <Compile Include="EmptyState.cs" />
     <Compile Include="State.cs" />
     <Compile Include="Action.cs" />
     <Compile Include="StateFactory.cs" />
+    <Compile Include="MyOnlyState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
