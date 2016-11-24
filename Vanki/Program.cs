@@ -76,7 +76,7 @@ namespace Vanki
 
         static string WaitABitPresentation(Deck deck, DateTime answerTime)
         {
-            var nextCardTime = deck.GetNextCard().DueTime;
+            var nextCardTime = deck.GetNextCardDueTime();
             return verbalMessages.ThereIsNoNextQuestion + "\n" + verbalMessages.ComeBackAtThisTime + ": " + nextCardTime.ToLocalTime() + " (" + verbalMessages.In + " " + (nextCardTime - answerTime) + ")" + "\n";
         }
 

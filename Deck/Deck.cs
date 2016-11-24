@@ -41,6 +41,11 @@ public class Deck
         ((Card)GetNextCardBefore(now)).Promote(now);
     }
 
+    public DateTime GetNextCardDueTime()
+    {
+        return ((Card)GetNextCard()).DueTime;
+    }
+
     public string GetNextQuestion()
     {
         return ((Card)GetNextCard()).Questions.OrderBy(x => Guid.NewGuid()).First();

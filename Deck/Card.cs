@@ -4,10 +4,7 @@ using System.Linq;
 
 public interface ICard
 {
-    // IEnumerable<string> Questions { get; }
-    IEnumerable<string> Answers { get; }
-
-    DateTime DueTime { get; }
+    // DateTime DueTime { get; }
 
     void IncreaseClue();
     void DecreaseClue();
