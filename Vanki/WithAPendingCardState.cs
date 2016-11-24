@@ -20,7 +20,12 @@ namespace Vanki
 
         public override string PrintNextQuestion()
         {
-            return GetQuestionPresentation();
+            var question = deck.GetNextQuestion();
+
+            if (!deck.NextCardNeedsAClue())
+                return question;
+
+            return question + "\n" + verbalMessages.Clue + ": " + deck.GetHint();
         }
 
         public override string RevertLastWrongAnswer(bool add)
@@ -29,16 +34,6 @@ namespace Vanki
                 return verbalMessages.NothingToRevert;
 
             return RevertLastAnswer(add);
-        }
-
-        string GetQuestionPresentation()
-        {
-            var question = deck.GetNextQuestion();
-
-            if (!deck.NextCardNeedsAClue())
-                return question;
-
-            return question + "\n" + verbalMessages.Clue + ": " + deck.GetHint();
         }
 
         string RevertLastAnswer(bool add)
