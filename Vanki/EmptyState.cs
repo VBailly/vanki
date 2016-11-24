@@ -5,9 +5,8 @@ namespace Vanki
 {
     public class EmptyState : State
     {
-        public EmptyState(IDeck deck, DateTime now, IVerbalMessages verbalMessages) : base(deck, now, verbalMessages)
-        {
-        }
+        public EmptyState(IDeck deck, DateTime now, IVerbalMessages verbalMessages) 
+            : base(deck, now, verbalMessages) { }
 
         public override string ProcessAnswer(string answer)
         {

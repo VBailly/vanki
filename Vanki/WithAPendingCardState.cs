@@ -5,9 +5,8 @@ namespace Vanki
     public class WithAPendingCardState : State
     {
 
-        public WithAPendingCardState(IDeck deck, DateTime now, IVerbalMessages verbalMessages) : base(deck, now, verbalMessages)
-        {
-        }
+        public WithAPendingCardState(IDeck deck, DateTime now, IVerbalMessages verbalMessages) 
+            : base(deck, now, verbalMessages) { }
 
         public override string ProcessAnswer(string answer)
         {
