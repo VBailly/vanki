@@ -14,6 +14,7 @@ namespace Vanki
         public bool CaseSensitive { get; set; }
         public bool RevertLastWrongAnswer { get; set; }
         public bool RevertLastWrongAnswerAdd { get; set; }
+        public Action Action { get; set; }
     }
 
     public static class ArgsParser
@@ -37,7 +38,27 @@ namespace Vanki
             };
             p.Parse (args);
 
+            opt.Action = GetAction(opt);
+
             return opt;
+        }
+
+        private static Action GetAction(Options options)
+        {
+            if (options.ShowNext)
+                return Action.PrintNextQuestion;
+
+            if (options.Questions.Any() && options.Answers.Any())
+                return Action.AddCard;
+
+            if (!(options.Answers == null || !options.Answers.Any()))
+                return Action.Answer;
+
+            if (options.RevertLastWrongAnswer)
+                return Action.Revert;
+
+            return Action.Nothing;
+
         }
     }
 }

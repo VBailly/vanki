@@ -30,6 +30,10 @@ namespace Vanki
         public static string TestableMain(string[] args, DateTime now)
         {
             var options = ArgsParser.Parse(args);
+
+            if (options.Action == Action.Nothing)
+                return verbalMessages.WrongCmdArgs;
+
             var deck = Persistence.Load();
 
             var ret = ExecuteActionFromOption(now, options, deck);
@@ -41,25 +45,7 @@ namespace Vanki
 
         static string ExecuteActionFromOption(DateTime now, Options options, IDeck deck)
         {
-            Action action = GetActionFromOptions(options);
-
-
-
-            return ExecuteAction(now, options.Questions, options.Answers, options.CaseSensitive, options.RevertLastWrongAnswerAdd, deck, action);
-        }
-
-        static Action GetActionFromOptions(Options options)
-        {
-            if (options.ShowNext)
-                return Action.PrintNextQuestion;
-            if (options.Questions.Any() && options.Answers.Any())
-                return Action.AddCard;
-            if (!(options.Answers == null || !options.Answers.Any()))
-                return Action.Answer;
-            if (options.RevertLastWrongAnswer)
-                return Action.Revert;
-            return Action.Nothing;
-
+            return ExecuteAction(now, options.Questions, options.Answers, options.CaseSensitive, options.RevertLastWrongAnswerAdd, deck, options.Action);
         }
 
         static string ExecuteAction(DateTime now, IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, bool addWithRevert, IDeck deck, Action action)
@@ -68,14 +54,18 @@ namespace Vanki
             {
                 case (Action.AddCard):
                     return AddNewCard(now, questions, answers, caseSensitive, deck);
+                    
                 case (Action.Answer):
-                return ProcessAnswer(deck, now, answers.First());
+                    return ProcessAnswer(deck, now, answers.First());
+                    
                 case (Action.PrintNextQuestion):
                     return PrintNextQuestion(deck, now);
+                    
                 case (Action.Revert):
-                return RevertLastWrongAnswer(deck, addWithRevert);
+                    return RevertLastWrongAnswer(deck, addWithRevert);
+                    
                 default:
-                    return verbalMessages.WrongCmdArgs;
+                    return string.Empty;
             }
         }
 
