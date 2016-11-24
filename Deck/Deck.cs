@@ -4,17 +4,22 @@ using System.Linq;
 
 public class Deck
 {
-    public IList<ICard> Cards { get; set; } = new List<ICard>();
-    public LastAnswer LastAnswer { get; internal set; } = LastAnswer.NullAnswer;
+    internal IList<Card> Cards { get; set; } = new List<Card>();
+    internal LastAnswer LastAnswer { get; set; } = LastAnswer.NullAnswer;
 
-    public ICard GetNextCardBefore(DateTime time)
+    private Card GetNextCardBefore(DateTime time)
     {
-        return Cards.Where(c => ((Card)c).DueTime <= time).OrderBy(c => ((Card)c).DueTime).FirstOrDefault();
+        return Cards.Where(c => c.DueTime <= time).OrderBy(c => c.DueTime).FirstOrDefault();
     }
 
-    public ICard GetNextCard()
+    private Card GetNextCard()
     {
-        return Cards.OrderBy(c => ((Card)c).DueTime).FirstOrDefault();
+        return Cards.OrderBy(c => c.DueTime).FirstOrDefault();
+    }
+
+    public bool IsEmpty()
+    {
+        return !Cards.Any();
     }
 
     public void AddNewCard(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now)
@@ -32,30 +37,30 @@ public class Deck
         LastAnswer = new LastAnswer
         {
             Answer = lastAnswer,
-            PreviousLapse = ((Card)GetNextCardBefore(now)).CurrentInterval
+            PreviousLapse = GetNextCardBefore(now).CurrentInterval
         };
     }
 
     public void TreatCorrectAnswer(DateTime now)
     {
-        ((Card)GetNextCardBefore(now)).Promote(now);
+        GetNextCardBefore(now).Promote(now);
     }
 
     public DateTime GetNextCardDueTime()
     {
-        return ((Card)GetNextCard()).DueTime;
+        return GetNextCard().DueTime;
     }
 
     public string GetNextQuestion()
     {
-        return ((Card)GetNextCard()).Questions.OrderBy(x => Guid.NewGuid()).First();
+        return GetNextCard().Questions.OrderBy(x => Guid.NewGuid()).First();
 
     }
 
     public void SetAnswerWrong(string answer, DateTime now)
     {
         SaveLastAnswer(answer, now);
-        ((Card)GetNextCard()).Reset();
+        GetNextCard().Reset();
     }
 
     public void AddLastAnswerAsCorrect()
@@ -63,12 +68,46 @@ public class Deck
         GetNextCard().AddAnswer(LastAnswer.Answer);
     }
 
+    public string GetHint()
+    {
+        return GetNextCard().GetHint();
+    }
+
     public void TreatLastAnswerAsCorrect()
     {
         GetNextCard().PromoteFrom(LastAnswer.PreviousLapse);
         LastAnswer = LastAnswer.NullAnswer;
     }
+
+    public bool IsAnswerCorrect(string answer)
+    {
+        return GetNextCard().IsAnswerCorrect(answer);
+    }
+
+    public bool NextCardNeedsAClue()
+    {
+        return GetNextCard().NeedsAClue();
+    }
+
+    public bool HasPendingQuestion(DateTime answerTime)
+    {
+        return GetNextCardBefore(answerTime) != null;
+    }
+    public bool LastAnswerWasWrong()
+    {
+        return LastAnswer != LastAnswer.NullAnswer;
+    }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -49,11 +49,11 @@ namespace Vanki
 
         static string ProcessAnswer (Deck deck, DateTime answerTime, string answer)
         {
-            var card = deck.GetNextCardBefore(answerTime);
-            if (card == null)
+
+            if (!deck.HasPendingQuestion(answerTime))
                 return verbalMessages.NothingToAnswer;
 
-            if (!card.IsAnswerCorrect(answer))
+            if (!deck.IsAnswerCorrect(answer))
                 deck.SetAnswerWrong(answer, answerTime);
             else
                 deck.TreatCorrectAnswer(answerTime);
@@ -64,14 +64,13 @@ namespace Vanki
 
         static string PrintNextQuestion (Deck deck, DateTime answerTime)
         {
-            if (!deck.Cards.Any())
+            if (deck.IsEmpty())
                 return verbalMessages.TheDeckIsEmpty;
 
             if (!deck.IsAnswerExpected(answerTime))
                 return WaitABitPresentation(deck, answerTime);
 
-            var card = deck.GetNextCardBefore(answerTime);
-            return GetQuestionPresentation(card, deck);
+            return GetQuestionPresentation(deck);
         }
 
         static string WaitABitPresentation(Deck deck, DateTime answerTime)
@@ -81,19 +80,19 @@ namespace Vanki
         }
 
 
-        static string GetQuestionPresentation(ICard card, Deck deck)
+        static string GetQuestionPresentation(Deck deck)
         {
             var question = deck.GetNextQuestion();
 
-            if (!card.NeedsAClue())
+            if (!deck.NextCardNeedsAClue())
                 return question;
             
-            return question + "\n" + verbalMessages.Clue + ": " + card.GetHint();
+            return question + "\n" + verbalMessages.Clue + ": " + deck.GetHint();
         }
 
         static string RevertLastWrongAnswer(Deck deck, bool add)
         {
-            if (deck.LastAnswer == LastAnswer.NullAnswer)
+            if (!deck.LastAnswerWasWrong())
                 return verbalMessages.NothingToRevert;
             
             return RevertLastAnswer(deck, add);

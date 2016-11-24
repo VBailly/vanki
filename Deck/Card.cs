@@ -2,22 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public interface ICard
-{
-    // DateTime DueTime { get; }
 
-    void IncreaseClue();
-    void DecreaseClue();
-    void ResetLapse();
-    void PromoteFrom(int previousLapse);
-    void AddAnswer(string answer);
-    string GetHint();
-    bool IsAnswerCorrect(string answer);
-    bool NeedsAClue();
-}
-
-
-internal class Card : ICard
+internal class Card
 {
     internal Card() { }
 
