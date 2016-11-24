@@ -32,16 +32,25 @@ namespace Vanki
             return RevertLastAnswer(add);
         }
 
+        string RevertLastAnswerAndAdd()
+        {
+            deck.AddLastAnswerAsCorrect();
+            deck.TreatLastAnswerAsCorrect();
+            return verbalMessages.RevertAddLast;
+        }
+
+        string RevertLastAnswer()
+        {
+            deck.TreatLastAnswerAsCorrect();
+            return verbalMessages.RevertLast;
+        }
+
         string RevertLastAnswer(bool add)
         {
-            var ret = verbalMessages.RevertLast;
-
             if (add)
-                ret = AddLastAnwerAsCorrect();
-
-            deck.TreatLastAnswerAsCorrect();
-
-            return ret;
+                return RevertLastAnswerAndAdd();
+            
+            return RevertLastAnswer();
         }
 
         string AddLastAnwerAsCorrect()
