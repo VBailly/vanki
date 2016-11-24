@@ -32,7 +32,7 @@ public class Deck
         LastAnswer = LastAnswer.NullAnswer;
     }
 
-    public void SaveLastAnswer(string lastAnswer, DateTime now)
+    private void SaveLastAnswer(string lastAnswer, DateTime now)
     {
         LastAnswer = new LastAnswer
         {
@@ -45,5 +45,11 @@ public class Deck
     {
         ResetLastAnswer();
         ((Card)GetNextCardBefore(now)).Promote(now);
+    }
+
+    public void SetAnswerWrong(string answer, DateTime now)
+    {
+        SaveLastAnswer(answer, now);
+        ((Card)GetNextCard()).Reset();
     }
 }

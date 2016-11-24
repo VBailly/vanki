@@ -9,7 +9,7 @@ public interface ICard
 
     DateTime DueTime { get; }
 
-    void Reset();
+    //void Reset();
     void IncreaseClue();
     void DecreaseClue();
     void ResetLapse();

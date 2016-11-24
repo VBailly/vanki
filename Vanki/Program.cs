@@ -54,17 +54,13 @@ namespace Vanki
                 return verbalMessages.NothingToAnswer;
 
             if (!card.IsAnswerCorrect(answer))
-                SetAnswerWrong(deck, answer, card, answerTime);
+                deck.SetAnswerWrong(answer, answerTime);
             else
                 deck.TreatCorrectAnswer(answerTime);
             return string.Empty;
         }
 
-        static void SetAnswerWrong(Deck deck, string answer, ICard card, DateTime now)
-        {
-            deck.SaveLastAnswer(answer, now);
-            card.Reset();
-        }
+       
 
         static string PrintNextQuestion (Deck deck, DateTime answerTime)
         {
