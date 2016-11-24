@@ -1,8 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Vanki
 {
+
+    public enum Action
+    {
+        AddCard,
+        Revert,
+        Answer,
+        PrintNextQuestion,
+        Nothing
+    }
+
     public class MainClass
     {
         static IVerbalMessages verbalMessages = new EnglishMessages();
@@ -30,20 +41,40 @@ namespace Vanki
 
         static string ExecuteAction(DateTime now, Options options, IDeck deck)
         {
-            if (options.ShowNext)
-                return PrintNextQuestion(deck, now);
-            if (options.Questions.Any() && options.Answers.Any())
-                return AddNewCard(now, options, deck);
-            if (!(options.Answers == null || !options.Answers.Any()))
-                return ProcessAnswer(deck, now, options.Answers[0]);
-            if (options.RevertLastWrongAnswer)
-                return RevertLastWrongAnswer(deck, options.RevertLastWrongAnswerAdd);
-            return verbalMessages.WrongCmdArgs;
+            Action action = GetActionFromOptions(options);
+
+            switch (action)
+            {
+                case (Action.AddCard):
+                    return AddNewCard(now, options.Questions, options.Answers, options.CaseSensitive, deck);
+                case (Action.Answer):
+                    return ProcessAnswer(deck, now, options.Answers[0]);
+                case (Action.PrintNextQuestion):
+                    return PrintNextQuestion(deck, now);
+                case (Action.Revert):
+                    return RevertLastWrongAnswer(deck, options.RevertLastWrongAnswerAdd);
+                default:
+                    return verbalMessages.WrongCmdArgs;
+            }
         }
 
-        static string AddNewCard(DateTime now, Options options, IDeck deck)
+        static Action GetActionFromOptions(Options options)
         {
-            deck.AddNewCard(options.Questions, options.Answers, options.CaseSensitive, now);
+            if (options.ShowNext)
+                return Action.PrintNextQuestion;
+            if (options.Questions.Any() && options.Answers.Any())
+                return Action.AddCard;
+            if (!(options.Answers == null || !options.Answers.Any()))
+                return Action.Answer;
+            if (options.RevertLastWrongAnswer)
+                return Action.Revert;
+            return Action.Nothing;
+
+        }
+
+        static string AddNewCard(DateTime now, IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, IDeck deck)
+        {
+            deck.AddNewCard(questions, answers, caseSensitive, now);
             return string.Empty;
         }
 
