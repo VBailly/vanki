@@ -27,11 +27,6 @@ public class Deck
         return GetNextCardBefore(now) != null;
     }
 
-    public void ResetLastAnswer()
-    {
-        LastAnswer = LastAnswer.NullAnswer;
-    }
-
     private void SaveLastAnswer(string lastAnswer, DateTime now)
     {
         LastAnswer = new LastAnswer
@@ -43,7 +38,6 @@ public class Deck
 
     public void TreatCorrectAnswer(DateTime now)
     {
-        ResetLastAnswer();
         ((Card)GetNextCardBefore(now)).Promote(now);
     }
 
@@ -52,4 +46,18 @@ public class Deck
         SaveLastAnswer(answer, now);
         ((Card)GetNextCard()).Reset();
     }
+
+    public void AddLastAnswerAsCorrect()
+    {
+        GetNextCard().AddAnswer(LastAnswer.Answer);
+    }
+
+    public void TreatLastAnswerAsCorrect()
+    {
+        GetNextCard().PromoteFrom(LastAnswer.PreviousLapse);
+        LastAnswer = LastAnswer.NullAnswer;
+    }
 }
+
+
+

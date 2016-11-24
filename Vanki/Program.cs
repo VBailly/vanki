@@ -101,27 +101,19 @@ namespace Vanki
 
         static string RevertLastAnswer(Deck deck, bool add)
         {
-            var lastAnswer = deck.LastAnswer;
-            deck.ResetLastAnswer();
-
-            var card = deck.GetNextCard();
-
-            return UpdateCardFromAnswer(card, add, lastAnswer);
-        }
-
-        static string UpdateCardFromAnswer(ICard card, bool add, LastAnswer lastAnswer)
-        {
-            card.PromoteFrom(lastAnswer.PreviousLapse);
+            var ret = verbalMessages.RevertLast;
 
             if (add)
-                return AddAnswer(lastAnswer, card);
+                ret = AddLastAnwerAsCorrect(deck);
+            
+            deck.TreatLastAnswerAsCorrect();
 
-            return verbalMessages.RevertLast;
+            return ret;
         }
 
-        static string AddAnswer(LastAnswer lastWrongAnswer, ICard card)
+        static string AddLastAnwerAsCorrect(Deck deck)
         {
-            card.AddAnswer(lastWrongAnswer.Answer);
+            deck.AddLastAnswerAsCorrect();
             return verbalMessages.RevertAddLast;
         }
    }
