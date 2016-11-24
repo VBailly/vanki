@@ -4,81 +4,6 @@ using System.Linq;
 
 namespace Vanki
 {
-    public class INeedToFindAName : IDeck, IDisposable
-    {
-        readonly IDeck deck;
-
-        public INeedToFindAName()
-        {
-            deck = Persistence.Load();
-        }
-
-        public void AddLastAnswerAsCorrect()
-        {
-            deck.AddLastAnswerAsCorrect();
-        }
-
-        public void AddNewCard(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now)
-        {
-            deck.AddNewCard(questions, answers, caseSensitive, now);
-        }
-
-        public void Dispose()
-        {
-            Persistence.Save(deck);
-        }
-
-        public string GetHint()
-        {
-            return deck.GetHint();
-        }
-
-        public DateTime GetNextCardDueTime()
-        {
-            return deck.GetNextCardDueTime();
-        }
-
-        public string GetNextQuestion()
-        {
-            return deck.GetNextQuestion();
-        }
-
-        public DeckState GetState(DateTime now)
-        {
-            return deck.GetState(now);
-        }
-
-        public bool IsAnswerCorrect(string answer)
-        {
-            return deck.IsAnswerCorrect(answer);
-        }
-
-        public bool LastAnswerWasWrong()
-        {
-            return deck.LastAnswerWasWrong();
-        }
-
-        public bool NextCardNeedsAClue()
-        {
-            return deck.NextCardNeedsAClue();
-        }
-
-        public void SetAnswerWrong(string answer, DateTime now)
-        {
-            deck.SetAnswerWrong(answer, now);
-        }
-
-        public void TreatCorrectAnswer(DateTime now)
-        {
-            deck.TreatCorrectAnswer(now);
-        }
-
-        public void TreatLastAnswerAsCorrect()
-        {
-            deck.TreatLastAnswerAsCorrect();
-        }
-    }
-
     public class MainClass
     {
         static IVerbalMessages verbalMessages = new EnglishMessages();
@@ -96,10 +21,10 @@ namespace Vanki
         {
             var options = ArgsParser.Parse(args);
 
-            if (options.Action == Action.Nothing)
+            if (options.Action == Action.Invalid)
                 return verbalMessages.WrongCmdArgs;
 
-            using (var deck = new INeedToFindAName())
+            using (var deck = new OnDiskDeck())
             {
                 return ExecuteAction(now, options.Questions, options.Answers, options.CaseSensitive, options.RevertLastWrongAnswerAdd, deck, options.Action);
             }

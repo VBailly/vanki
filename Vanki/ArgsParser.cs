@@ -57,7 +57,7 @@ namespace Vanki
             if (options.RevertLastWrongAnswer)
                 return Action.Revert;
 
-            return Action.Nothing;
+            return Action.Invalid;
 
         }
     }

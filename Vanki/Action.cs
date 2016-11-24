@@ -11,7 +11,7 @@ namespace Vanki
         Revert,
         Answer,
         PrintNextQuestion,
-        Nothing
+        Invalid
     }
     
 }
