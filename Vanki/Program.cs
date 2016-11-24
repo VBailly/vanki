@@ -32,30 +32,20 @@ namespace Vanki
             var options = ArgsParser.Parse(args);
             var deck = Persistence.Load();
 
-            var ret = ExecuteAction(now, options, deck);
+            var ret = ExecuteActionFromOption(now, options, deck);
 
             Persistence.Save(deck);
 
             return ret;
         }
 
-        static string ExecuteAction(DateTime now, Options options, IDeck deck)
+        static string ExecuteActionFromOption(DateTime now, Options options, IDeck deck)
         {
             Action action = GetActionFromOptions(options);
 
-            switch (action)
-            {
-                case (Action.AddCard):
-                    return AddNewCard(now, options.Questions, options.Answers, options.CaseSensitive, deck);
-                case (Action.Answer):
-                    return ProcessAnswer(deck, now, options.Answers[0]);
-                case (Action.PrintNextQuestion):
-                    return PrintNextQuestion(deck, now);
-                case (Action.Revert):
-                    return RevertLastWrongAnswer(deck, options.RevertLastWrongAnswerAdd);
-                default:
-                    return verbalMessages.WrongCmdArgs;
-            }
+
+
+            return ExecuteAction(now, options.Questions, options.Answers, options.CaseSensitive, options.RevertLastWrongAnswerAdd, deck, action);
         }
 
         static Action GetActionFromOptions(Options options)
@@ -70,6 +60,23 @@ namespace Vanki
                 return Action.Revert;
             return Action.Nothing;
 
+        }
+
+        static string ExecuteAction(DateTime now, IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, bool addWithRevert, IDeck deck, Action action)
+        {
+            switch (action)
+            {
+                case (Action.AddCard):
+                    return AddNewCard(now, questions, answers, caseSensitive, deck);
+                case (Action.Answer):
+                return ProcessAnswer(deck, now, answers.First());
+                case (Action.PrintNextQuestion):
+                    return PrintNextQuestion(deck, now);
+                case (Action.Revert):
+                return RevertLastWrongAnswer(deck, addWithRevert);
+                default:
+                    return verbalMessages.WrongCmdArgs;
+            }
         }
 
         static string AddNewCard(DateTime now, IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, IDeck deck)
