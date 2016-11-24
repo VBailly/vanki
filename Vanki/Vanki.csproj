@@ -44,7 +44,8 @@
     <Compile Include="State.cs" />
     <Compile Include="Action.cs" />
     <Compile Include="StateFactory.cs" />
-    <Compile Include="MyOnlyState.cs" />
+    <Compile Include="WithoutPendingCardState.cs" />
+    <Compile Include="WithAPendingCardState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
