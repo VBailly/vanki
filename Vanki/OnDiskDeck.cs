@@ -48,11 +48,6 @@ namespace Vanki
             return deck.GetState(now);
         }
 
-        public bool IsAnswerCorrect(string answer)
-        {
-            return deck.IsAnswerCorrect(answer);
-        }
-
         public bool LastAnswerWasWrong()
         {
             return deck.LastAnswerWasWrong();
@@ -63,14 +58,9 @@ namespace Vanki
             return deck.NextCardNeedsAClue();
         }
 
-        public void SetAnswerWrong(string answer, DateTime now)
+        public void ProcessAnswer(string answer, DateTime now)
         {
-            deck.SetAnswerWrong(answer, now);
-        }
-
-        public void TreatCorrectAnswer(DateTime now)
-        {
-            deck.TreatCorrectAnswer(now);
+            deck.ProcessAnswer(answer, now);
         }
 
         public void TreatLastAnswerAsCorrect()

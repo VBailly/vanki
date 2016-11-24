@@ -10,10 +10,7 @@ namespace Vanki
 
         public override string ProcessAnswer(string answer)
         {
-            if (!deck.IsAnswerCorrect(answer))
-                deck.SetAnswerWrong(answer, now);
-            else
-                deck.TreatCorrectAnswer(now);
+            deck.ProcessAnswer(answer, now);
             return string.Empty;
         }
 

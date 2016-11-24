@@ -6,7 +6,7 @@ namespace Vanki
 {
     public class MainClass
     {
-        static IVerbalMessages verbalMessages = new EnglishMessages();
+        static readonly IVerbalMessages verbalMessages = new EnglishMessages();
 
         public static int Main (string[] args)
         {

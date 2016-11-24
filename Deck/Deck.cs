@@ -12,9 +12,6 @@ public enum DeckState
 public interface IDeck
 {
     void AddNewCard(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now);
-    bool IsAnswerCorrect(string answer);
-    void SetAnswerWrong(string answer, DateTime now);
-    void TreatCorrectAnswer(DateTime now);
     DateTime GetNextCardDueTime();
     string GetNextQuestion();
     bool NextCardNeedsAClue();
@@ -23,10 +20,18 @@ public interface IDeck
     void TreatLastAnswerAsCorrect();
     void AddLastAnswerAsCorrect();
     DeckState GetState(DateTime now);
+    void ProcessAnswer(string answer, DateTime now);
 }
 
 public class Deck : IDeck
 {
+    public void ProcessAnswer(string answer, DateTime now)
+    {
+        if (!IsAnswerCorrect(answer))
+            SetAnswerWrong(answer, now);
+        else
+            TreatCorrectAnswer(now);
+    }
 
     public DeckState GetState(DateTime now)
     {
@@ -75,7 +80,7 @@ public class Deck : IDeck
         };
     }
 
-    public void TreatCorrectAnswer(DateTime now)
+    void TreatCorrectAnswer(DateTime now)
     {
         GetNextCardBefore(now).Promote(now);
     }
@@ -91,7 +96,7 @@ public class Deck : IDeck
 
     }
 
-    public void SetAnswerWrong(string answer, DateTime now)
+    void SetAnswerWrong(string answer, DateTime now)
     {
         SaveLastAnswer(answer, now);
         GetNextCard().Reset();
@@ -113,7 +118,7 @@ public class Deck : IDeck
         LastAnswer = LastAnswer.NullAnswer;
     }
 
-    public bool IsAnswerCorrect(string answer)
+    bool IsAnswerCorrect(string answer)
     {
         return GetNextCard().IsAnswerCorrect(answer);
     }
