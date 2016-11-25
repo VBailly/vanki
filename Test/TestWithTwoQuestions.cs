@@ -2,6 +2,7 @@
 using System;
 using Vanki;
 using Storage;
+using Orchestration;
 
 namespace Test
 {
@@ -17,8 +18,16 @@ namespace Test
         [SetUp]
         public void SetUp()
         {
+            ServiceOrchestration.InstallServices();
             Repository.StoreString(string.Empty);
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ServiceOrchestration.UninstallServices();
+        }
+
 
         [Test]
         public void Oldest_question_of_newly_created_questions_is_the_next_one()

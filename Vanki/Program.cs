@@ -2,20 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using DeckAPI;
-
+using UserInterfaceAPI;
 
 namespace Vanki
 {
-    public class MainClass
+    public class MainClass : UserInterface
     {
         static readonly IVerbalMessages verbalMessages = new EnglishMessages();
 
-        public static int Main (string[] args)
+        public override void Launch (string[] args)
         {
             var result = TestableMain (args, DateTime.UtcNow);
-            
-            var ret = result.StartsWith(verbalMessages.ThereIsNoNextQuestion, StringComparison.CurrentCulture) ? 7 : 0;
             Console.Write (result + "\n");
+        }
+
+        public static int Main(string[] args)
+        {
+            var result = TestableMain(args, DateTime.UtcNow);
+
+            var ret = result.StartsWith(verbalMessages.ThereIsNoNextQuestion, StringComparison.CurrentCulture) ? 7 : 0;
+            Console.Write(result + "\n");
             return ret;
         }
 
@@ -26,7 +32,7 @@ namespace Vanki
             if (options.Action == Action.Invalid)
                 return verbalMessages.WrongCmdArgs;
 
-            using (var deck = new OnDiskDeck())
+            using (var deck = DisposableDeckFactory.Instance.GetDeck())
             {
                 return ExecuteAction(now, options.Questions, options.Answers, options.CaseSensitive, options.RevertLastWrongAnswerAdd, deck, options.Action);
             }

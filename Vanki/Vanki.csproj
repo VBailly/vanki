@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{E0F251C0-50CD-4C68-ADDA-22E8EF3C76D5}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>Vanki</RootNamespace>
     <AssemblyName>Vanki</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -57,13 +57,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Deck\Deck.csproj">
-      <Project>{238B947B-C132-4BE9-8D5B-72CEBCE996DE}</Project>
-      <Name>Deck</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DeckAPI\DeckAPI.csproj">
       <Project>{1CC609B4-622A-49C4-B1F8-C64D5D7D69B9}</Project>
       <Name>DeckAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeckAPI\UserInterfaceAPI\UserInterfaceAPI.csproj">
+      <Project>{0A989CD8-94C2-45E6-B6A9-48CF518689AC}</Project>
+      <Name>UserInterfaceAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

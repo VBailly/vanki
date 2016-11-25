@@ -57,9 +57,13 @@
       <Project>{85D1280D-070E-4C09-9A40-AC4E5E43F469}</Project>
       <Name>Storage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Deck\Deck.csproj">
-      <Project>{238B947B-C132-4BE9-8D5B-72CEBCE996DE}</Project>
-      <Name>Deck</Name>
+    <ProjectReference Include="..\ServiceOrchestration\Orchestration.csproj">
+      <Project>{D3A446B0-49CF-4987-8A0B-3FED7712BBA0}</Project>
+      <Name>Orchestration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeckAPI\UserInterfaceAPI\UserInterfaceAPI.csproj">
+      <Project>{0A989CD8-94C2-45E6-B6A9-48CF518689AC}</Project>
+      <Name>UserInterfaceAPI</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

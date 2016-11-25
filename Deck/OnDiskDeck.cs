@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DeckAPI;
 
 
-public class OnDiskDeck : IDeck, IDisposable
+public class OnDiskDeck : IDisposableDeck
 {
     readonly IDeck deck;
 

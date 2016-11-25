@@ -14,12 +14,14 @@ namespace Test
         [SetUp]
         public void SetUp()
         {
+            Orchestration.ServiceOrchestration.InstallServices();
             Repository.StoreString(string.Empty);
         }
 
         [TearDown]
         public void TearDown()
         {
+            Orchestration.ServiceOrchestration.UninstallServices();
         }
 
         [Test]
