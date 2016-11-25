@@ -1,4 +1,6 @@
 using System;
+using DeckAPI;
+
 
 namespace Vanki
 {

@@ -44,6 +44,10 @@
       <Project>{85D1280D-070E-4C09-9A40-AC4E5E43F469}</Project>
       <Name>Storage</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DeckAPI\DeckAPI.csproj">
+      <Project>{1CC609B4-622A-49C4-B1F8-C64D5D7D69B9}</Project>
+      <Name>DeckAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

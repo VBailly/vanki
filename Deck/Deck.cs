@@ -1,27 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DeckAPI;
 
-public enum DeckState
-{
-    Empty,
-    PendingCard,
-    NoPendingCard
-}
-
-public interface IDeck
-{
-    void AddNewCard(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now);
-    DateTime GetNextCardDueTime();
-    string GetNextQuestion();
-    bool NextCardNeedsAClue();
-    string GetHint();
-    bool LastAnswerWasWrong();
-    void TreatLastAnswerAsCorrect();
-    void AddLastAnswerAsCorrect();
-    DeckState GetState(DateTime now);
-    void ProcessAnswer(string answer, DateTime now);
-}
 
 public class Deck : IDeck
 {

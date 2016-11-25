@@ -61,6 +61,10 @@
       <Project>{238B947B-C132-4BE9-8D5B-72CEBCE996DE}</Project>
       <Name>Deck</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DeckAPI\DeckAPI.csproj">
+      <Project>{1CC609B4-622A-49C4-B1F8-C64D5D7D69B9}</Project>
+      <Name>DeckAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="States\" />
