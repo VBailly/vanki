@@ -12,24 +12,14 @@ public class OnDiskDeck : IDisposableDeck
         deck = Persistence.Load();
     }
 
-    public void AddLastAnswerAsCorrect()
-    {
-        deck.AddLastAnswerAsCorrect();
-    }
-
-    public void AddNewCard(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now)
-    {
-        deck.AddNewCard(questions, answers, caseSensitive, now);
-    }
-
     public void Dispose()
     {
         Persistence.Save(deck);
     }
 
-    public string GetHint()
+    public string GetClue()
     {
-        return deck.GetHint();
+        return deck.GetClue();
     }
 
     public DateTime GetNextCardDueTime()
@@ -47,23 +37,23 @@ public class OnDiskDeck : IDisposableDeck
         return deck.GetState(now);
     }
 
-    public bool LastAnswerWasWrong()
-    {
-        return deck.LastAnswerWasWrong();
-    }
-
     public bool NextCardNeedsAClue()
     {
         return deck.NextCardNeedsAClue();
     }
 
-    public void ProcessAnswer(string answer, DateTime now)
+    public DeckOperationResult ProcessAnswer(string answer, DateTime now)
     {
-        deck.ProcessAnswer(answer, now);
+        return deck.ProcessAnswer(answer, now);
     }
 
-    public void TreatLastAnswerAsCorrect()
+    public DeckOperationResult AddNewCard(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now)
     {
-        deck.TreatLastAnswerAsCorrect();
+        return deck.AddNewCard(questions, answers, caseSensitive, now);
+    }
+
+    public DeckOperationResult RevertLastWrongAnswer(bool add, DateTime now)
+    {
+        return deck.RevertLastWrongAnswer(add, now);
     }
 }

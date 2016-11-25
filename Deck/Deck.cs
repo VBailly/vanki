@@ -6,12 +6,10 @@ using DeckAPI;
 
 public class Deck : IDeck
 {
-    public void ProcessAnswer(string answer, DateTime now)
+    public DeckOperationResult AddNewCard(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now)
     {
-        if (!IsAnswerCorrect(answer))
-            SetAnswerWrong(answer, now);
-        else
-            TreatCorrectAnswer(now);
+        Cards.Add(new Card(questions, answers, caseSensitive, now));
+        return DeckOperationResult.CardCreated;
     }
 
     public DeckState GetState(DateTime now)
@@ -40,11 +38,6 @@ public class Deck : IDeck
     private bool IsEmpty()
     {
         return !Cards.Any();
-    }
-
-    public void AddNewCard(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now)
-    {
-        Cards.Add(new Card(questions, answers, caseSensitive, now));
     }
 
     private bool IsAnswerExpected(DateTime now)
@@ -88,7 +81,7 @@ public class Deck : IDeck
         GetNextCard().AddAnswer(LastAnswer.Answer);
     }
 
-    public string GetHint()
+    public string GetClue()
     {
         return GetNextCard().GetHint();
     }
@@ -116,6 +109,64 @@ public class Deck : IDeck
     public bool LastAnswerWasWrong()
     {
         return LastAnswer != LastAnswer.NullAnswer;
+    }
+
+    public DeckOperationResult ProcessAnswer(string answer, DateTime now)
+    {
+        var state = GetState(now);
+        if (state != DeckState.PendingCard)
+            return DeckOperationResult.NothingToAnswer;
+
+        if (!IsAnswerCorrect(answer))
+            SetAnswerWrong(answer, now);
+        else
+            TreatCorrectAnswer(now);
+
+        return DeckOperationResult.AnswerProcessed;
+    }
+
+    public DeckOperationResult RevertLastWrongAnswer(bool add, DateTime now)
+    {
+        var state = GetState(now);
+        if (state != DeckState.PendingCard)
+            return DeckOperationResult.NothingToRevert;
+
+        return RevertLastWrongAnswer(add);
+    }
+
+    DeckOperationResult RevertLastWrongAnswer(bool add)
+    {
+        if (!LastAnswerWasWrong())
+            return DeckOperationResult.NothingToRevert;
+
+        return RevertLastAnswer(add);
+    }
+
+    DeckOperationResult RevertLastAnswerAndAdd()
+    {
+        AddLastAnswerAsCorrect();
+        TreatLastAnswerAsCorrect();
+        return DeckOperationResult.RevertAddLast;
+    }
+
+    DeckOperationResult RevertLastAnswer()
+    {
+        TreatLastAnswerAsCorrect();
+        return DeckOperationResult.RevertLast;
+    }
+
+    DeckOperationResult RevertLastAnswer(bool add)
+    {
+        if (add)
+            return RevertLastAnswerAndAdd();
+
+        return RevertLastAnswer();
+    }
+
+    DeckOperationResult AddLastAnwerAsCorrect()
+    {
+        AddLastAnswerAsCorrect();
+        return DeckOperationResult.RevertAddLast;
     }
 }
 

@@ -40,21 +40,21 @@ namespace Vanki
 
         static string ExecuteAction(DateTime now, IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, bool addWithRevert, IDeck deck, Action action)
         {
-            var state = StateFactory.CreateState(deck, now, verbalMessages);
+            var game = new SpokenGame(deck, now, verbalMessages);
 
             switch (action)
             {
                 case (Action.AddCard):
-                    return state.AddNewCard(questions, answers, caseSensitive);
+                    return game.AddNewCard(questions, answers, caseSensitive);
                     
                 case (Action.Answer):
-                    return state.ProcessAnswer(answers.First());
+                    return game.ProcessAnswer(answers.First());
                     
                 case (Action.PrintNextQuestion):
-                    return state.PrintNextQuestion();
+                    return game.PrintNextQuestion();
                     
                 case (Action.Revert):
-                    return state.RevertLastWrongAnswer(addWithRevert);
+                    return game.RevertLastWrongAnswer(addWithRevert);
                     
                 default:
                     return string.Empty;

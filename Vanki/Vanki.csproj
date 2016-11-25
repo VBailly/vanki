@@ -41,11 +41,7 @@
     <Compile Include="EnglishMessages.cs" />
     <Compile Include="IVerbalMessages.cs" />
     <Compile Include="Action.cs" />
-    <Compile Include="States\WithAPendingCardState.cs" />
-    <Compile Include="States\WithoutPendingCardState.cs" />
-    <Compile Include="States\State.cs" />
-    <Compile Include="States\StateFactory.cs" />
-    <Compile Include="States\EmptyState.cs" />
+    <Compile Include="SpokenGame.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -65,8 +61,5 @@
       <Project>{0A989CD8-94C2-45E6-B6A9-48CF518689AC}</Project>
       <Name>UserInterfaceAPI</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="States\" />
   </ItemGroup>
 </Project>
