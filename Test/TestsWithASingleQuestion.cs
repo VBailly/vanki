@@ -1,7 +1,5 @@
 ﻿using NUnit.Framework;
 using System;
-using Vanki;
-using StorageAPI;
 
 namespace Test
 {
@@ -14,8 +12,7 @@ namespace Test
         [SetUp]
         public void SetUp()
         {
-            Orchestration.ServiceOrchestration.InstallServices();
-            Storage.Instance.StoreString(string.Empty);
+            Orchestration.ServiceOrchestration.InstallServicesForTests();
         }
 
         [TearDown]

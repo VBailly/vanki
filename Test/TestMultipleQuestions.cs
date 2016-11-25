@@ -10,7 +10,7 @@ namespace Test
         [SetUp]
         public void SetUp()
         {
-            ServiceOrchestration.InstallServices();
+            ServiceOrchestration.InstallServicesForTests();
         }
 
         [TearDown]

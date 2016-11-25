@@ -61,9 +61,5 @@
       <Project>{0A989CD8-94C2-45E6-B6A9-48CF518689AC}</Project>
       <Name>UserInterfaceAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DeckAPI\StorageAPI\StorageAPI.csproj">
-      <Project>{4E5BC538-6483-4307-B65B-D40D81A6E343}</Project>
-      <Name>StorageAPI</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>

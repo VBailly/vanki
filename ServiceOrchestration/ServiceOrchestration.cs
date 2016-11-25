@@ -13,10 +13,18 @@ namespace Orchestration
             Storage.Instance = new FileBasedStorage();
         }
 
+        public static void InstallServicesForTests()
+        {
+            DisposableDeckFactory.Instance = new DisposableDeckFactoryImpl();
+            UserInterface.Instance = new InteractiveCommandLine();
+            Storage.Instance = new MemoryBasedStorage();
+        }
+
         public static void UninstallServices()
         {
             DisposableDeckFactory.Instance = null;
             UserInterface.Instance = null;
+            Storage.Instance = null;
         }
    }
 }
