@@ -55,6 +55,14 @@
       <Project>{4E93AFA4-5971-453B-A759-27FC2E549518}</Project>
       <Name>InteractiveCommandLine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Storage\Storage.csproj">
+      <Project>{85D1280D-070E-4C09-9A40-AC4E5E43F469}</Project>
+      <Name>Storage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeckAPI\StorageAPI\StorageAPI.csproj">
+      <Project>{4E5BC538-6483-4307-B65B-D40D81A6E343}</Project>
+      <Name>StorageAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

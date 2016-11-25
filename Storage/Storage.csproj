@@ -30,10 +30,14 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositoryImpl.cs" />
-    <Compile Include="FileBasedRespositoryImpl.cs" />
+    <Compile Include="FileBasedStorage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeckAPI\StorageAPI\StorageAPI.csproj">
+      <Project>{4E5BC538-6483-4307-B65B-D40D81A6E343}</Project>
+      <Name>StorageAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

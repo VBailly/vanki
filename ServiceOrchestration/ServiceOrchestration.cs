@@ -1,4 +1,5 @@
 ﻿using DeckAPI;
+using StorageAPI;
 using UserInterfaceAPI;
 
 namespace Orchestration
@@ -9,6 +10,7 @@ namespace Orchestration
         {
             DisposableDeckFactory.Instance = new DisposableDeckFactoryImpl();
             UserInterface.Instance = new InteractiveCommandLine();
+            Storage.Instance = new FileBasedStorage();
         }
 
         public static void UninstallServices()

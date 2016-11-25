@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
-using Storage;
+using StorageAPI;
 using Orchestration;
 
 namespace Test
@@ -18,7 +18,7 @@ namespace Test
         public void SetUp()
         {
             ServiceOrchestration.InstallServices();
-            Repository.StoreString(string.Empty);
+            Storage.Instance.StoreString(string.Empty);
         }
 
         [TearDown]

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Xml.Linq;
 using DeckAPI;
-
+using StorageAPI;
 
 public static class Persistence {
 
@@ -41,7 +41,7 @@ public static class Persistence {
             }));
         }
 
-        Storage.Repository.StoreString(deckXml.ToString());
+        Storage.Instance.StoreString(deckXml.ToString());
     }
 
     private static Card LoadCardV6(XElement xml)
@@ -113,7 +113,7 @@ public static class Persistence {
     }
 
     public static IDeck Load() {
-        var content = Storage.Repository.LoadString();
+        var content = Storage.Instance.LoadString();
         if (string.IsNullOrEmpty(content))
             return new Deck();
 

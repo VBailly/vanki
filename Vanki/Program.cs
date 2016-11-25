@@ -12,8 +12,7 @@ namespace Vanki
 
         public override void Launch (string[] args)
         {
-            var result = TestableMain (args, DateTime.UtcNow);
-            Console.Write (result + "\n");
+            Main(args);
         }
 
         public static int Main(string[] args)
