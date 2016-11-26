@@ -63,6 +63,14 @@
       <Project>{4E5BC538-6483-4307-B65B-D40D81A6E343}</Project>
       <Name>StorageAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DeckAPI\RandomAPI\RandomAPI.csproj">
+      <Project>{6BE15460-EDA9-4BEC-8D48-B2AA0CA10D28}</Project>
+      <Name>RandomAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Random\Random.csproj">
+      <Project>{2F13D869-9FCE-4FA3-8E7F-D26C482E71F4}</Project>
+      <Name>Random</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

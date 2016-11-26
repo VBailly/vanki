@@ -11,6 +11,7 @@ namespace Orchestration
             DisposableDeckFactory.Instance = new DisposableDeckFactoryImpl();
             UserInterface.Instance = new InteractiveCommandLine();
             Storage.Instance = new FileBasedStorage();
+            RandomAPI.Random.Instance = new RandomImpl();
         }
 
         public static void InstallServicesForTests()
@@ -18,6 +19,7 @@ namespace Orchestration
             DisposableDeckFactory.Instance = new DisposableDeckFactoryImpl();
             UserInterface.Instance = new InteractiveCommandLine();
             Storage.Instance = new MemoryBasedStorage();
+            RandomAPI.Random.Instance = new RandomImpl();
         }
 
         public static void UninstallServices()
@@ -25,6 +27,7 @@ namespace Orchestration
             DisposableDeckFactory.Instance = null;
             UserInterface.Instance = null;
             Storage.Instance = null;
+            RandomAPI.Random.Instance = null;
         }
    }
 }

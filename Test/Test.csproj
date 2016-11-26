@@ -61,5 +61,9 @@
       <Project>{0A989CD8-94C2-45E6-B6A9-48CF518689AC}</Project>
       <Name>UserInterfaceAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DeckAPI\RandomAPI\RandomAPI.csproj">
+      <Project>{6BE15460-EDA9-4BEC-8D48-B2AA0CA10D28}</Project>
+      <Name>RandomAPI</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

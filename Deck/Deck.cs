@@ -66,7 +66,7 @@ public class Deck : IDeck
 
     public string GetNextQuestion()
     {
-        return GetNextCard().Questions.OrderBy(x => Guid.NewGuid()).First();
+        return RandomAPI.Random.Instance.PickRandomly(GetNextCard().Questions);
 
     }
 
