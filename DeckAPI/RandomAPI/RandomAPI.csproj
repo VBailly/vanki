@@ -3,16 +3,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{238B947B-C132-4BE9-8D5B-72CEBCE996DE}</ProjectGuid>
+    <ProjectGuid>{6BE15460-EDA9-4BEC-8D48-B2AA0CA10D28}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>Deck</AssemblyName>
+    <RootNamespace>RandomAPI</RootNamespace>
+    <AssemblyName>RandomAPI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug</OutputPath>
+    <OutputPath>..\..\bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -20,7 +21,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Release</OutputPath>
+    <OutputPath>..\..\bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -29,31 +30,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Deck.cs" />
+    <Compile Include="Random.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Card.cs" />
-    <Compile Include="Persistence.cs" />
-    <Compile Include="LastAnswer.cs" />
-    <Compile Include="OnDiskDeck.cs" />
-    <Compile Include="DisposableDeckFactoryImpl.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DeckAPI\DeckAPI.csproj">
-      <Project>{1CC609B4-622A-49C4-B1F8-C64D5D7D69B9}</Project>
-      <Name>DeckAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DeckAPI\StorageAPI\StorageAPI.csproj">
-      <Project>{4E5BC538-6483-4307-B65B-D40D81A6E343}</Project>
-      <Name>StorageAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DeckAPI\RandomAPI\RandomAPI.csproj">
-      <Project>{6BE15460-EDA9-4BEC-8D48-B2AA0CA10D28}</Project>
-      <Name>RandomAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DeckAPI\SerializationAPI\SerializationAPI.csproj">
-      <Project>{1F43DA70-D1F4-43E8-95D7-7132065CDE28}</Project>
-      <Name>SerializationAPI</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -71,6 +71,14 @@
       <Project>{2F13D869-9FCE-4FA3-8E7F-D26C482E71F4}</Project>
       <Name>Random</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Serialization\Serialization.csproj">
+      <Project>{701C4C1E-9516-49DB-9460-A15FF1C9A950}</Project>
+      <Name>Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeckAPI\SerializationAPI\SerializationAPI.csproj">
+      <Project>{1F43DA70-D1F4-43E8-95D7-7132065CDE28}</Project>
+      <Name>SerializationAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

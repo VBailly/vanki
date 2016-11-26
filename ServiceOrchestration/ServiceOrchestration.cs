@@ -12,14 +12,15 @@ namespace Orchestration
             UserInterface.Instance = new InteractiveCommandLine();
             Storage.Instance = new FileBasedStorage();
             RandomAPI.Random.Instance = new RandomImpl();
+            SerializationAPI.Serialization.Instance = new SerializationImpl();
         }
 
         public static void InstallServicesForTests()
         {
             DisposableDeckFactory.Instance = new DisposableDeckFactoryImpl();
-            UserInterface.Instance = new InteractiveCommandLine();
             Storage.Instance = new MemoryBasedStorage();
             RandomAPI.Random.Instance = new RandomImpl();
+            SerializationAPI.Serialization.Instance = new SerializationImpl();
         }
 
         public static void UninstallServices()
@@ -28,6 +29,7 @@ namespace Orchestration
             UserInterface.Instance = null;
             Storage.Instance = null;
             RandomAPI.Random.Instance = null;
+            SerializationAPI.Serialization.Instance = null;
         }
    }
 }

@@ -22,8 +22,8 @@ public class Deck : IDeck
         return DeckState.NoPendingCard;
     }
 
-    internal IList<Card> Cards { get; set; } = new List<Card>();
-    internal LastAnswer LastAnswer { get; set; } = LastAnswer.NullAnswer;
+    public IList<Card> Cards { get; set; } = new List<Card>();
+    public LastAnswer LastAnswer { get; set; } = LastAnswer.NullAnswer;
 
     private Card GetNextCardBefore(DateTime time)
     {

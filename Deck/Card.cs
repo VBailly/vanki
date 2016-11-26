@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-internal class Card
+public class Card
 {
-    internal Card() { }
+    public Card() { }
 
     public Card(IEnumerable<string> questions, IEnumerable<string> answers, bool caseSensitive, DateTime now)
     {
@@ -17,15 +17,15 @@ internal class Card
 
     }
 
-    internal Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-    public IEnumerable<string> Questions { get; internal set; }
-    public IEnumerable<string> Answers { get; internal set; } = new List<string>();
+    public IEnumerable<string> Questions { get; set; }
+    public IEnumerable<string> Answers { get; set; } = new List<string>();
 
-    public bool CaseSensitiveAnswers { get; internal set; }
-    public int Clue { get; internal set; }
-    public DateTime LastAnswerTime { get; internal set; }
-    public int CurrentInterval { get; internal set; }
+    public bool CaseSensitiveAnswers { get; set; }
+    public int Clue { get; set; }
+    public DateTime LastAnswerTime { get; set; }
+    public int CurrentInterval { get; set; }
 
     public bool IsAnswerCorrect(string answer)
     {
