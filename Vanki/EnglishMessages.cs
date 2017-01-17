@@ -3,7 +3,7 @@
     public class EnglishMessages : IVerbalMessages
     {
         public string ThereIsNoNextQuestion => "There is no next question";
-        public string NothinggToAnswer => "You cannot answer because there is no question pending";
+        public string NothingToAnswer => "You cannnot answer because there is no question pending";
         public string TheDeckIsEmpty => "There is no questions, the deck is empty";
         public string NothingToRevert => "No last wrong answer to revert";
         public string RevertLast => "Your last answer has been considered correct for this time";
